@@ -1,0 +1,29 @@
+*{
+    font-family: 'Roboto', sans-serif;
+}
+
+header{
+    background-color: #f5f5f5;
+    padding: 10px;
+    display: flex;
+   justify-content: space-between;
+}
+.header-div {
+    align-self: center;
+}
+a {
+    margin: 1vh;
+    font-size: larger;
+    text-decoration: none;
+    color: #0dbfe9;
+    align-self: center;
+}
+
+.container{
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+.blog-title{
+    align-items : center;
+}

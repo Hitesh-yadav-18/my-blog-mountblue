@@ -1,10 +1,84 @@
 <!DOCTYPE html>
-<html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>My Blog</title>
+    <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
+    <header>
+        <h1>My Blog Application</h1>
+        <div class="header-div">
+        <input type="text" id="search" placeholder="Search"/>
+        <a href="login.html">Login</a>
+        </div>
+    </header>
+    <div class="nav-bar">
+        <div id="filterDropDown" class="dropdown-content">
+            <select name="filter" id="filter">
+                <option value=""disabled selected>Filters</option>
+                <option value="author">Author</option>
+                <option value="publishedDateTime">Published DateTime</option>
+                <option value="tags">Tags</option>
+            </select>
+        </div>
+        <div id="sortDropdown" class="dropdown-content">
+            <select name="sort" id="sort">
+                <option value="" disabled selected>Sort</option>
+                <option value="publishedDateTime">Published DateTime</option>
+            </select>
+        </div>
+    </div>
+    <div class="container">
+        <div class="blog-box">
+            <div class="blog-box-header">
+                <h2>Blog Title</h2>
+                <p>Author: <span>Author Name</span></p>
+                <p>Published DateTime: <span>Published DateTime</span></p>
+            </div>
+            <div class="blog-box-content">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod, nisl eu blandit consectetur, nisl nunc congue nunc, euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliqu
+                </p>
+            </div>
+        </div>
+        <div class="blog-box">
+            <div class="blog-box-header">
+                <h2>Blog Title</h2>
+                <p>Author: <span>Author Name</span></p>
+                <p>Published DateTime: <span>Published DateTime</span></p>
+            </div>
+            <div class="blog-box-content">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod, nisl eu blandit consectetur, nisl nunc congue nunc, euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliqu
+                </p>
+            </div>
+        </div>
+        <div class="blog-box">
+            <div class="blog-box-header">
+                <h2>Blog Title</h2>
+                <p>Author: <span>Author Name</span></p>
+                <p>Published DateTime: <span>Published DateTime</span></p>
+            </div>
+            <div class="blog-box-content">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod, nisl eu blandit consectetur, nisl nunc congue nunc, euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliqu
+                </p>
+            </div>
+        </div>
+        <div class="blog-box">
+            <div class="blog-box-header">
+                <h2>Blog Title</h2>
+                <p>Author: <span>Author Name</span></p>
+                <p>Published DateTime: <span>Published DateTime</span></p>
+            </div>
+            <div class="blog-box-content">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod, nisl eu blandit consectetur, nisl nunc congue nunc, euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliqu
+                </p>
+            </div>
+        </div>
 
+    </div>
+    <footer class="footer">
+        <div> <a href=""> < Prev </a></div>
+        <div><a href=""> Next > </a></div>
+    </footer>
 </body>
 </html>
