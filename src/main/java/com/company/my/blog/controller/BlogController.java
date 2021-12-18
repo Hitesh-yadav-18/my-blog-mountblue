@@ -17,6 +17,11 @@ public class BlogController {
         return "post";
     }
 
+    @RequestMapping(value = "blog/create")
+    public String blogCreate() {
+        return "create";
+    }
+
 
 
 }

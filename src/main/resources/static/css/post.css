@@ -1,4 +1,4 @@
-*{
+@import url('https://fonts.googleapis.com/css2?family=Comforter+Brush&family=Inconsolata:wght@700&family=Readex+Pro&family=Roboto+Mono:wght@200&display=swap');*{
     font-family: 'Roboto', sans-serif;
 }
 
@@ -25,5 +25,22 @@ a {
 }
 
 .blog-title{
-    align-items : center;
+        width: 95%;
+        text-align: center;
+        font-size: 2rem;
+}
+
+.container {
+    display: grid;
+    margin: 10vh 15vw;
+    padding: 5vh;
+}
+
+.blog-content{
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.5rem;
+    line-height: 1.5;
+    color: #333;
+    margin: 0;
+    padding: 0;
 }
