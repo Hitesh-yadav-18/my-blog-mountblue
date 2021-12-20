@@ -1,7 +1,7 @@
 package com.company.my.blog.model;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "post")
@@ -12,12 +12,13 @@ public class Post {
     private Integer id;
     private String title;
     private String excerpt;
+    @Column(length=20000)
     private String content;
     private String author;
-    private LocalDateTime publishedAt;
+    private Date publishedAt;
     private boolean isPublished;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private Date createdAt;
+    private Date updatedAt;
 
     public Integer getId() {
         return id;
@@ -59,11 +60,11 @@ public class Post {
         this.author = author;
     }
 
-    public LocalDateTime getPublishedAt() {
+    public Date getPublishedAt() {
         return publishedAt;
     }
 
-    public void setPublishedAt(LocalDateTime publishedAt) {
+    public void setPublishedAt(Date publishedAt) {
         this.publishedAt = publishedAt;
     }
 
@@ -75,19 +76,19 @@ public class Post {
         isPublished = published;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDateTime getUpdatedAt() {
+    public Date getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
+    public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
 }

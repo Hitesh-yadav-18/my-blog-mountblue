@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-
+<html xmlns="http://www.thymeleaf.org"> 
 <head>
     <meta charset="UTF-8">
     <title>My Blog</title>
@@ -15,7 +15,7 @@
     </header>
     <div class="nav-bar">
         <div id="filterDropDown" class="dropdown-content">
-            <select name="filter" id="filter">
+            <select name="filter" id="filter" onchange="location.href=this.value">
                 <option value=""disabled selected>Filters</option>
                 <option value="author">Author</option>
                 <option value="publishedDateTime">Published DateTime</option>
@@ -29,51 +29,19 @@
             </select>
         </div>
     </div>
-    <div class="container">
+    <div class="container"> 
+        <div th:each="post : ${posts}">
         <div class="blog-box">
             <div class="blog-box-header">
-                <h2>Blog Title</h2>
-                <p>Author: <span>Author Name</span></p>
-                <p>Published DateTime: <span>Published DateTime</span></p>
+                <h2 th:text="${post.getTitle()}">Blog Title</h2>
+                <p th:inline="text">Author: <span>[[${post.getAuthor()}]]</span></p>
+                <p th:inline="text">Published on: <span>[[${post.getPublishedAt()}]]</span></p>
             </div>
             <div class="blog-box-content">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod, nisl eu blandit consectetur, nisl nunc congue nunc, euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliqu
-                </p>
+                <p th:text=${post.getExcerpt()}></p>
             </div>
         </div>
-        <div class="blog-box">
-            <div class="blog-box-header">
-                <h2>Blog Title</h2>
-                <p>Author: <span>Author Name</span></p>
-                <p>Published DateTime: <span>Published DateTime</span></p>
-            </div>
-            <div class="blog-box-content">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod, nisl eu blandit consectetur, nisl nunc congue nunc, euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliqu
-                </p>
-            </div>
-        </div>
-        <div class="blog-box">
-            <div class="blog-box-header">
-                <h2>Blog Title</h2>
-                <p>Author: <span>Author Name</span></p>
-                <p>Published DateTime: <span>Published DateTime</span></p>
-            </div>
-            <div class="blog-box-content">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod, nisl eu blandit consectetur, nisl nunc congue nunc, euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliqu
-                </p>
-            </div>
-        </div>
-        <div class="blog-box">
-            <div class="blog-box-header">
-                <h2>Blog Title</h2>
-                <p>Author: <span>Author Name</span></p>
-                <p>Published DateTime: <span>Published DateTime</span></p>
-            </div>
-            <div class="blog-box-content">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod, nisl eu blandit consectetur, nisl nunc congue nunc, euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliquet nisl nunc euismod aliqu
-                </p>
-            </div>
-        </div>
+    </div>
 
     </div>
     <footer class="footer">

@@ -1,24 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>My Post</title>
     <link rel="stylesheet" href="/css/post.css">
+    <link rel="stylesheet" href="/css/comment.css">
 </head>
 <body>
 <header>
-    <h3>My Blog Application</h3>
+    <a th:href="@{/}"><h3>My Blog Application</h3></a>
     <div class="header-div">
         <a href="login.html">Login</a>
     </div>
 </header>
-<div class="container">
+<a th:href="/post/edit/${post.getId()}">Edit post</a>
+<div class="container" th:id="${post.getId()}">
     <div class="blog-title">
-        <h1>My Blog</h1>
-        <p>Author name, 18/8/20</p>
+        <h1 th:text="${post.getTitle()}"></h1>
+        <p th:inline = "text"> Author : [[${post.getAuthor()}]], Published on: [[${post.getPublishedAt()}]] </p>
     </div>
-    <div class="blog-content">
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusantium consequuntur, deserunt, distinctio eius, error eum explicabo fugiat id labore magnam maiores odio reiciendis sit suscipit? Est quidem quos ratione saepe veniam? A, ab accusamus aliquam architecto aspernatur commodi culpa, debitis deserunt distinctio dolor doloremque dolorum ea eius expedita facilis fugiat hic id iste iure laborum maiores modi nihil nulla, obcaecati porro quam quas qui quod recusandae saepe sint sit suscipit tenetur velit veritatis voluptatibus voluptatum? Inventore ratione, repellendus. Commodi doloremque esse harum ipsum quo? Consequatur impedit neque nesciunt optio possimus quia recusandae similique tempora temporibus, ut! Assumenda, error, nesciunt?
+    <div class="blog-content" th:text="${post.getContent()}"></div>
+
+    <div class="all-comments">
+        <h3>Comments</h3>
+        <div class="comment-list">
+            <div class="comment-item" th:each="comment : ${comments}">
+                <div class="comment-item-header">
+                    <h4 th:text="${comment.getName()}"></h4>
+                    <p th:inline = "text"> Email: [[${comment.getEmail()}]] &nbsp;&nbsp;&nbsp; Published on: [[${comment.getCreatedAt()}]] </p>
+                </div>
+                <div class="comment-item-content" th:text="${comment.getComment()}"></div>
+            </div>
+        </div>
+    </div>
+    <div class="form-comment">
+        <h3>Write a comment</h3>
+        <form action="/post/comment/save" method="post">
+            <input type="hidden" name="postId" th:value="${post.getId()}">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Enter name">
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Enter email">
+            </div>
+            <div class="form-group">
+                <label for="comment">Comment</label>
+                <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
     </div>
 
 </div>

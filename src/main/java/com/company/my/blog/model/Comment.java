@@ -1,7 +1,7 @@
 package com.company.my.blog.model;
 
 import javax.persistence.*;
-import java.time.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "comment")
@@ -12,10 +12,11 @@ public class Comment {
     private Integer id;
     private String name;
     private String email;
+    @Column(nullable = false)
     private String comment;
     private Integer postId;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private Date createdAt;
+    private Date updatedAt;
 
     public Integer getId() {
         return id;
@@ -57,19 +58,19 @@ public class Comment {
         this.postId = postId;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDateTime getUpdatedAt() {
+    public Date getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
+    public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
 }

@@ -6,13 +6,16 @@
     <link rel="stylesheet" href="/css/create.css">
 </head>
 <body>
+    <a th:href="@{/}"><h2>My Blog Application</h2></a>
     <h1>New/Edit Post</h1>
     <div class="container">
-        <form action="create" method="post" class="create-form">
+        <form action="create/save" method="post" class="create-form">
             <input class="form-input" type="text" name="title" id="title" placeholder="Title">
             <br>
-            <input class="form-input" type="text" name="tags" id="tags" placeholder="Add tags">
+            <input class="form-input" type="text" name="excerpt" id="excerpt" placeholder="Add brief summary about post">
             <br>
+            <!-- <input class="form-input" type="text" name="tags" id="tags" placeholder="Add tags">
+            <br> -->
             <textarea name="content" id="content" cols="40" rows="30" placeholder="Start writing here..."></textarea>
             <br>
             <input class="form-btn" type="submit" value="Publish">

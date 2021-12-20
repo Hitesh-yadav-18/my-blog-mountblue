@@ -1,7 +1,7 @@
 package com.company.my.blog.model;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "tag")
@@ -11,8 +11,8 @@ public class Tag {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private Date createdAt;
+    private Date updatedAt;
 
     public Long getId() {
         return id;
@@ -30,19 +30,19 @@ public class Tag {
         this.name = name;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreated_at(LocalDateTime createdAt) {
+    public void setCreated_at(Date createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDateTime getUpdatedAt() {
+    public Date getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdated_at(LocalDateTime updatedAt) {
+    public void setUpdated_at(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
 }
