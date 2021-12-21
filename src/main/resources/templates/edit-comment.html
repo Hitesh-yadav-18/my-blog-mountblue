@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Comment</title>
+    <link rel="stylesheet" href="/css/comment.css">
+</head>
+<body>
+    <div class="form-comment">
+        <h3>Write a comment</h3>
+        <form th:action="@{/updateComment/{id}(id=${comments.getId()})}"  th:object="${comments}" method="post">
+            <input type="hidden"  name="postId" th:value="${comments.getPostId()}">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" th:field="*{name}" class="form-control" id="name" name="name" placeholder="Enter name" readonly>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" th:field="*{email}" class="form-control" id="email" name="email" placeholder="Enter email" readonly>
+            </div>
+            <div class="form-group">
+                <label for="comment">Comment</label>
+                <textarea class="form-control"  th:field="*{comment}" id="comment" name="comment" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</body>
+</html>

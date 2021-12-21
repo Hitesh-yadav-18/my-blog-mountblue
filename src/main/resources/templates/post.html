@@ -13,7 +13,7 @@
         <a href="login.html">Login</a>
     </div>
 </header>
-<a th:href="/post/edit/${post.getId()}">Edit post</a>
+<a th:href="@{/post/edit/{id}(id=${post.getId()})}">Edit post</a>
 <div class="container" th:id="${post.getId()}">
     <div class="blog-title">
         <h1 th:text="${post.getTitle()}"></h1>
@@ -28,6 +28,10 @@
                 <div class="comment-item-header">
                     <h4 th:text="${comment.getName()}"></h4>
                     <p th:inline = "text"> Email: [[${comment.getEmail()}]] &nbsp;&nbsp;&nbsp; Published on: [[${comment.getCreatedAt()}]] </p>
+                    <div class="comment-button">
+                        <button class="edit comment-button"><a th:href="@{/editComment/{commentId}(commentId=${comment.getId()})}">Edit</a></button>
+                        <button class="delete comment-button"><a th:href="@{/deleteComment/{postId}/{commentId}(postId=(${post.getId()}), commentId=${comment.getId()})}"> x</a></button>
+                    </div>
                 </div>
                 <div class="comment-item-content" th:text="${comment.getComment()}"></div>
             </div>
@@ -35,7 +39,7 @@
     </div>
     <div class="form-comment">
         <h3>Write a comment</h3>
-        <form action="/post/comment/save" method="post">
+        <form action="/post/comment/save" method="post" th:object="${createComment}">
             <input type="hidden" name="postId" th:value="${post.getId()}">
             <div class="form-group">
                 <label for="name">Name</label>

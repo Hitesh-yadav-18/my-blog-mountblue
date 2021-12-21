@@ -73,4 +73,12 @@ public class Comment {
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    @Override
+    public String toString() {
+        return "Comment [comment=" + comment + ", createdAt=" + createdAt + ", email=" + email + ", id=" + id
+                + ", name=" + name + ", postId=" + postId + ", updatedAt=" + updatedAt + "]";
+    }
+
+    
 }

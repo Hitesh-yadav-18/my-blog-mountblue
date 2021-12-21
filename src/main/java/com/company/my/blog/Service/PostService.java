@@ -1,4 +1,4 @@
-package com.company.my.blog.dao;
+package com.company.my.blog.Service;
 
 import java.util.Date;
 import java.util.List;
@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PostDao {
+public class PostService {
 
     @Autowired
     private PostRepository postRepository;

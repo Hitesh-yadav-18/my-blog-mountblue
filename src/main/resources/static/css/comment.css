@@ -73,4 +73,20 @@ textarea{
 
 .comment-item-content{
     padding: 1vh 1vw;
+    align-items: center;
 }   
+
+.comment-button {
+    display: flex;
+    align-items: center;
+    margin: 0.2vw;
+}
+
+.edit.comment-button{
+    background-color: #fcf4ac;
+    
+}
+
+.delete.comment-button{
+    background-color: #e64c41;
+}

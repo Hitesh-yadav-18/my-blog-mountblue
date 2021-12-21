@@ -1,4 +1,4 @@
-package com.company.my.blog.dao;
+package com.company.my.blog.Service;
 
 import java.util.Date;
 import java.util.List;
@@ -8,15 +8,13 @@ import com.company.my.blog.repository.CommentRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
 @Service
-public class CommentDao {
+public class CommentService {
 
     @Autowired
     private CommentRepository commentRepository;
     
-    @GetMapping("/comment")
     public void addNewCommentToPost(String name, String email, String commentContent, int postId) {
         Comment comment = new Comment();
         comment.setName(name);
@@ -29,8 +27,19 @@ public class CommentDao {
         commentRepository.save(comment);
     }
 
-    @GetMapping("/comment/list")
     public List<Comment> getCommentsByPostId(int postId) {
         return commentRepository.findCommentByPostId(postId);
+    }
+
+    public Comment getCommentById(int commentId) {
+        return commentRepository.findCommentById(commentId);
+    }
+
+    public void deleteExistingCommentById(int commentId) {
+        commentRepository.deleteCommentById(commentId);
+    }
+
+    public void updateExistingCommentById(int commentId, String comment) {
+        commentRepository.updateCommentById(commentId, comment);
     }
 }
