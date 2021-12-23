@@ -1,54 +1,65 @@
 <!DOCTYPE html>
-<html xmlns="http://www.thymeleaf.org"> 
-<head>
-    <meta charset="UTF-8">
+<html xmlns="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
     <title>My Blog</title>
-    <link rel="stylesheet" href="/css/index.css">
-    
-</head>
-<body>
+    <link rel="stylesheet" href="/css/index.css" />
+  </head>
+  <body>
     <header>
-        <h1>My Blog Application</h1>
-        <div class="header-div">
-        <input type="text" id="search" placeholder="Search"/>
+      <h1>My Blog Application</h1>
+      <div class="header-div">
+        <input
+          type="text"
+          id="search"
+          placeholder="Search"
+          onkeydown="searchPost()"
+        />
+        <a href="/post/create">Create a Post</a>
         <a href="login.html">Login</a>
-        </div>
+      </div>
     </header>
     <div class="nav-bar">
-        <div id="filterDropDown" class="dropdown-content">
-            <select name="filter" id="filter" onchange="location.href=this.value">
-                <option value=""disabled selected>Filters</option>
-                <option value="author">Author</option>
-                <option value="publishedDateTime">Published DateTime</option>
-                <option value="tags">Tags</option>
-            </select>
-        </div>
-        <div id="sortDropdown" class="dropdown-content">
-            <select name="sort" id="sort">
-                <option value="" disabled selected>Sort</option>
-                <option value="publishedDateTime">Published DateTime</option>
-            </select>
-        </div>
+      <div id="filterDropDown" class="dropdown-content">
+        <select name="filter" id="filter" onchange="location.href=this.value">
+          <option value="" disabled selected>Filters</option>
+          <option value="author">Author</option>
+          <option value="publishedDateTime">Published DateTime</option>
+          <option value="tags">Tags</option>
+        </select>
+      </div>
+      <div id="sortDropdown" class="dropdown-content">
+        <select name="sort" id="sort" onchange="location.href=this.value">
+          <option value="" disabled selected>Sort</option>
+          <option value="../sortByDesc">Newest first</option>
+          <option value="../sortByAsc">Oldest first</option>
+        </select>
+      </div>
     </div>
-    <div class="container"> 
-        <div th:each="post : ${posts}">
+    <div class="container">
+      <div th:each="post : ${posts}">
         <div class="blog-box">
-            <div class="blog-box-header">
-                <h2 th:text="${post.getTitle()}">Blog Title</h2>
-                <p th:inline="text">Author: <span>[[${post.getAuthor()}]]</span></p>
-                <p th:inline="text">Published on: <span>[[${post.getPublishedAt()}]]</span></p>
-            </div>
-            <div class="blog-box-content">
-                <p th:text=${post.getExcerpt()}></p>
-            </div>
+          <div
+            class="blog-box-header"
+            th:onclick="'location.href= \''+ @{/post/{id}(id=${post.getId()})}+'\''"
+          >
+            <h2 th:text="${post.getTitle()}">Blog Title</h2>
+            <p th:inline="text">Author: <span>[[${post.getAuthor()}]]</span></p>
+            <p th:inline="text">
+              Published on: <span>[[${post.getPublishedAt()}]]</span>
+            </p>
+          </div>
+          <div class="blog-box-content">
+            <p th:text="${post.getExcerpt()}"></p>
+          </div>
         </div>
-    </div>
-
+      </div>
     </div>
     <footer class="footer">
-        <div> <a href=""> < Prev </a></div>
-        <div><a href=""> Next > </a></div>
+      <button id="prev-btn" onclick="prevPage(this)">&#8678; Prev</button>
+      <span id="curr-page" th:text="${currentPage}"></span>
+      <button id="next-btn" onclick="nextPage(this)">&#8680; Next</button>
     </footer>
-    
-</body>
+    <script th:src="@{/JS/index.js}"></script>
+  </body>
 </html>

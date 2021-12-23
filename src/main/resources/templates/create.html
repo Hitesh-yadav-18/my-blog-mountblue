@@ -1,25 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Create Blog</title>
-    <link rel="stylesheet" href="/css/create.css">
-</head>
-<body>
+    <link rel="stylesheet" href="/css/create.css" />
+  </head>
+  <body>
     <a th:href="@{/}"><h2>My Blog Application</h2></a>
-    <h1>New/Edit Post</h1>
+    <h1>Write New Post</h1>
     <div class="container">
-        <form action="create/save" method="post" class="create-form">
-            <input class="form-input" type="text" name="title" id="title" placeholder="Title">
-            <br>
-            <input class="form-input" type="text" name="excerpt" id="excerpt" placeholder="Add brief summary about post">
-            <br>
-            <!-- <input class="form-input" type="text" name="tags" id="tags" placeholder="Add tags">
-            <br> -->
-            <textarea name="content" id="content" cols="40" rows="30" placeholder="Start writing here..."></textarea>
-            <br>
-            <input class="form-btn" type="submit" value="Publish">
-        </form>
+      <form action="create/save" method="post" class="create-form" id="create-post-form">
+        <input
+          class="form-input"
+          type="text"
+          name="title"
+          id="title"
+          placeholder="Title"
+        />
+        <br />
+        <input
+          class="form-input"
+          type="text"
+          name="excerpt"
+          id="excerpt"
+          placeholder="Add brief summary about post"
+        />
+        <br />
+        <input
+          class="form-input"
+          type="text"
+          name="tags"
+          id="tags"
+          placeholder="Add tags"
+          onkeydown="tagCreate()"
+        />
+        <br />
+        <input
+          class="form-input"
+          type="text"
+          name="tagsList"
+          id="tagsList"
+          placeholder="Added tags will appear here"
+          readonly
+        />
+        <br />
+        <textarea
+          name="content"
+          id="content"
+          cols="40"
+          rows="30"
+          placeholder="Start writing here..."
+        ></textarea>
+        <br />
+        <button class="form-btn" type="submit" >Publish</button>
+      </form>
     </div>
-</body>
+
+    <script>
+      var el = document.getElementById("tags");
+      el.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+           event.preventDefault(); 
+          let insertedTag = event.target.value;
+          document.getElementById("tagsList").value += insertedTag + ", ";
+          event.target.value = "";
+        }
+      });
+
+    </script>
+  </body>
 </html>

@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="form-comment">
-        <h3>Write a comment</h3>
+        <h3>Update existing comment here</h3>
         <form th:action="@{/updateComment/{id}(id=${comments.getId()})}"  th:object="${comments}" method="post">
             <input type="hidden"  name="postId" th:value="${comments.getPostId()}">
             <div class="form-group">

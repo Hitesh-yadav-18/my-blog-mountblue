@@ -63,6 +63,11 @@ a {
     margin: 2vh;
 }
 
+.blog-box-header:hover{
+    cursor: pointer;
+    font-size: large;
+}
+
 .footer{
     background-color: #f5f5f5;
     padding: 10px;

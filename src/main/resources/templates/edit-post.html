@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Post</title>
+    <link rel="stylesheet" href="/css/create.css">
+</head>
+<body>
+    <a th:href="@{/}"><h2>My Blog Application</h2></a>
+    <h1>Edit Post</h1>
+    <div class="container">
+        <form th:action="@{../postUpdate/{id} (id=${post.getId()})}" th:object="${post}" method="post" class="create-form">
+            <input class="form-input" th:field="*{title}" type="text" name="title" id="title" placeholder="Title">
+            <br>
+            <input class="form-input" th:field="*{excerpt}" type="text" name="excerpt" id="excerpt" placeholder="Add brief summary about post">
+            <br>
+            <!-- <input class="form-input" type="text" name="tags" id="tags" placeholder="Add tags">
+            <br> -->
+            <textarea name="content" th:field="*{content}" id="content" cols="40" rows="30" placeholder="Start writing here..."></textarea>
+            <br>
+            <input class="form-btn" type="submit" value="Update Post">
+        </form>
+    </div>
+</body>
+</html>

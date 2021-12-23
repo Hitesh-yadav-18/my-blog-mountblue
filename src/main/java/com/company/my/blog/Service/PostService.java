@@ -41,6 +41,30 @@ public class PostService {
         return postRepository.findByAuthor(author);
     }
 
+    public void deletePost(int id) {
+        postRepository.deleteById(id);
+    }
+
+    public void updatePostById(int id, String title, String excerpt, String content, Date updatedAt) {
+        postRepository.updatePostByPostId(id, title, excerpt, content, updatedAt);
+    }
+
+    public List<Post> getAllPostsByPublishedDateDesc() {
+        return postRepository.findPostOrderByPublisedAtDesc();
+    }
+
+    public List<Post> getAllPostsByPublishedDateAsc() {
+        return postRepository.findPostOrderByPublisedAtAsc();
+    }
+
+    public List<Post> getAllPostsBySearchedValue(String searchedValue){
+        return postRepository.findAllPostsBySearchedValue(searchedValue);
+    }
+
+    public List<Post> getAllPostsByPage(int startPage, int endPage) {
+        return postRepository.findAllPostsByPage(startPage, endPage);
+    }
+
     // public List<Post> getPostByTags(String tags) {
     //     return postRepository.findByTags(tags);
     // }

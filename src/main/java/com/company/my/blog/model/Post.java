@@ -20,6 +20,13 @@ public class Post {
     private Date createdAt;
     private Date updatedAt;
 
+    // @ManyToMany
+    // @JoinTable(name = "post_tag", joinColumns = {
+    //         @JoinColumn(name = "post_id", referencedColumnName = "id"),
+    //         @JoinColumn(name = "tag_id", referencedColumnName = "id")
+    // })
+    // private Set<Tag> tags;
+
     public Integer getId() {
         return id;
     }

@@ -1,5 +1,6 @@
 package com.company.my.blog.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,11 +13,13 @@ import com.company.my.blog.model.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping(value = "/")
@@ -27,12 +30,11 @@ public class BlogController {
 
     @Autowired
     private CommentService commentService;
+    
 
-    @GetMapping
-    public String getIndexPage(Model model) {
-        List<Post> posts = postService.getAllPosts();
-        model.addAttribute("posts", posts);
-        return "index";
+    @GetMapping("/")
+    public String getIndexPage() {
+        return "redirect:/?start=0&limit=4";
     }
 
     @GetMapping(value = "post/{id}")
@@ -48,12 +50,12 @@ public class BlogController {
     }
 
     @GetMapping(value = "post/create")
-    public String getCreatePage() {
+    public String getCreatePostPage() {
         return "create";
     }
 
     @PostMapping(value = "post/create/save")
-    public String postCreate(HttpServletRequest request, Model model) {
+    public String newPostCreate(HttpServletRequest request, Model model) {
         String title = request.getParameter("title");
         String excerpt = request.getParameter("excerpt");
         String content = request.getParameter("content");
@@ -65,21 +67,38 @@ public class BlogController {
         return "redirect:/post/create";
     }
 
-    @GetMapping(value = "/search")
-    public String getSearchPage(Model model) {
-        return "redirect:/index";
+    @GetMapping(value = "/search/{searchedValue}")
+    public String getSearchPage(@PathVariable(value="searchedValue") String searchedValue, Model model) {
+        List<Post> posts = postService.getAllPostsBySearchedValue(searchedValue);
+        model.addAttribute("posts", posts);
+        return "index";
     }
 
     // Filter methods
     @GetMapping(value = "/author")
-    public String getAuthorPosts(Model model) {
+    public String getAuthorFilterOnPosts(Model model) {
         List<Post> posts = postService.getPostByAuthor("Admin");
         model.addAttribute("posts", posts);
         return "index";
     }
 
+    //sort methods
+    @GetMapping(value = "/sortByDesc")
+    public String getSortPostsByPublishedDateDesc(Model model) {
+        List<Post> posts = postService.getAllPostsByPublishedDateDesc();
+        model.addAttribute("posts", posts);
+        return "index";
+    }
+
+    @GetMapping(value = "/sortByAsc")
+    public String getSortPostsByPublishedDateAsc(Model model) {
+        List<Post> posts = postService.getAllPostsByPublishedDateAsc();
+        model.addAttribute("posts", posts);
+        return "index";
+    }
+
     @PostMapping(value = "/post/comment/save")
-    public String postComment(HttpServletRequest request, Model model) {
+    public String createPostComment(HttpServletRequest request, Model model) {
         String name = request.getParameter("name");
         String email = request.getParameter("email");
         String comment = request.getParameter("comment");
@@ -92,15 +111,32 @@ public class BlogController {
         return "redirect:/post/" + postId;
     }
 
-    // @GetMapping(value = "/post/edit/{id}")
-    // public String getEditPage(@PathVariable(value="id") int id, ModelAndView
-    // model) {
-    // model.setViewName("edit", id);
-    // return "redirect:/post/create";
-    // }
+    @GetMapping(value = "/editPost/{id}")
+    public String showPostEditForm(@PathVariable(value="id") int id, Model
+    model) {
+        Post post = postService.getParticularPost(id);
+        model.addAttribute("post", post);
+        return "edit-post";
+    }
+
+    @PostMapping(value = "/postUpdate/{id}")
+    public String processUpdatePostById(
+        @PathVariable(value="id") int postId,
+        @ModelAttribute(value="post") Post post ){
+        post.setUpdatedAt(new Date());
+        postService.updatePostById(postId, post.getTitle(),
+             post.getExcerpt(), post.getContent(), post.getUpdatedAt());
+        return "redirect:/post/" + postId;     
+    }
+
+    @DeleteMapping(value = "/post/delete/{id}")
+    public String deletePost(@PathVariable(value = "id") int id) {
+        // postService.deletePost(id);
+        return "redirect:/";
+    }
 
     @GetMapping("/editComment/{id}")
-    public String showEditForm(@PathVariable("id") int id, Model model) {
+    public String showCommentEditForm(@PathVariable("id") int id, Model model) {
         Comment comment = commentService.getCommentById(id);
         model.addAttribute("comments", comment);
         return "edit-comment";
@@ -119,9 +155,22 @@ public class BlogController {
     public String processDeleteCommentById(@PathVariable(value = "postId") int postId,
             @PathVariable(value = "commentId") int commentId) {
         commentService.deleteExistingCommentById(commentId);
-
         return "redirect:/post/" + postId;
     }
 
+    
+    @GetMapping(value = "/", params = {"start", "limit"})
+    public String getPage(@RequestParam("start") int startPage,
+            @RequestParam("limit") int endPage, Model model) {
+        List<Post> posts = postService.getAllPostsByPage(startPage, endPage);
+        model.addAttribute("posts", posts);
+        if(posts.size() >= 4){
+            model.addAttribute("currentPage", (startPage/endPage) + 1);
+        }else{
+            model.addAttribute("currentPage", "last");
+        }
+
+        return "index";
+    }
 
 }

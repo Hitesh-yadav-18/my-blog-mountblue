@@ -8,6 +8,7 @@ import java.util.Date;
 public class PostTag {
 
     @Id
+    private String id;
     private String postId;
     private String tagId;
     private Date createdAt;
