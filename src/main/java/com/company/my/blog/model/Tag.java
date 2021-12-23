@@ -1,14 +1,12 @@
 package com.company.my.blog.model;
 
 import java.util.Date;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -47,11 +45,6 @@ public class Tag {
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
-    @Override
-    public String toString() {
-        return "Tag [createdAt=" + createdAt + ", posts=" + posts + ", tagId=" + tagId + ", tagName=" + tagName
-                + ", updatedAt=" + updatedAt + "]";
-    }
-
+   
     
 }

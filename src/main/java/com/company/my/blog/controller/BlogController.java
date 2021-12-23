@@ -13,6 +13,7 @@ import com.company.my.blog.Service.PostTagService;
 import com.company.my.blog.Service.TagService;
 import com.company.my.blog.model.Comment;
 import com.company.my.blog.model.Post;
+import com.company.my.blog.model.PostTag;
 import com.company.my.blog.model.Tag;
 import com.company.my.blog.repository.PostTagRepository;
 
@@ -91,6 +92,9 @@ public class BlogController {
                 }
                 
                 for(Tag tag : tagSet) {
+                    PostTag postTag = new PostTag();
+                    postTag.setCreatedAt(new Date());
+                    postTag.setUpdatedAt(new Date());
                     postTagService.addTagToPost(savedPostData.getId(), tag.getTagId());
                 }
                 return "redirect:/post/create";

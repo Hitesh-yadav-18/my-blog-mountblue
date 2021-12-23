@@ -2,33 +2,36 @@ package com.company.my.blog.model;
 
 import javax.persistence.*;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "post")
 public class Post {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String title;
     private String excerpt;
-    @Column(length=20000)
+    @Column(length = 20000)
     private String content;
-    @ManyToOne
-    @OnDelete(action=OnDeleteAction.CASCADE)
-    @JoinColumn(referencedColumnName = "id")
     private String author;
     private Date publishedAt;
     private boolean isPublished;
     private Date createdAt;
     private Date updatedAt;
 
-    
+    @ManyToMany(
+        cascade = CascadeType.ALL,
+        fetch = FetchType.EAGER
+        )
+    @JoinTable(
+        name = "post_tag",
+        joinColumns = @JoinColumn(name = "post_id",referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "tag_id",referencedColumnName = "tagId")
+        )
+    List<Tag> tags;
 
     public Integer getId() {
         return id;
@@ -109,5 +112,4 @@ public class Post {
                 + ", title=" + title + ", updatedAt=" + updatedAt + "]";
     }
 
-    
 }
