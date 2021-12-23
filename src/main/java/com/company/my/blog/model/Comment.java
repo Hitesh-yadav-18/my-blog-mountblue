@@ -1,6 +1,10 @@
 package com.company.my.blog.model;
 
 import javax.persistence.*;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import java.util.Date;
 
 @Entity
@@ -14,6 +18,9 @@ public class Comment {
     private String email;
     @Column(nullable = false)
     private String comment;
+    @ManyToOne
+    @OnDelete(action=OnDeleteAction.CASCADE)
+    @JoinColumn(referencedColumnName = "id")
     private Integer postId;
     private Date createdAt;
     private Date updatedAt;

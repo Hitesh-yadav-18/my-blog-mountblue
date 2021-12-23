@@ -1,14 +1,20 @@
 package com.company.my.blog.controller;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
 import com.company.my.blog.Service.CommentService;
 import com.company.my.blog.Service.PostService;
+import com.company.my.blog.Service.PostTagService;
+import com.company.my.blog.Service.TagService;
 import com.company.my.blog.model.Comment;
 import com.company.my.blog.model.Post;
+import com.company.my.blog.model.Tag;
+import com.company.my.blog.repository.PostTagRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,7 +36,12 @@ public class BlogController {
 
     @Autowired
     private CommentService commentService;
-    
+
+    @Autowired
+    private TagService tagService;
+
+    @Autowired
+    private PostTagService postTagService;
 
     @GetMapping("/")
     public String getIndexPage() {
@@ -59,8 +70,31 @@ public class BlogController {
         String title = request.getParameter("title");
         String excerpt = request.getParameter("excerpt");
         String content = request.getParameter("content");
-        if (title != null && excerpt != null && content != null) {
-            postService.createNewPost(title, excerpt, content);
+        String tags = request.getParameter("tagsList");
+        if (title != null && excerpt != null && content != null && tags != null) {
+            Post savedPostData = postService.createNewPost(title, excerpt, content);
+            
+            if (savedPostData != null) {
+                Set<Tag> tagSet = new HashSet<Tag>();
+                String allTags[] = tags.split(",");
+                for (String tagName : allTags) {
+                    tagName = tagName.trim();
+                    Tag tag = tagService.getTagByName(tagName);
+                    if (tag == null) {
+                        tag = new Tag();
+                        tag.setTagName(tagName);
+                        tag.setCreatedAt(new Date());
+                        tag.setUpdatedAt(new Date());
+                        tag = tagService.addTagToPost(tag);
+                    }
+                    tagSet.add(tag);
+                }
+                
+                for(Tag tag : tagSet) {
+                    postTagService.addTagToPost(savedPostData.getId(), tag.getTagId());
+                }
+                return "redirect:/post/create";
+            }
         } else {
             model.addAttribute("error", "Please insert all fields");
         }
@@ -68,7 +102,7 @@ public class BlogController {
     }
 
     @GetMapping(value = "/search/{searchedValue}")
-    public String getSearchPage(@PathVariable(value="searchedValue") String searchedValue, Model model) {
+    public String getSearchPage(@PathVariable(value = "searchedValue") String searchedValue, Model model) {
         List<Post> posts = postService.getAllPostsBySearchedValue(searchedValue);
         model.addAttribute("posts", posts);
         return "index";
@@ -82,7 +116,7 @@ public class BlogController {
         return "index";
     }
 
-    //sort methods
+    // sort methods
     @GetMapping(value = "/sortByDesc")
     public String getSortPostsByPublishedDateDesc(Model model) {
         List<Post> posts = postService.getAllPostsByPublishedDateDesc();
@@ -112,8 +146,7 @@ public class BlogController {
     }
 
     @GetMapping(value = "/editPost/{id}")
-    public String showPostEditForm(@PathVariable(value="id") int id, Model
-    model) {
+    public String showPostEditForm(@PathVariable(value = "id") int id, Model model) {
         Post post = postService.getParticularPost(id);
         model.addAttribute("post", post);
         return "edit-post";
@@ -121,12 +154,12 @@ public class BlogController {
 
     @PostMapping(value = "/postUpdate/{id}")
     public String processUpdatePostById(
-        @PathVariable(value="id") int postId,
-        @ModelAttribute(value="post") Post post ){
+            @PathVariable(value = "id") int postId,
+            @ModelAttribute(value = "post") Post post) {
         post.setUpdatedAt(new Date());
         postService.updatePostById(postId, post.getTitle(),
-             post.getExcerpt(), post.getContent(), post.getUpdatedAt());
-        return "redirect:/post/" + postId;     
+                post.getExcerpt(), post.getContent(), post.getUpdatedAt());
+        return "redirect:/post/" + postId;
     }
 
     @DeleteMapping(value = "/post/delete/{id}")
@@ -158,15 +191,14 @@ public class BlogController {
         return "redirect:/post/" + postId;
     }
 
-    
-    @GetMapping(value = "/", params = {"start", "limit"})
+    @GetMapping(value = "/", params = { "start", "limit" })
     public String getPage(@RequestParam("start") int startPage,
             @RequestParam("limit") int endPage, Model model) {
         List<Post> posts = postService.getAllPostsByPage(startPage, endPage);
         model.addAttribute("posts", posts);
-        if(posts.size() >= 4){
-            model.addAttribute("currentPage", (startPage/endPage) + 1);
-        }else{
+        if (posts.size() >= 4) {
+            model.addAttribute("currentPage", (startPage / endPage) + 1);
+        } else {
             model.addAttribute("currentPage", "last");
         }
 

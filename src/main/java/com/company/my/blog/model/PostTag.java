@@ -1,34 +1,22 @@
 package com.company.my.blog.model;
 
-import javax.persistence.*;
 import java.util.Date;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "post_tag")
 public class PostTag {
 
     @Id
-    private String id;
-    private String postId;
-    private String tagId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     private Date createdAt;
     private Date updatedAt;
-
-    public String getPostId() {
-        return postId;
-    }
-
-    public void setPostId(String postId) {
-        this.postId = postId;
-    }
-
-    public String getTagId() {
-        return tagId;
-    }
-
-    public void setTagId(String tagId) {
-        this.tagId = tagId;
-    }
 
     public Date getCreatedAt() {
         return createdAt;
@@ -45,4 +33,5 @@ public class PostTag {
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
+
 }

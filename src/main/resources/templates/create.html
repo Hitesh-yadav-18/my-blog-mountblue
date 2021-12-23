@@ -9,7 +9,7 @@
     <a th:href="@{/}"><h2>My Blog Application</h2></a>
     <h1>Write New Post</h1>
     <div class="container">
-      <form action="create/save" method="post" class="create-form" id="create-post-form">
+      <form action="create/save" th:object="${createPostModel}" method="post" class="create-form" id="create-post-form">
         <input
           class="form-input"
           type="text"

@@ -1,7 +1,12 @@
 package com.company.my.blog.model;
 
 import javax.persistence.*;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "post")
@@ -14,18 +19,16 @@ public class Post {
     private String excerpt;
     @Column(length=20000)
     private String content;
+    @ManyToOne
+    @OnDelete(action=OnDeleteAction.CASCADE)
+    @JoinColumn(referencedColumnName = "id")
     private String author;
     private Date publishedAt;
     private boolean isPublished;
     private Date createdAt;
     private Date updatedAt;
 
-    // @ManyToMany
-    // @JoinTable(name = "post_tag", joinColumns = {
-    //         @JoinColumn(name = "post_id", referencedColumnName = "id"),
-    //         @JoinColumn(name = "tag_id", referencedColumnName = "id")
-    // })
-    // private Set<Tag> tags;
+    
 
     public Integer getId() {
         return id;
@@ -98,4 +101,13 @@ public class Post {
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    @Override
+    public String toString() {
+        return "Post [author=" + author + ", content=" + content + ", createdAt=" + createdAt + ", excerpt=" + excerpt
+                + ", id=" + id + ", isPublished=" + isPublished + ", publishedAt=" + publishedAt + ", tags=" + tags
+                + ", title=" + title + ", updatedAt=" + updatedAt + "]";
+    }
+
+    
 }

@@ -15,7 +15,7 @@ public class PostService {
     @Autowired
     private PostRepository postRepository;
 
-    public void createNewPost(String title, String excerpt, String content) {
+    public Post createNewPost(String title, String excerpt, String content) {
         Post post = new Post();
         post.setTitle(title);
         post.setExcerpt(excerpt);
@@ -26,7 +26,7 @@ public class PostService {
         post.setCreatedAt(new Date());
         post.setUpdatedAt(new Date());
 
-        postRepository.save(post);
+        return postRepository.save(post);
     }
 
     public List<Post> getAllPosts() {
