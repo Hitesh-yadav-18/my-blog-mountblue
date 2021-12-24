@@ -44,23 +44,28 @@ public class PostService {
     }
 
     public List<Post> getPostByAuthor(User author) {
-        return postRepository.findByAuthor(author.getName());
+        return postRepository.findByAuthor(author.getId());
     }
 
     public void deletePost(Integer id) {
         postRepository.deleteById(id);
     }
 
-    public void updatePostById(int id, String title, String excerpt, String content, Date updatedAt) {
+    public void updatePostById(
+        int id, 
+        String title, 
+        String excerpt, 
+        String content, 
+        Date updatedAt) {
         postRepository.updatePostByPostId(id, title, excerpt, content, updatedAt);
     }
 
-    public List<Post> getAllPostsByPublishedDateDesc() {
-        return postRepository.findPostOrderByPublisedAtDesc();
+    public List<Post> getAllPostsByPublishedDateDesc(int start, int limit) {
+        return postRepository.findPostOrderByPublisedAtDesc(start, limit);
     }
 
-    public List<Post> getAllPostsByPublishedDateAsc() {
-        return postRepository.findPostOrderByPublisedAtAsc();
+    public List<Post> getAllPostsByPublishedDateAsc(int start, int limit) {
+        return postRepository.findPostOrderByPublisedAtAsc(start, limit);
     }
 
     public List<Post> getAllPostsBySearchedValue(String searchedValue){

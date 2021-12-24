@@ -23,8 +23,8 @@ public class TagService {
         return tagRepository.findByTagName(tag);
     }
 
-    // public List<Tag> getAllTagsByPostId(Post post) {
-    //     return tagRepository.findAllByPost(post);
-    // }
+    public List<String> getTagsName(Post post){
+        return tagRepository.findTagsByName(post.getId());
+    }
 
 }

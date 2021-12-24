@@ -16,7 +16,11 @@ public class CommentService {
     @Autowired
     private CommentRepository commentRepository;
     
-    public void addNewCommentToPost(String name, String email, String commentContent, Post post) {
+    public void addNewCommentToPost(
+        String name,
+        String email, 
+        String commentContent, 
+        Post post) {
         Comment comment = new Comment();
         comment.setName(name);
         comment.setEmail(email);

@@ -11,22 +11,29 @@ function searchPost() {
   el.addEventListener("keydown", function (event) {
     if (event.key === "Enter") {
       let searchedValue = event.target.value;
-      window.location.href = "/search/" + searchedValue;
+      window.location.href = "/?search=" + searchedValue;
     }
   });
 }
+
+function sortingPost(sortingBtn) {
+      var el = document.getElementById(sortingBtn.id);
+      console.log(el);
+      let order = el.value;
+      let url = new URL(window.location);
+      url.searchParams.set("sortField" , "publishedAt");
+      url.searchParams.set('order', order);
+      window.location.href = url;
+  }
 
 function prevPage(buttonElement) {
   let params = new URLSearchParams(window.location.search);
   let start = params.get("start");
   let limit = params.get("limit");
-  if(start == 0){
-    let newStart = 0;
+ 
+    let newStart = parseInt(start)-4;
     let newLimit = 4;
-  }else{ 
-  let newStart = parseInt(start - 4);
-  let newLimit = 4;
-  }
+  
   window.location.href =
     "/?" + "start=" + newStart + "&limit=" + newLimit;
 }

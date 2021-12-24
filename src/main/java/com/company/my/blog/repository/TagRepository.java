@@ -20,4 +20,11 @@ public interface TagRepository extends JpaRepository<Tag, Integer> {
     )
     Tag findByTagName(@Param("tagName") String tagName);
    
+    @Query(
+        value="select tag_name from tag "+
+        "inner join post_tag on tag.tag_id = post_tag.tag_id "+
+        "inner join post on post.id = post_tag.post_id where post.id = :postId ",
+        nativeQuery = true
+    )
+    List <String> findTagsByName(@Param("postId") int postId);
 }

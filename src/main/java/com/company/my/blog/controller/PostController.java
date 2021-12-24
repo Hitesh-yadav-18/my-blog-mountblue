@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class PostController {
 
     @Autowired
-    private PostService postService;    
+    private PostService postService;
 
     @Autowired
     private PostTagService postTagService;
@@ -48,8 +48,8 @@ public class PostController {
     public String getPostById(@PathVariable(value = "id") int id, Model model) {
         Post post = postService.getParticularPost(id);
         List<Comment> comments = commentService.getCommentsByPostId(post);
-         List <Tag> tags = new ArrayList<>();
-        for(Integer i = 0; i<post.getPostTags().size();i++){
+        List<Tag> tags = new ArrayList<>();
+        for (Integer i = 0; i < post.getPostTags().size(); i++) {
             tags.add(post.getPostTags().get(i).getTag());
         }
         model.addAttribute("comments", comments);
@@ -57,7 +57,7 @@ public class PostController {
         model.addAttribute("tags", tags);
         return "post";
     }
-    
+
     @GetMapping(value = "/create")
     public String getCreatePostPage() {
         return "create";
@@ -71,13 +71,13 @@ public class PostController {
         String tags = request.getParameter("tagsList");
         if (title != null && excerpt != null && content != null && tags != null) {
             Post savedPostData = postService.createNewPost(title, excerpt, content);
-            
+
             if (savedPostData != null) {
                 Set<Tag> tagSet = new HashSet<Tag>();
                 String allTags[] = tags.split(",");
                 for (String tagName : allTags) {
                     tagName = tagName.trim();
-                    if(tagName != "" || tagName != " ") {
+                    if (tagName.length() > 0) {
                         Tag tag = tagService.getTagByName(tagName);
                         if (tag == null) {
                             tag = new Tag();
@@ -87,10 +87,10 @@ public class PostController {
                             tag = tagService.addTagToPost(tag);
                         }
                         tagSet.add(tag);
-                   }
+                    }
                 }
-                
-                for(Tag tag : tagSet) {
+
+                for (Tag tag : tagSet) {
                     PostTag postTag = new PostTag();
                     postTag.setPost(savedPostData);
                     postTag.setTag(tag);
@@ -104,13 +104,11 @@ public class PostController {
         }
         return "redirect:/post/create";
     }
-    
+
     @GetMapping(value = "/editPost/{id}")
     public String showPostEditForm(@PathVariable(value = "id") int id, Model model) {
         Post post = postService.getParticularPost(id);
-        // List <Tag> tags = tagService.getAllTags();
         model.addAttribute("post", post);
-        // model.addAttribute("tags", tags);
         return "edit-post";
     }
 

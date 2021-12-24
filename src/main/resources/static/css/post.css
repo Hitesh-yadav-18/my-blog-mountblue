@@ -1,70 +1,79 @@
-@import url('https://fonts.googleapis.com/css2?family=Comforter+Brush&family=Inconsolata:wght@700&family=Readex+Pro&family=Roboto+Mono:wght@200&display=swap');
-*{
-    font-family: 'Roboto', sans-serif;
+@import url("https://fonts.googleapis.com/css2?family=Comforter+Brush&family=Inconsolata:wght@700&family=Readex+Pro&family=Roboto+Mono:wght@200&display=swap");
+* {
+  font-family: "Roboto", sans-serif;
 }
 
-header{
-    background-color: #f5f5f5;
-    padding: 10px;
-    display: flex;
-   justify-content: space-between;
+header {
+  background-color: #f5f5f5;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
 }
 .header-div {
-    align-self: center;
+  align-self: center;
 }
 a {
-    margin: 1vh;
-    font-size: larger;
-    text-decoration: none;
-    color: #0dbfe9;
-    align-self: center;
-}
-
-.container{
-    display: grid;
-    grid-template-columns: 1fr;
-}
-
-.blog-title{
-        width: 95%;
-        text-align: center;
-        font-size: 2rem;
+  margin: 1vh;
+  font-size: larger;
+  text-decoration: none;
+  color: #0dbfe9;
+  align-self: center;
 }
 
 .container {
-    display: grid;
-    margin: 2vh 15vw;
-    padding: 2vh;
+  display: grid;
+  grid-template-columns: 1fr;
 }
 
-.blog-content{
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1.5rem;
-    line-height: 1.5;
-    color: #333;
-    margin: 0;
-    padding: 0;
-    white-space: pre-wrap;
+.blog-title {
+  width: 95%;
+  text-align: center;
+  font-size: 2rem;
 }
 
-.edit.post-button{
-    background-color: #fcf4ac;
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin: 1vh 0.2vw;
-    
+.container {
+  display: grid;
+  margin: 2vh 15vw;
+  padding: 2vh;
 }
 
-.delete.post-button{
-    background-color: #e64c41;
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin: 1vh 0.2vw;
+.blog-content {
+  font-family: "Montserrat", sans-serif;
+  font-size: 1.5rem;
+  line-height: 1.5;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  white-space: pre-wrap;
 }
-.post-tag{
-    display: flex;
-    background-color: #fcf4ac;
-    font-weight: bold;
-    justify-content: flex-start;
-    flex-direction: row;
+
+.edit.post-button {
+  background-color: #ccc;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 1vh 0.2vw;
+}
+
+.delete.post-button {
+  background-color: #ccc;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 1vh 0.2vw;
+}
+.post-tag {
+  display: flex;
+  background-color: whitesmoke;
+  width: fit-content;
+  margin: 1vh;
+  padding: 1vh;
+  font-weight: bold;
+  justify-content: flex-start;
+  flex-direction: row;
+}
+
+.post-tag span{
+  border: 1px solid #333;
+  padding: 0.4vh 0.3vw;
+  margin: 0.3vw;
+  border-radius: 10px;
 }

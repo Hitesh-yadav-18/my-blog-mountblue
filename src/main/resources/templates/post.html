@@ -21,7 +21,10 @@
         <p th:inline = "text"> Author : [[${post.getAuthor().getName()}]], Published on: [[${post.getPublishedAt()}]] </p>
     </div>
     <div  class="post-tag">
-        <span th:each="tag : ${tags}" th:inline="text">[[${tag.getTagName()}]]</span>
+        <p>Tags:&nbsp;</p> 
+        <span th:each="tag : ${tags}" th:if="${tag.getTagName()!=''}" th:inline="text">        
+            [[${tag.getTagName()}]]&nbsp;&nbsp; 
+        </span>
     </div>
     <div class="blog-content" th:text="${post.getContent()}"></div>
 

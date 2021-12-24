@@ -19,9 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping(value = "/")
 public class CommentController {
- 
 
-    
     @Autowired
     private CommentService commentService;
 
@@ -41,8 +39,6 @@ public class CommentController {
         return "redirect:/post/" + postId;
     }
 
-    
-
     @GetMapping("/editComment/{id}")
     public String showCommentEditForm(@PathVariable("id") int id, Model model) {
         Comment comment = commentService.getCommentById(id);
@@ -55,7 +51,7 @@ public class CommentController {
             @PathVariable(value = "commentId") int commentId,
             @ModelAttribute(value = "comments") Comment commentObj,
             @RequestParam("postId") Integer postId) {
-          
+
         commentService.updateExistingCommentById(commentId, commentObj.getComment());
         return "redirect:/post/" + postId;
     }
@@ -67,7 +63,4 @@ public class CommentController {
         return "redirect:/post/" + postId;
     }
 
-    
-
-   
 }

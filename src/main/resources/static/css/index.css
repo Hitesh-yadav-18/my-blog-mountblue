@@ -1,76 +1,76 @@
-
-*{
-    font-family: 'Roboto', sans-serif;
+* {
+  font-family: "Roboto", sans-serif;
 }
 
-header{
-    background-color: #f5f5f5;
-    padding: 10px;
-    display: flex;
-   justify-content: space-between;
+header {
+  background-color: #f5f5f5;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
 }
 .header-div {
-    align-self: center;
+  align-self: center;
 }
 
 header input[type="text"] {
-      width: 20vw;
-      height: 5vh;
-      border: 2px solid black;
-      border-radius: 5vh;
-      align-self: center;
-      padding : 0.5vw;
-      font-size: large;
-  }
-
-a {
-    margin: 1vh;
-    font-size: larger;
-    text-decoration: none;
-    color: #0dbfe9;
-    align-self: center;
+  width: 20vw;
+  height: 5vh;
+  border: 2px solid black;
+  border-radius: 5vh;
+  align-self: center;
+  padding: 0.5vw;
+  font-size: large;
 }
 
-.nav-bar{
-        display: flex;
-        justify-content: end;
-        align-items: center;
-        padding: 1vh;
+a {
+  margin: 1vh;
+  font-size: larger;
+  text-decoration: none;
+  color: #0dbfe9;
+  align-self: center;
+}
+
+.nav-bar {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  padding: 1vh;
 }
 
 .dropdown-content select {
-    padding: 1vh;
-    margin: 1vw;
-    height: 5vh;
-    width: 15vw;
-    border: 2px solid black;
-    font-size: 16px;
+  padding: 1vh;
+  margin: 1vw;
+  height: 5vh;
+  width: 15vw;
+  border: 2px solid black;
+  font-size: 16px;
 }
 
-.container{
-    margin-top: 3vh;
-    margin-bottom: 3vh;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+.container {
+  margin-top: 3vh;
+  margin-bottom: 3vh;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
 }
 
 .blog-box {
-    width: 45;
-    height: 30vh;
-    overflow: hidden;
-    border: 2px solid black;
-    padding: 2vh;
-    margin: 2vh;
+  width: 45;
+  height: 30vh;
+  overflow: hidden;
+  border: 2px solid black;
+  padding: 2vh;
+  margin: 2vh;
+  background-color: rgb(218, 222, 233);
 }
 
-.blog-box-header:hover{
-    cursor: pointer;
-    font-size: large;
+.blog-box-header:hover {
+  cursor: pointer;
+  font-size: large;
 }
 
-.footer{
-    background-color: #f5f5f5;
-    padding: 10px;
-    display: flex;
-    justify-content: space-between;
+.footer {
+  background-color: #f5f5f5;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
 }

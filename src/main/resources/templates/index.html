@@ -29,29 +29,39 @@
         </select>
       </div>
       <div id="sortDropdown" class="dropdown-content">
-        <select name="sort" id="sort" onchange="location.href=this.value">
-          <option value="" disabled selected>Sort</option>
-          <option value="../sortByDesc">Newest first</option>
-          <option value="../sortByAsc">Oldest first</option>
+        <select name="sort" id="sort"  onclick="sortingPost(this)">
+          <option value="" disabled selected >Sort</option>
+          <option id="sortByDesc" value="desc" >Newest first</option>
+          <option id="sortByAsc" value="asc" >Oldest first</option>
         </select>
       </div>
     </div>
+    <footer class="footer">
+      <button id="prev-btn" onclick="prevPage(this)">&#8678; Prev</button>
+      <span id="curr-page" th:text="${currentPage}"></span>
+      <button id="next-btn" onclick="nextPage(this)">&#8680; Next</button>
+    </footer>
     <div class="container">
-      <div th:each="post : ${posts}">
+      <div th:each="post : ${postTagMap.keySet()}">
         <div class="blog-box">
           <div
             class="blog-box-header"
             th:onclick="'location.href= \''+ @{/post/{id}(id=${post.getId()})}+'\''"
           >
             <h2 th:text="${post.getTitle()}">Blog Title</h2>
-            <p th:inline="text">Author: <span>[[${post.getAuthor().getName()}]]</span></p>
+            <p th:inline="text">
+              Author: <span>[[${post.getAuthor().getName()}]]</span>
+            </p>
             <p th:inline="text">
               Published on: <span>[[${post.getPublishedAt()}]]</span>
             </p>
           </div>
-          <div th:each="tag : ${tags}" class="tag">
-            <p th:inline="text">[[${tag.getName()}]]</p>
-            </div>
+          <div  class="post-tag">
+            <p>Tags:&nbsp;
+            <span th:each="tag : ${postTagMap.get(post)}" th:if="${tag != ''}" th:inline="text">        
+                [[${tag}]]&nbsp;&nbsp; 
+            </span></p>
+        </div>
           <div class="blog-box-content">
             <p th:text="${post.getExcerpt()}"></p>
           </div>

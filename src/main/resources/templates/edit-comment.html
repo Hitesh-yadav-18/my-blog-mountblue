@@ -10,19 +10,42 @@
 <body>
     <div class="form-comment">
         <h3>Update existing comment here</h3>
-        <form th:action="@{/updateComment/{id}(id=${comments.getId()})}"  th:object="${comments}" method="post">
-            <input type="hidden"  name="postId" th:value="${comments.getPostId().getId()}">
+        <form 
+            th:action="@{/updateComment/{id}(id=${comments.getId()})}"
+            th:object="${comments}" 
+            method="post">
+            <input 
+                type="hidden"  
+                name="postId" 
+                th:value="${comments.getPostId().getId()}">
             <div class="form-group">
                 <label for="name">Name</label>
-                <input type="text" th:field="*{name}" class="form-control" id="name" name="name" placeholder="Enter name" readonly>
+                <input 
+                    type="text" 
+                    th:field="*{name}" 
+                    class="form-control" 
+                    id="name" 
+                    name="name" 
+                    placeholder="Enter name" readonly>
             </div>
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" th:field="*{email}" class="form-control" id="email" name="email" placeholder="Enter email" readonly>
+                <input 
+                    type="email" 
+                    th:field="*{email}" 
+                    class="form-control" 
+                    id="email" 
+                    name="email" 
+                    placeholder="Enter email" readonly>
             </div>
             <div class="form-group">
                 <label for="comment">Comment</label>
-                <textarea class="form-control"  th:field="*{comment}" id="comment" name="comment" rows="3"></textarea>
+                <textarea 
+                    class="form-control"  
+                    th:field="*{comment}" 
+                    id="comment" 
+                    name="comment" 
+                    rows="3"></textarea>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
     </div>

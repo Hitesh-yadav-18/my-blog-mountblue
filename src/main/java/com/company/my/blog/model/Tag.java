@@ -3,7 +3,6 @@ package com.company.my.blog.model;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -70,6 +69,5 @@ public class Tag {
     public void setPostTags(List<PostTag> postTags) {
         this.postTags = postTags;
     }
-    
 
 }
