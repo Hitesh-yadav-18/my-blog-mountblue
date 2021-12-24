@@ -1,9 +1,20 @@
 package com.company.my.blog.model;
 
-import javax.persistence.*;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
-@Table(name = "\"user\"")
+@Table(name = "users")
 public class User {
 
     @Id
@@ -13,6 +24,10 @@ public class User {
     @Column(unique=true)
     private String email;
     private String password;
+
+    @OneToMany(mappedBy = "author")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<Post> posts;
 
     public Integer getId() {
         return id;
@@ -45,4 +60,14 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+    }
+
+    
 }

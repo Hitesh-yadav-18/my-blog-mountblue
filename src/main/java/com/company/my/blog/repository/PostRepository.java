@@ -43,13 +43,10 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
           ) 
     List<Post> findPostOrderByPublisedAtAsc();
 
-    @Query(
-        value="SELECT * FROM post WHERE "+
-              "LOWER(title) LIKE LOWER('%'||:searchedValue||'%') OR "+
-              "LOWER(excerpt) LIKE LOWER('%'||:searchedValue||'%') OR "+
-              "LOWER(author) LIKE LOWER('%'||:searchedValue||'%') OR "+
-              "LOWER(content) LIKE LOWER('%'||:searchedValue||'%')", 
-        nativeQuery = true
+    @Query("select p from Post p where lower(p.title) like lower(concat('%',:searchedValue,'%')) " +
+                        "or lower(p.content) like lower(concat('%',:searchedValue,'%')) " +
+                        "or lower(p.excerpt) like lower(concat('%',:searchedValue,'%')) " +
+                        "or lower(p.author.name) like lower(concat('%',:searchedValue,'%')) "
     )
     List<Post> findAllPostsBySearchedValue(@Param("searchedValue") String searchedValue);
 

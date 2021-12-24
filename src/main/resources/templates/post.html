@@ -18,7 +18,10 @@
 <div class="container" th:id="${post.getId()}">
     <div class="blog-title">
         <h1 th:text="${post.getTitle()}"></h1>
-        <p th:inline = "text"> Author : [[${post.getAuthor()}]], Published on: [[${post.getPublishedAt()}]] </p>
+        <p th:inline = "text"> Author : [[${post.getAuthor().getName()}]], Published on: [[${post.getPublishedAt()}]] </p>
+    </div>
+    <div  class="post-tag">
+        <span th:each="tag : ${tags}" th:inline="text">[[${tag.getTagName()}]]</span>
     </div>
     <div class="blog-content" th:text="${post.getContent()}"></div>
 
@@ -29,9 +32,10 @@
                 <div class="comment-item-header">
                     <h4 th:text="${comment.getName()}"></h4>
                     <p th:inline = "text"> Email: [[${comment.getEmail()}]] &nbsp;&nbsp;&nbsp; Published on: [[${comment.getCreatedAt()}]] </p>
+                    
                     <div class="comment-button">
                         <button class="edit comment-button" th:value="${comment.getId()}" onclick="editCommentPage(this)">Edit</button>
-                        <button class="delete comment-button" th:value="${comment.getId() +','+ comment.getPostId()}" onclick="deleteComment(this)">x</button>
+                        <button class="delete comment-button" th:value="${comment.getId() +','+ comment.getPostId().getId()}" onclick="deleteComment(this)">x</button>
                     </div>
                 </div>
                 <div class="comment-item-content" th:text="${comment.getComment()}"></div>
@@ -61,19 +65,20 @@
 <script>
     function editPostPage(postByPostId){
         let postId = postByPostId.value;
-        window.location.href = '/editPost/'+postId;
+        window.location.href = '/post/editPost/'+postId;
        
     }
 
     function deletePostPage(){
         let postId = location.pathname.split('/')[2];
         let xhr = new XMLHttpRequest();
-        xhr.open('DELETE', '/post/delete/' + postId);
+        xhr.open('DELETE', '/post/postDelete/' + postId);
         xhr.send();
 
         xhr.onload = function () {
-            if (xhr.status === 200) {
+            if (xhr.status == 200) {
                 alert('Post deleted');
+                window.location.href = '/';
             }else{
                 alert('Error');
             }

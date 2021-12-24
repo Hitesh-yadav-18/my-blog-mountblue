@@ -20,9 +20,13 @@ function prevPage(buttonElement) {
   let params = new URLSearchParams(window.location.search);
   let start = params.get("start");
   let limit = params.get("limit");
-  
+  if(start == 0){
+    let newStart = 0;
+    let newLimit = 4;
+  }else{ 
   let newStart = parseInt(start - 4);
   let newLimit = 4;
+  }
   window.location.href =
     "/?" + "start=" + newStart + "&limit=" + newLimit;
 }

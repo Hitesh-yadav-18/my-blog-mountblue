@@ -1,6 +1,10 @@
 package com.company.my.blog.model;
 
 import javax.persistence.*;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import java.util.Date;
 
 @Entity
@@ -8,13 +12,16 @@ import java.util.Date;
 public class Comment {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
     private String email;
     @Column(nullable = false)
     private String comment;
-    private Integer postId;
+
+    @OneToOne
+    @JoinColumn(name = "post_id")
+    private Post postId;
     private Date createdAt;
     private Date updatedAt;
 
@@ -50,11 +57,11 @@ public class Comment {
         this.comment = comment;
     }
 
-    public Integer getPostId() {
+    public Post getPostId() {
         return postId;
     }
 
-    public void setPostId(Integer postId) {
+    public void setPostId(Post postId) {
         this.postId = postId;
     }
 
@@ -80,5 +87,4 @@ public class Comment {
                 + ", name=" + name + ", postId=" + postId + ", updatedAt=" + updatedAt + "]";
     }
 
-    
 }

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.company.my.blog.model.Comment;
+import com.company.my.blog.model.Post;
 import com.company.my.blog.repository.CommentRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,20 +16,20 @@ public class CommentService {
     @Autowired
     private CommentRepository commentRepository;
     
-    public void addNewCommentToPost(String name, String email, String commentContent, int postId) {
+    public void addNewCommentToPost(String name, String email, String commentContent, Post post) {
         Comment comment = new Comment();
         comment.setName(name);
         comment.setEmail(email);
         comment.setComment(commentContent);
-        comment.setPostId(postId);
+        comment.setPostId(post);
         comment.setCreatedAt(new Date());
         comment.setUpdatedAt(new Date());
 
         commentRepository.save(comment);
     }
 
-    public List<Comment> getCommentsByPostId(int postId) {
-        return commentRepository.findCommentByPostId(postId);
+    public List<Comment> getCommentsByPostId(Post post) {
+        return commentRepository.findCommentByPostId(post);
     }
 
     public Comment getCommentById(int commentId) {

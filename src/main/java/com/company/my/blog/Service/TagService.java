@@ -1,5 +1,8 @@
 package com.company.my.blog.Service;
 
+import java.util.List;
+
+import com.company.my.blog.model.Post;
 import com.company.my.blog.model.Tag;
 import com.company.my.blog.repository.TagRepository;
 
@@ -19,5 +22,9 @@ public class TagService {
     public Tag getTagByName(String tag) {
         return tagRepository.findByTagName(tag);
     }
+
+    // public List<Tag> getAllTagsByPostId(Post post) {
+    //     return tagRepository.findAllByPost(post);
+    // }
 
 }

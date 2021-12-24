@@ -1,9 +1,24 @@
 package com.company.my.blog.model;
 
-import javax.persistence.*;
-
 import java.util.Date;
 import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "post")
@@ -16,22 +31,23 @@ public class Post {
     private String excerpt;
     @Column(length = 20000)
     private String content;
-    private String author;
+
+    @ManyToOne
+    @JoinColumn(name = "author", referencedColumnName = "id")
+    private User author;
     private Date publishedAt;
     private boolean isPublished;
     private Date createdAt;
     private Date updatedAt;
 
-    @ManyToMany(
-        cascade = CascadeType.ALL,
-        fetch = FetchType.EAGER
-        )
-    @JoinTable(
-        name = "post_tag",
-        joinColumns = @JoinColumn(name = "post_id",referencedColumnName = "id"),
-        inverseJoinColumns = @JoinColumn(name = "tag_id",referencedColumnName = "tagId")
-        )
-    List<Tag> tags;
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<PostTag> postTags;
+
+    @OneToMany(mappedBy = "postId", cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<Comment> comments;
+
 
     public Integer getId() {
         return id;
@@ -65,11 +81,11 @@ public class Post {
         this.content = content;
     }
 
-    public String getAuthor() {
+    public User getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(User author) {
         this.author = author;
     }
 
@@ -104,12 +120,31 @@ public class Post {
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
+    
+
+    public List<PostTag> getPostTags() {
+        return postTags;
+    }
+
+    public void setPostTags(List<PostTag> postTags) {
+        this.postTags = postTags;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
 
     @Override
     public String toString() {
-        return "Post [author=" + author + ", content=" + content + ", createdAt=" + createdAt + ", excerpt=" + excerpt
-                + ", id=" + id + ", isPublished=" + isPublished + ", publishedAt=" + publishedAt + ", tags=" + tags
-                + ", title=" + title + ", updatedAt=" + updatedAt + "]";
+        return "Post [author=" + author + ", content=" + content + 
+                ", createdAt=" + createdAt + ", excerpt=" + excerpt
+                + ", id=" + id + ", isPublished=" + isPublished + 
+                ", publishedAt=" + publishedAt + ", title=" + title +
+                 ", updatedAt=" + updatedAt + "]";
     }
 
 }

@@ -61,3 +61,10 @@ a {
     padding: 10px;
     margin: 1vh 0.2vw;
 }
+.post-tag{
+    display: flex;
+    background-color: #fcf4ac;
+    font-weight: bold;
+    justify-content: flex-start;
+    flex-direction: row;
+}

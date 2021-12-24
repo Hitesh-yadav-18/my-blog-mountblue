@@ -11,7 +11,7 @@
     <div class="form-comment">
         <h3>Update existing comment here</h3>
         <form th:action="@{/updateComment/{id}(id=${comments.getId()})}"  th:object="${comments}" method="post">
-            <input type="hidden"  name="postId" th:value="${comments.getPostId()}">
+            <input type="hidden"  name="postId" th:value="${comments.getPostId().getId()}">
             <div class="form-group">
                 <label for="name">Name</label>
                 <input type="text" th:field="*{name}" class="form-control" id="name" name="name" placeholder="Enter name" readonly>

@@ -4,7 +4,9 @@ import java.util.Date;
 import java.util.List;
 
 import com.company.my.blog.model.Post;
+import com.company.my.blog.model.User;
 import com.company.my.blog.repository.PostRepository;
+import com.company.my.blog.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,13 +16,17 @@ public class PostService {
 
     @Autowired
     private PostRepository postRepository;
+    
+    @Autowired
+    private UserRepository userRepository;
 
     public Post createNewPost(String title, String excerpt, String content) {
         Post post = new Post();
         post.setTitle(title);
         post.setExcerpt(excerpt);
         post.setContent(content);
-        post.setAuthor("Hitesh");
+        User user = userRepository.findById(1).get();
+        post.setAuthor(user);
         post.setPublished(true);
         post.setPublishedAt(new Date());
         post.setCreatedAt(new Date());
@@ -37,11 +43,11 @@ public class PostService {
         return postRepository.findPostById(id);
     }
 
-    public List<Post> getPostByAuthor(String author) {
-        return postRepository.findByAuthor(author);
+    public List<Post> getPostByAuthor(User author) {
+        return postRepository.findByAuthor(author.getName());
     }
 
-    public void deletePost(int id) {
+    public void deletePost(Integer id) {
         postRepository.deleteById(id);
     }
 
@@ -65,7 +71,4 @@ public class PostService {
         return postRepository.findAllPostsByPage(startPage, endPage);
     }
 
-    // public List<Post> getPostByTags(String tags) {
-    //     return postRepository.findByTags(tags);
-    // }
 }

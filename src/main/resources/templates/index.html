@@ -44,11 +44,14 @@
             th:onclick="'location.href= \''+ @{/post/{id}(id=${post.getId()})}+'\''"
           >
             <h2 th:text="${post.getTitle()}">Blog Title</h2>
-            <p th:inline="text">Author: <span>[[${post.getAuthor()}]]</span></p>
+            <p th:inline="text">Author: <span>[[${post.getAuthor().getName()}]]</span></p>
             <p th:inline="text">
               Published on: <span>[[${post.getPublishedAt()}]]</span>
             </p>
           </div>
+          <div th:each="tag : ${tags}" class="tag">
+            <p th:inline="text">[[${tag.getName()}]]</p>
+            </div>
           <div class="blog-box-content">
             <p th:text="${post.getExcerpt()}"></p>
           </div>
