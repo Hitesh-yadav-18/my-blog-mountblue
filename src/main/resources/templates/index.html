@@ -16,16 +16,15 @@
           onkeydown="searchPost()"
         />
         <a href="/post/create">Create a Post</a>
-        <a href="login.html">Login</a>
+        <a href="/login">Login</a>
       </div>
     </header>
     <div class="nav-bar">
       <div id="filterDropDown" class="dropdown-content">
         <select name="filter" id="filter" onchange="location.href=this.value">
           <option value="" disabled selected>Filters</option>
-          <option value="author">Author</option>
-          <option value="publishedDateTime">Published DateTime</option>
-          <option value="tags">Tags</option>
+          <option value="/post/mypost">My Post</option>
+          <option value="?start=0&limit=4&authorId=1&tagId=16">Tags</option> 
         </select>
       </div>
       <div id="sortDropdown" class="dropdown-content">
@@ -36,12 +35,24 @@
         </select>
       </div>
     </div>
-    <footer class="footer">
-      <button id="prev-btn" onclick="prevPage(this)">&#8678; Prev</button>
-      <span id="curr-page" th:text="${currentPage}"></span>
-      <button id="next-btn" onclick="nextPage(this)">&#8680; Next</button>
-    </footer>
-    <div class="container">
+    <div>
+      <aside class="filter-section">
+        <div  class="post-tag">
+          <p>Author:&nbsp;</p>
+          <checkbox-group th:each="author : ${authors}">
+            <input type="checkbox" th:id="${author.name}" th:name="${author.name}" th:value="${author.id}" th:checked="${authorIdsSet.contains(author.id)? true : false}" onclick=filterPostByAuthor(this) />
+            <label th:for="${author.name}">[[${author.name}]]</label><br>
+          </checkbox-group>
+      </div>
+        <div  class="post-tag">
+          <p>Tags:&nbsp;</p>
+          <checkbox-group th:each="tag : ${tags}">
+            <input type="checkbox" th:id="${tag.tagName}" th:name="${tag.tagName}" th:value="${tag.tagId}" th:checked="${tagIdsSet.contains(tag.tagId)? true : false}"  onclick="filterPostByTag(this)"/>
+            <label th:for="${tag.tagName}" th:inline="text">[[${tag.tagName}]]</label><br>
+      </div>
+     </aside>
+    </div>
+    <div class="container">      
       <div th:each="post : ${postTagMap.keySet()}">
         <div class="blog-box">
           <div

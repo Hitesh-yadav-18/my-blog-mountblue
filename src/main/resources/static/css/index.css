@@ -74,3 +74,20 @@ a {
   display: flex;
   justify-content: space-between;
 }
+
+aside {
+  width: 15%;
+  padding-left: .5rem;
+  margin-left: .5rem;
+  float: left;
+  box-shadow: inset 5px 0 5px -5px #29627e;
+  font-style: italic;
+  color: #29627e;
+}
+
+.post-tag span{
+  border: 1px solid #333;
+  padding: 0.4vh 0.3vw;
+  margin: 0.3vw;
+  border-radius: 10px;
+}

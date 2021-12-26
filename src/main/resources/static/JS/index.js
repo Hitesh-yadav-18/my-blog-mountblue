@@ -11,7 +11,8 @@ function searchPost() {
   el.addEventListener("keydown", function (event) {
     if (event.key === "Enter") {
       let searchedValue = event.target.value;
-      window.location.href = "/?search=" + searchedValue;
+      let url = new URL(window.location.origin);
+      window.location.href = url.origin+"?start=0&limit=4&search="+searchedValue;
     }
   });
 }
@@ -33,18 +34,58 @@ function prevPage(buttonElement) {
  
     let newStart = parseInt(start)-4;
     let newLimit = 4;
-  
-  window.location.href =
-    "/?" + "start=" + newStart + "&limit=" + newLimit;
+    let url = new URL(window.location);
+    url.searchParams.set("start" , newStart);
+    url.searchParams.set('limit', newLimit);
+    window.location.href = url;
 }
 
 function nextPage(buttonElement) {
   let params = new URLSearchParams(window.location.search);
   let start = params.get("start");
   let limit = params.get("limit");
+  
 
   let newStart = parseInt(start) + 4;
   let newLimit = 4;
-  window.location.href =
-    "/?" + "start=" + newStart + "&limit=" + newLimit;
+  let url = new URL(window.location);
+      url.searchParams.set("start" , newStart);
+      url.searchParams.set('limit', newLimit);
+  window.location.href = url;
+}
+
+function filterPostByAuthor(authorCheckbox) {
+  let author = authorCheckbox.value;
+  
+  if(authorCheckbox.checked == true){
+    let url = new URL(window.location);
+    url.searchParams.append("author", author);
+    window.location.href = url;
+  }else{
+    let url = new URL(window.location);
+    urlParams=removeParam(url.search, "author", author);
+    window.location.href = url.origin+urlParams;
+  }
+}
+
+function filterPostByTag(tagCheckbox) {
+  let tag = tagCheckbox.value;
+  
+  if(tagCheckbox.checked == true){
+    let url = new URL(window.location);
+    url.searchParams.append("tagId", tag);
+    window.location.href = url; 
+  }else{
+    let url = new URL(window.location);
+    urlParams=removeParam(url.search, "tagId", tag);
+    
+    window.location.href = url.origin+urlParams;
+  }
+}
+
+function removeParam(sourceURL, key, value) {
+  var params = sourceURL.replace('?','').split('&');
+  let removeParam = key+"="+value;
+  params = params.filter(param => param !== removeParam);
+  return '/?'+params.join('&');
 }

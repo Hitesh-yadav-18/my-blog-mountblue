@@ -1,10 +1,11 @@
 package com.company.my.blog.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -12,10 +13,12 @@ import com.company.my.blog.Service.CommentService;
 import com.company.my.blog.Service.PostService;
 import com.company.my.blog.Service.PostTagService;
 import com.company.my.blog.Service.TagService;
+import com.company.my.blog.Service.UserService;
 import com.company.my.blog.model.Comment;
 import com.company.my.blog.model.Post;
 import com.company.my.blog.model.PostTag;
 import com.company.my.blog.model.Tag;
+import com.company.my.blog.model.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +29,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -40,6 +44,9 @@ public class PostController {
 
     @Autowired
     private TagService tagService;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private CommentService commentService;
@@ -128,4 +135,52 @@ public class PostController {
         postService.deletePost(id);
         return "deleted";
     }
+
+    @GetMapping(value = "/mypost", params = {})
+    public String getAuthorFilterOnPosts(
+        @RequestParam(value= "author", required = false, defaultValue="-1") List<Integer> authorId,
+            @RequestParam(value="tagId", required = false, defaultValue = "-1") List<Integer> tagIds,
+        Model model) {
+        User user = new User();
+        user = userService.getUserById(1);
+        List<Integer> userIds = new ArrayList<>();
+        userIds.add(user.getId());
+        List<Post> posts = postService.getPostByAuthor(userIds,0,4);
+        Map<Post, List<String>> postTagMap = postService.getPostsWithTagsAsHashMap(posts);
+        Set<Integer> authorIdsSet = new HashSet<>(authorId);        
+        Set<Integer> tagIdsSet = new HashSet<>(tagIds);
+        
+        model.addAttribute("authorIdsSet", authorIdsSet);
+        model.addAttribute("tagIdsSet", tagIdsSet);
+        model.addAttribute("postTagMap", postTagMap);
+        model.addAttribute("authors", userService.getAllUsers());
+        model.addAttribute("tags", tagService.getAllTags());
+        return "index";
+    }
+
+    @GetMapping(value = "/mypost", params = { "sortField", "order" })
+    public String getSortPostsByPublishedDateDesc(
+            @RequestParam(value = "sortField") String sortField,
+            @RequestParam("order") String order,
+            @RequestParam(value= "author", required = false, defaultValue="-1") List<Integer> authorIdList,
+            @RequestParam(value="tagId", required = false, defaultValue = "-1") List<Integer> tagIds, 
+            Model model) {
+        int authorId = userService.getUserById(1).getId();
+        List<Post> posts = null;
+        if (order.equals("desc")) {
+            posts = postService.getAllPostsByAuthorInPublishedDateDesc(authorId);
+        } else if (order.equals("asc")) {
+            posts = postService.getAllPostsByAuthorInPublishedDateAsc(authorId);
+        }
+        Map<Post, List<String>> postTagMap = postService.getPostsWithTagsAsHashMap(posts);
+        Set<Integer> authorIdsSet = new HashSet<>(authorIdList);
+        Set<Integer> tagIdsSet = new HashSet<>(tagIds);
+        model.addAttribute("authorIdsSet", authorIdsSet);
+        model.addAttribute("tagIdsSet", tagIdsSet);
+        model.addAttribute("postTagMap", postTagMap);
+        model.addAttribute("authors", userService.getAllUsers());
+        model.addAttribute("tags", tagService.getAllTags());
+        return "index";
+    }
+
 }

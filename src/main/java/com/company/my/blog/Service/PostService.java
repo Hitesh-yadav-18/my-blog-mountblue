@@ -1,7 +1,9 @@
 package com.company.my.blog.Service;
 
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.company.my.blog.model.Post;
 import com.company.my.blog.model.User;
@@ -9,6 +11,10 @@ import com.company.my.blog.repository.PostRepository;
 import com.company.my.blog.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,6 +25,9 @@ public class PostService {
     
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private TagService tagService;
 
     public Post createNewPost(String title, String excerpt, String content) {
         Post post = new Post();
@@ -35,6 +44,16 @@ public class PostService {
         return postRepository.save(post);
     }
 
+    public Map<Post, List<String>> getPostsWithTagsAsHashMap(List<Post> posts) {
+        List<String> tagList = null;
+        Map<Post, List<String>> postTagMap = new LinkedHashMap<>();
+        for (Post post : posts) {
+            tagList = tagService.getTagsName(post);
+            postTagMap.put(post, tagList);
+        }
+        return postTagMap;
+    }
+
     public List<Post> getAllPosts() {
        return  postRepository.findAll();
     }
@@ -43,8 +62,13 @@ public class PostService {
         return postRepository.findPostById(id);
     }
 
-    public List<Post> getPostByAuthor(User author) {
-        return postRepository.findByAuthor(author.getId());
+    public List<Post> getPostByAuthor(List<Integer> authorId, int start, int limit) {
+        return postRepository.findByAuthor(authorId, start, limit);
+    }
+
+    public List<Post> getAllPostsByTagId(List<Integer> tagIds, int startPage, int endPage) {
+        Pageable pageable = PageRequest.of(startPage/endPage, endPage, Sort.by("publishedAt").descending());
+        return postRepository.findAllByTagId(tagIds, pageable);
     }
 
     public void deletePost(Integer id) {
@@ -75,5 +99,49 @@ public class PostService {
     public List<Post> getAllPostsByPage(int startPage, int endPage) {
         return postRepository.findAllPostsByPage(startPage, endPage);
     }
+
+    public List<Post> getAllPostsByAuthorAndTag(List<Integer> authorId, List<Integer> tagIds) {
+        return postRepository.findAllPostsByAuthorAndTag(authorId, tagIds);
+    }
+
+    public List<Post> getAllPostsByAuthorInPublishedDateDesc(int authorId) {
+        return postRepository.findAllPostsByAuthorInPublishedDateDesc(authorId);
+    }
+
+    public List<Post> getAllPostsByAuthorInPublishedDateAsc(int authorId) {
+        return postRepository.findAllPostsByAuthorInPublishedDateAsc(authorId);
+    }
+
+    public List<Post> getAllPostsBySearchedValueAndAuthor(String searchedValue, List<Integer> author) {
+        return postRepository.findAllPostsBySearchedValueAndAuthor(searchedValue, author);
+    }
+
+    public List<Post> getAllPostsBySearchedValueAndAuthorInDesc(String searchedValue, List<Integer> authorIds) {
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("publishedAt").descending());
+        return postRepository.findAllPostsBySearchedValueAndAuthorInDesc(searchedValue, authorIds, pageable);
+    }
+
+    public List<Post> getAllPostsBySearchedValueAndAuthorInAsc(String searchedValue, List<Integer> authorIds) {
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("publishedAt").ascending());
+        return postRepository.findAllPostsBySearchedValueAndAuthorInAsc(searchedValue, authorIds, pageable);
+    }
+
+    public List<Post> getAllPostsBySearchedValueAuthorTagInDesc(String searchedValue, List<Integer> authorIds, List<Integer> tagIds) {
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("publishedAt").descending());
+        return postRepository.findAllPostsBySearchedValueAuthorTagInDesc(searchedValue, authorIds, tagIds, pageable);
+    }
+
+    public List<Post> getAllPostsBySearchedValueAndAuthorTagInAsc(String searchedValue, List<Integer> authorIds, List<Integer> tagIds) {
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("publishedAt").ascending());
+        return postRepository.findAllPostsBySearchedValueAuthorTagInAsc(searchedValue, authorIds, tagIds, pageable);
+    }
+
+    public List<Post> getAllPostsBySearchedValueAuthorTagWithoutSort(String searchedValue, List<Integer> authorIds,
+            List<Integer> tagIds) {
+        return postRepository.findAllPostsBySearchedValueAuthorTagNoSorting(searchedValue, authorIds, tagIds);
+    }
+
+    
+   
 
 }

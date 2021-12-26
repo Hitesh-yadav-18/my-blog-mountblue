@@ -24,7 +24,15 @@ public class TagService {
     }
 
     public List<String> getTagsName(Post post){
-        return tagRepository.findTagsByName(post.getId());
+        return tagRepository.findTagsByPostId(post.getId());
+    }
+
+    public List<Tag> getAllTags() {
+        return tagRepository.findAll();
+    }
+
+    public List<Tag> getAllTagsOfSelectedAuthor(List<Integer> authorId) {
+        return tagRepository.findAllTagsOfSelectedAuthor(authorId);
     }
 
 }
