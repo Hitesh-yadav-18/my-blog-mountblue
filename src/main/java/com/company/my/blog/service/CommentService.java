@@ -1,4 +1,4 @@
-package com.company.my.blog.Service;
+package com.company.my.blog.service;
 
 import java.util.Date;
 import java.util.List;

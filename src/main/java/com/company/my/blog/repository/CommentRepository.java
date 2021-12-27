@@ -23,7 +23,8 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
 
     @Modifying
     @Transactional
-    @Query(value = "UPDATE comment SET comment = ?2  WHERE id = ?1", nativeQuery = true)
+    @Query(value = "UPDATE comment SET comment = ?2  WHERE id = ?1", 
+                    nativeQuery = true)
     void updateCommentById(int commentId, String comment);
 
 }

@@ -1,4 +1,4 @@
-package com.company.my.blog.Service;
+package com.company.my.blog.service;
 
 import com.company.my.blog.model.PostTag;
 import com.company.my.blog.repository.PostTagRepository;

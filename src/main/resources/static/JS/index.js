@@ -12,7 +12,7 @@ function searchPost() {
     if (event.key === "Enter") {
       let searchedValue = event.target.value;
       let url = new URL(window.location.origin);
-      window.location.href = url.origin+"?start=0&limit=4&search="+searchedValue;
+      window.location.href = url.origin+"?start=0&limit=10&search="+searchedValue;
     }
   });
 }
@@ -27,13 +27,14 @@ function sortingPost(sortingBtn) {
       window.location.href = url;
   }
 
+
 function prevPage(buttonElement) {
   let params = new URLSearchParams(window.location.search);
   let start = params.get("start");
   let limit = params.get("limit");
  
-    let newStart = parseInt(start)-4;
-    let newLimit = 4;
+    let newStart = parseInt(start)-10;
+    let newLimit = 10;
     let url = new URL(window.location);
     url.searchParams.set("start" , newStart);
     url.searchParams.set('limit', newLimit);
@@ -45,9 +46,8 @@ function nextPage(buttonElement) {
   let start = params.get("start");
   let limit = params.get("limit");
   
-
-  let newStart = parseInt(start) + 4;
-  let newLimit = 4;
+  let newStart = parseInt(start) + 10;
+  let newLimit = 10;
   let url = new URL(window.location);
       url.searchParams.set("start" , newStart);
       url.searchParams.set('limit', newLimit);

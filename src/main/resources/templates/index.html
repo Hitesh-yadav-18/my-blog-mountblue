@@ -7,7 +7,7 @@
   </head>
   <body>
     <header>
-      <h1>My Blog Application</h1>
+      <a th:href="@{/}"><h3>My Blog Application</h3></a>
       <div class="header-div">
         <input
           type="text"
@@ -20,13 +20,6 @@
       </div>
     </header>
     <div class="nav-bar">
-      <div id="filterDropDown" class="dropdown-content">
-        <select name="filter" id="filter" onchange="location.href=this.value">
-          <option value="" disabled selected>Filters</option>
-          <option value="/post/mypost">My Post</option>
-          <option value="?start=0&limit=4&authorId=1&tagId=16">Tags</option> 
-        </select>
-      </div>
       <div id="sortDropdown" class="dropdown-content">
         <select name="sort" id="sort"  onclick="sortingPost(this)">
           <option value="" disabled selected >Sort</option>
@@ -35,16 +28,18 @@
         </select>
       </div>
     </div>
+    <h3> Current search result:&nbsp;<em th:text="${totalResultCount}"></em></h3>
     <div>
       <aside class="filter-section">
-        <div  class="post-tag">
+        <strong style="color: black;">FILTERS</strong>
+        <div  class="post-filter-tag">
           <p>Author:&nbsp;</p>
           <checkbox-group th:each="author : ${authors}">
             <input type="checkbox" th:id="${author.name}" th:name="${author.name}" th:value="${author.id}" th:checked="${authorIdsSet.contains(author.id)? true : false}" onclick=filterPostByAuthor(this) />
             <label th:for="${author.name}">[[${author.name}]]</label><br>
           </checkbox-group>
       </div>
-        <div  class="post-tag">
+        <div  class="post-filter-tag">
           <p>Tags:&nbsp;</p>
           <checkbox-group th:each="tag : ${tags}">
             <input type="checkbox" th:id="${tag.tagName}" th:name="${tag.tagName}" th:value="${tag.tagId}" th:checked="${tagIdsSet.contains(tag.tagId)? true : false}"  onclick="filterPostByTag(this)"/>

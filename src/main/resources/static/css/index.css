@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Pushster&display=swap');
+
 * {
   font-family: "Roboto", sans-serif;
 }
@@ -15,10 +17,11 @@ header {
 header input[type="text"] {
   width: 20vw;
   height: 5vh;
-  border: 2px solid black;
   border-radius: 5vh;
   align-self: center;
-  padding: 0.5vw;
+  padding: 0.2vw 3vh;
+  border: none;
+  outline: none;
   font-size: large;
 }
 
@@ -57,15 +60,28 @@ a {
   width: 45;
   height: 30vh;
   overflow: hidden;
-  border: 2px solid black;
+  border-radius: 2vh;
   padding: 2vh;
   margin: 2vh;
   background-color: rgb(218, 222, 233);
 }
 
+.blog-box:hover{
+  box-shadow: 4px 4px 18px rgba(0, 0, 0, 0.1);
+}
+
+.blog-box-header h2{
+  font-family: 'Pushster';
+}
+
 .blog-box-header:hover {
+ 
   cursor: pointer;
-  font-size: large;
+  
+}
+
+.blog-box-content p{
+  font-style: italic;
 }
 
 .footer {
@@ -80,14 +96,20 @@ aside {
   padding-left: .5rem;
   margin-left: .5rem;
   float: left;
-  box-shadow: inset 5px 0 5px -5px #29627e;
   font-style: italic;
   color: #29627e;
 }
 
+.post-filter-tag {
+  border: 1px solid #29627e;
+  margin: 0.5vh;
+  padding: 0.5vh;
+  height :40vh;
+  overflow: auto;
+}
 .post-tag span{
-  border: 1px solid #333;
-  padding: 0.4vh 0.3vw;
+  background-color: rgba(255,255,255,0.4);
+  padding: 0.5vh 0.5vw;
   margin: 0.3vw;
   border-radius: 10px;
 }
