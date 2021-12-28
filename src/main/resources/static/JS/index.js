@@ -1,8 +1,10 @@
 let currentPage = document.getElementById("curr-page");
 if (currentPage.innerHTML == "1") {
   document.getElementById("prev-btn").disabled = true;
-}
-if(currentPage.innerHTML == "last"){
+}else if(currentPage.innerHTML == "last" && new URLSearchParams(window.location.search).get("start") == "0"){
+  document.getElementById("prev-btn").disabled = true;
+  document.getElementById("next-btn").disabled = true;
+}else if(currentPage.innerHTML == "last"){
   document.getElementById("next-btn").disabled = true;
 }
 
@@ -90,8 +92,10 @@ function removeParam(sourceURL, key, value) {
 }
 
 function selectPublishedDate(){
-  let selectedDate = document.getElementById("myDate").value;
+  let startDate = document.getElementById("startDate").value;
+  let endDate = document.getElementById("endDate").value;
   let url = new URL(window.location);
-  url.searchParams.append("sortField" , selectedDate);
+  url.searchParams.set("fromDate" , startDate);
+  url.searchParams.set("toDate" , endDate);
   window.location.href = url;
 }

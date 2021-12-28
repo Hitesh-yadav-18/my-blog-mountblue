@@ -1,5 +1,7 @@
 package com.company.my.blog.service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -11,7 +13,6 @@ import com.company.my.blog.repository.PostRepository;
 import com.company.my.blog.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -75,6 +76,11 @@ public class PostService {
         postRepository.updatePostByPostId(id, title, excerpt, content, updatedAt);
     }
 
+    public List<Post> getAllPosts(int startPage, int endPage) {
+        Pageable pageable = PageRequest.of(startPage / endPage, endPage);
+        return postRepository.findAllPostsByPage(pageable);
+    }
+
     public List<Post> getPostByAuthor(List<Integer> authorIds, Integer start, Integer limit) {
         Pageable pageable = PageRequest.of(start/limit, limit);
         return postRepository.findByAuthorId(authorIds, pageable);
@@ -85,68 +91,221 @@ public class PostService {
                  Sort.by("publishedAt").descending());
         return postRepository.findAllByTagId(tagIds, pageable);
     }
-
-    public List<Post> getPostByAuthorSelectedPublishedDate(List<Integer> authorId, int startPage, int endPage,
-            Date sortField, String order) {
-        Pageable pageable = PageRequest.of(startPage / endPage, endPage);
-        return postRepository.findByAuthorIdAndPublished(authorId, sortField, pageable);
-    }
-
-    public List<Post> getAllPostsByPublishedDateDesc(int start, int limit) {
-        Pageable pageable = PageRequest.of(start/limit, limit, Sort.by("publishedAt").descending());
-        return postRepository.findPostOrderByPublisedAtDesc(pageable);
-    }
-
-    public List<Post> getAllPostsByPublishedDateAsc(int start, int limit) {
-        Pageable pageable = PageRequest.of(start/limit, limit, Sort.by("publishedAt").ascending());
-        return postRepository.findPostOrderByPublisedAtAsc(pageable);
-    }    
-
-    public List<Post> getAllPostsByPage(int startPage, int endPage) {
-        Pageable pageable = PageRequest.of(startPage / endPage, endPage);
-        return postRepository.findAllPostsByPage(pageable);
-    }
+   
 
     public List<Post> getAllPostsByAuthorAndTag(List<Integer> authorId, List<Integer> tagIds, int startPage, int endPage) {
         Pageable pageable = PageRequest.of(startPage / endPage, endPage);
         return postRepository.findAllPostsByAuthorAndTag(authorId, tagIds, pageable);
     }
 
-    public List<Post> getAllPostsByTagIdsPublishedDateDesc(List<Integer> tagIds, int start, int limit) {
-        Pageable pageable = PageRequest.of(start/limit, limit, Sort.by("publishedAt").descending());
-        return postRepository.findAllPostsByTagIdsPublishedDateDesc(tagIds, pageable);
+    public List<Post> getAllPostsBasedOnDates(int startPage, int endPage, String fromDate, String toDate) {
+        Pageable pageable = PageRequest.of(startPage / endPage, endPage);
+        Date startDate = null;
+        Date endDate = null;
+        try {
+            startDate = new SimpleDateFormat("yyyy-MM-dd").parse(fromDate);
+            endDate = new SimpleDateFormat("yyyy-MM-dd").parse(toDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        
+        return postRepository.findAllPostsByDates(pageable, startDate, endDate);
+    }
+
+    public List<Post> getPostsByAuthorBasedOnDates(List<Integer> authorId, int startPage, int endPage,
+            String fromDate, String toDate) {
+        Pageable pageable = PageRequest.of(startPage / endPage, endPage);
+        Date startDate = null;
+        Date endDate = null;
+        try {
+            startDate = new SimpleDateFormat("yyyy-MM-dd").parse(fromDate);
+            endDate = new SimpleDateFormat("yyyy-MM-dd").parse(toDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return postRepository.findPostsByAuthorAndDates(authorId, pageable, startDate, endDate);
+    }
+
+    public List<Post> getAllPostsByTagIdBasedOnDates(List<Integer> tagIds, int startPage, int endPage,
+            String fromDate, String toDate) {
+        Pageable pageable = PageRequest.of(startPage / endPage, endPage);
+        Date startDate = null;
+        Date endDate = null;
+        try {
+            startDate = new SimpleDateFormat("yyyy-MM-dd").parse(fromDate);
+            endDate = new SimpleDateFormat("yyyy-MM-dd").parse(toDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return postRepository.findAllByTagIdAndDates(tagIds, pageable, startDate, endDate);
+    }
+
+    public List<Post> getAllPostsByAuthorAndTagBasedOnDates(List<Integer> authorIds, List<Integer> tagIds, int startPage,
+            int endPage, String fromDate, String toDate) {
+        Pageable  pageable = PageRequest.of(startPage / endPage, endPage);
+        Date startDate = null;
+        Date endDate = null;
+        try {
+            startDate = new SimpleDateFormat("yyyy-MM-dd").parse(fromDate);
+            endDate = new SimpleDateFormat("yyyy-MM-dd").parse(toDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return postRepository.findAllPostsByAuthorAndTagAndDates(authorIds, tagIds, pageable, startDate, endDate);
+    }
+
+
+    public List<Post> getAllPostsInSortingOrder(int start, int limit, String order) {
+        Pageable pageable = null;
+        if(order.equals("desc")){
+             pageable = PageRequest.of(start/limit, limit, Sort.by("publishedAt").descending());
+        }else if(order.equals("asc")){
+            pageable = PageRequest.of(start/limit, limit, Sort.by("publishedAt").ascending());
+        }
+        return postRepository.findAllPostsInSortingOrder(pageable);
+    }
+
+    public List<Post> getAllPostsByTagIdsInSortingOrder(List<Integer> tagIds, int start, int limit, String order) {
+        Pageable pageable = null;
+        if(order.equals("desc")){
+             pageable = PageRequest.of(start/limit, limit, Sort.by("publishedAt").descending());
+        }else if(order.equals("asc")){
+            pageable = PageRequest.of(start/limit, limit, Sort.by("publishedAt").ascending());
+        }
+        return postRepository.findAllPostsByTagIdsInSortingOrder(tagIds, pageable);
     }
     
-    public List<Post> getAllPostsByTagIdsPublishedDateAsc(List<Integer> tagIds, int start, int limit) {
-        Pageable pageable = PageRequest.of(start/limit, limit, Sort.by("publishedAt").ascending());
-        return postRepository.findAllPostsByTagIdsPublishedDateAsc(tagIds, pageable);
+    
+    public List<Post> getAllPostsByAuthorIdsInSortingOrder(List<Integer> authorIds, int start, int limit, String order) {
+        Pageable pageable = null;
+        if(order.equals("desc")){
+             pageable = PageRequest.of(start/limit, limit, Sort.by("publishedAt").descending());
+        }else if(order.equals("asc")){
+            pageable = PageRequest.of(start/limit, limit, Sort.by("publishedAt").ascending());
+        }
+        return postRepository.findAllPostsByAuthorIdsInSortingOrder(authorIds, pageable);
     }
 
-    public List<Post> getAllPostsByAuthorPublishedDateDesc(List<Integer> authorIds, int start, int limit) {
-        Pageable pageable = PageRequest.of(start/limit, limit, Sort.by("publishedAt").descending());
-        return postRepository.findAllPostsByAuthorInPublishedDateDesc(authorIds, pageable);
+   
+    public List<Post> getAllPostsByAuthorIdsAndTagIdsInSortingOrder(List<Integer> authorIds, List<Integer> tagIds,
+            int start, int limit, String order) {
+        Pageable pageable = null;
+        if(order.equals("desc")){
+             pageable = PageRequest.of(start/limit, limit, Sort.by("publishedAt").descending());
+        }else if(order.equals("asc")){
+            pageable = PageRequest.of(start/limit, limit, Sort.by("publishedAt").ascending());
+        }
+        return postRepository.findAllPostsByAuthorIdsAndTagIdsInSortingOrder(authorIds, tagIds, pageable);
     }
 
-    public List<Post> getAllPostsByAuthorPublishedDateAsc(List<Integer> authorIds, int start, int limit) {
-        Pageable pageable = PageRequest.of(start/limit, limit, Sort.by("publishedAt").ascending());
-        return postRepository.findAllPostsByAuthorInPublishedDateAsc(authorIds, pageable);
+    public List<Post> getAllPostsInSortingOrderByDates(int start, int limit, String fromDate, String toDate,
+            String order) {
+        Pageable pageable = null;
+        Date startDate = null;
+        Date endDate = null;
+
+        if(order.equals("desc")){
+             pageable = PageRequest.of(start/limit, limit, Sort.by("publishedAt").descending()); try {
+             startDate = new SimpleDateFormat("yyyy-MM-dd").parse(fromDate);
+             endDate = new SimpleDateFormat("yyyy-MM-dd").parse(toDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }else if(order.equals("asc")){
+            pageable = PageRequest.of(start/limit, limit, Sort.by("publishedAt").ascending());
+            try {
+                startDate = new SimpleDateFormat("yyyy-MM-dd").parse(fromDate);
+                endDate = new SimpleDateFormat("yyyy-MM-dd").parse(toDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return postRepository.findAllPostsByDates(pageable, startDate, endDate);
     }
 
-    public List<Post> getAllPostsByAuthorAndTagPublishedDateDesc(List<Integer> authorIds, List<Integer> tagIds,
-            int start, int limit) {
-        Pageable pageable = PageRequest.of(start/limit, limit, Sort.by("publishedAt").descending());
-        return postRepository.findAllPostsByAuthorAndTagPublishedDateDesc(authorIds, tagIds, pageable);
+    public List<Post> getAllPostsByTagIdsInSortingOrderByDates(List<Integer> tagIds, int start, int limit,
+            String fromDate, String toDate, String order) {
+                Pageable pageable = null;
+                Date startDate = null;
+                Date endDate = null;
+        
+                if(order.equals("desc")){
+                     pageable = PageRequest.of(start/limit, limit, Sort.by("publishedAt").descending()); try {
+                     startDate = new SimpleDateFormat("yyyy-MM-dd").parse(fromDate);
+                     endDate = new SimpleDateFormat("yyyy-MM-dd").parse(toDate);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }else if(order.equals("asc")){
+                    pageable = PageRequest.of(start/limit, limit, Sort.by("publishedAt").ascending());
+                    try {
+                        startDate = new SimpleDateFormat("yyyy-MM-dd").parse(fromDate);
+                        endDate = new SimpleDateFormat("yyyy-MM-dd").parse(toDate);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+                return postRepository.findAllByTagIdAndDates(tagIds, pageable, startDate, endDate);
     }
 
-    public List<Post> getAllPostsByAuthorAndTagPublishedDateAsc(List<Integer> authorIds, List<Integer> tagIds, int start,
-            int limit) {
-        Pageable pageable = PageRequest.of(start/limit, limit, Sort.by("publishedAt").ascending());
-        return postRepository.findAllPostsByAuthorAndTagPublishedDateAsc(authorIds, tagIds, pageable);
+    public List<Post> getAllPostsByAuthorIdsInSortingOrderByDates(List<Integer> authorIds, int start, int limit,
+            String fromDate, String toDate, String order) {
+                Pageable pageable = null;
+                Date startDate = null;
+                Date endDate = null;
+        
+                if(order.equals("desc")){
+                     pageable = PageRequest.of(start/limit, limit, Sort.by("publishedAt").descending()); try {
+                     startDate = new SimpleDateFormat("yyyy-MM-dd").parse(fromDate);
+                     endDate = new SimpleDateFormat("yyyy-MM-dd").parse(toDate);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }else if(order.equals("asc")){
+                    pageable = PageRequest.of(start/limit, limit, Sort.by("publishedAt").ascending());
+                    try {
+                        startDate = new SimpleDateFormat("yyyy-MM-dd").parse(fromDate);
+                        endDate = new SimpleDateFormat("yyyy-MM-dd").parse(toDate);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+                return postRepository.findPostsByAuthorAndDates(authorIds, pageable, startDate, endDate);
     }
 
-    public List<Post> getAllPostsBySearchedValueAndAuthor(String searchedValue, List<Integer> author, int start, int limit) {
+    public List<Post> getAllPostsByAuthorIdsAndTagIdsInSortingOrderByDates(List<Integer> authorIds,
+            List<Integer> tagIds, int start, int limit, String fromDate, String toDate, String order) {
+                Pageable pageable = null;
+                Date startDate = null;
+                Date endDate = null;
+        
+                if(order.equals("desc")){
+                     pageable = PageRequest.of(start/limit, limit, Sort.by("publishedAt").descending()); try {
+                     startDate = new SimpleDateFormat("yyyy-MM-dd").parse(fromDate);
+                     endDate = new SimpleDateFormat("yyyy-MM-dd").parse(toDate);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }else if(order.equals("asc")){
+                    pageable = PageRequest.of(start/limit, limit, Sort.by("publishedAt").ascending());
+                    try {
+                        startDate = new SimpleDateFormat("yyyy-MM-dd").parse(fromDate);
+                        endDate = new SimpleDateFormat("yyyy-MM-dd").parse(toDate);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+                return postRepository.findAllPostsByAuthorAndTagAndDates(authorIds, tagIds, pageable, startDate, endDate);
+    }
+
+    public List<Post> getAllPostsBySearchedValue(String searchedValue, int start, int limit) {
         Pageable pageable = PageRequest.of(start/limit, limit);
-        return postRepository.findAllPostsBySearchedValueAndAuthor(searchedValue, author, pageable);
+        return postRepository.findAllPostsBySearchedValue(searchedValue, pageable);
+    }
+   
+    public List<Post> getAllPostsBySearchedValueAndAuthor(String searchedValue, List<Integer> authorIds, int start, int limit) {
+        Pageable pageable = PageRequest.of(start/limit, limit);
+        return postRepository.findAllPostsBySearchedValueAndAuthor(searchedValue, authorIds, pageable);
     }
 
     public List<Post> getAllPostsBySearchedValueAndTag(String searchedValue, List<Integer> tagIds, int start,
@@ -155,34 +314,40 @@ public class PostService {
         return postRepository.findAllPostsBySearchedValueAndTag(searchedValue, tagIds, pageable);
     }
 
-    public List<Post> getAllPostsBySearchedValue(String searchedValue, int start, int limit) {
-        Pageable pageable = PageRequest.of(start/limit, limit);
-        return postRepository.findAllPostsBySearchedValue(searchedValue, pageable);
-    }
-
-    public List<Post> getAllPostsBySearchedValueAndAuthorInDesc(
-        String searchedValue, 
-        List<Integer> authorIds, int start, int limit) {
-        Pageable pageable = PageRequest.of(start/limit, limit, Sort.by("publishedAt").descending());
-
-        return postRepository.findAllPostsBySearchedValueAndAuthorInDesc(
-            searchedValue, authorIds, pageable);
-    }
-
-    public List<Post> getAllPostsBySearchedValueAndAuthorInAsc(
-        String searchedValue, List<Integer> authorIds, int start, int limit) {
-        Pageable pageable = PageRequest.of(start/limit, limit, Sort.by("publishedAt").ascending());
-
-        return postRepository.findAllPostsBySearchedValueAndAuthorInAsc(
-            searchedValue, authorIds, pageable);
-    }
-
-    public List<Post> getAllPostsBySearchedValueAuthorTagInDesc(
-        String searchedValue, List<Integer> authorIds,
+    public List<Post> getAllPostsBySearchedValueAndAuthorAndTag(String searchedValue, List<Integer> authorIds,
             List<Integer> tagIds, int start, int limit) {
-        Pageable pageable = PageRequest.of(start/limit, limit, Sort.by("publishedAt").descending());
+            Pageable pageable = PageRequest.of(start/limit, limit);        
+            return postRepository.findAllPostsBySearchedValueAndAuthorAndTag(
+                searchedValue, authorIds, tagIds, pageable);
+    }
 
-        return postRepository.findAllPostsBySearchedValueAuthorTagInDesc(
+    public List<Post> getAllPostsBySearchedValueAndAuthorAndSorted(
+        String searchedValue, 
+        List<Integer> authorIds, int start, int limit, String order) {
+        Pageable pageable = null;
+        if(order.equals("desc")){
+            pageable = PageRequest.of(start/limit, limit, Sort.by("publishedAt").descending());
+        }else if(order.equals("asc")){
+            pageable = PageRequest.of(start/limit, limit, Sort.by("publishedAt").ascending());
+        }
+        PageRequest.of(start/limit, limit, Sort.by("publishedAt").descending());
+
+        return postRepository.findAllPostsBySearchedValueAndAuthorAndSorted(
+            searchedValue, authorIds, pageable);
+    }
+
+
+    public List<Post> getAllPostsBySearchedValueAndAuthorAndTagAndSorted(
+        String searchedValue, List<Integer> authorIds,
+            List<Integer> tagIds, int start, int limit, String order) {
+        Pageable pageable = null;
+        if(order.equals("desc")){
+            pageable = PageRequest.of(start/limit, limit, Sort.by("publishedAt").descending());
+        }else if(order.equals("asc")){
+            pageable = PageRequest.of(start/limit, limit, Sort.by("publishedAt").ascending());
+        }
+
+        return postRepository.findAllPostsBySearchedValueAndAuthorAndTagAndSorted(
             searchedValue, authorIds, tagIds, pageable);
     }
 
@@ -196,15 +361,107 @@ public class PostService {
             searchedValue, authorIds, tagIds, pageable);
     }
 
-    public List<Post> getAllPostsBySearchedValueAuthorTagWithoutSort(
-        String searchedValue, List<Integer> authorIds,
-            List<Integer> tagIds,
-            int start, int limit) {
-        Pageable pageable = PageRequest.of(start/limit, limit);        
-        return postRepository.findAllPostsBySearchedValueAuthorTagNoSorting(
-            searchedValue, authorIds, tagIds, pageable);
+    
+//searched value with date filter
+    public List<Post> getAllPostsBySearchedValueAndDates(String searchedValue, int start, int limit, String fromDate,
+            String toDate) {
+                
+                Date startDate = null;
+                Date endDate = null;
+                Pageable pageable = PageRequest.of(start/limit, limit, Sort.by("publishedAt").descending()); 
+                try {
+                     startDate = new SimpleDateFormat("yyyy-MM-dd").parse(fromDate);
+                     endDate = new SimpleDateFormat("yyyy-MM-dd").parse(toDate);
+                } catch (ParseException e) {
+                        e.printStackTrace();
+                }
+                return postRepository.findAllPostsBySearchedValueAndDates(searchedValue, pageable, startDate, endDate);
     }
 
+    public List<Post> getAllPostsBySearchedValueAndAuthorAndDates(String searchedValue, int start, int limit,
+            List<Integer> authorIds, String fromDate, String toDate) {
+                Date startDate = null;
+                Date endDate = null;
+                Pageable pageable = PageRequest.of(start/limit, limit, Sort.by("publishedAt").descending()); 
+                try {
+                     startDate = new SimpleDateFormat("yyyy-MM-dd").parse(fromDate);
+                     endDate = new SimpleDateFormat("yyyy-MM-dd").parse(toDate);
+                } catch (ParseException e) {
+                        e.printStackTrace();
+                }
+
+                return postRepository.findAllPostsBySearchedValueAndAuthorAndDates(searchedValue, authorIds, pageable, startDate, endDate);
+    }
+
+    public List<Post> getAllPostsBySearchedValueAndTagAndDates(String searchedValue, int start, int limit,
+            List<Integer> tagIds, String fromDate, String toDate) {
+                Date startDate = null;
+                Date endDate = null;
+                Pageable pageable = PageRequest.of(start/limit, limit, Sort.by("publishedAt").descending()); 
+                try {
+                     startDate = new SimpleDateFormat("yyyy-MM-dd").parse(fromDate);
+                     endDate = new SimpleDateFormat("yyyy-MM-dd").parse(toDate);
+                } catch (ParseException e) {
+                        e.printStackTrace();
+                }
+
+                return postRepository.findAllPostsBySearchedValueAndTagAndDates(searchedValue, tagIds, pageable, startDate, endDate);
+    }
+
+    public List<Post> getAllPostsBySearchedValueAndAuthorAndTagAndDates(String searchedValue, int start, int limit,
+            List<Integer> authorIds, List<Integer> tagIds, String fromDate, String toDate) {
+                Date startDate = null;
+                Date endDate = null;
+                Pageable pageable = PageRequest.of(start/limit, limit, Sort.by("publishedAt").descending()); 
+                try {
+                     startDate = new SimpleDateFormat("yyyy-MM-dd").parse(fromDate);
+                     endDate = new SimpleDateFormat("yyyy-MM-dd").parse(toDate);
+                } catch (ParseException e) {
+                        e.printStackTrace();
+                }
+
+                return postRepository.findAllPostsBySearchedValueAndAuthorAndTagAndDates(searchedValue, authorIds, tagIds, pageable, startDate, endDate);
+    }
+
+    public List<Post> getAllPostsBySearchedValueAndAuthorAndDatesAndSorted(String searchedValue, int start, int limit,
+            List<Integer> authorIds, String fromDate, String toDate, String order) {
+                Date startDate = null;
+                Date endDate = null;
+                Pageable pageable = PageRequest.of(start/limit, limit, Sort.by("publishedAt").descending()); 
+                try {
+                     startDate = new SimpleDateFormat("yyyy-MM-dd").parse(fromDate);
+                     endDate = new SimpleDateFormat("yyyy-MM-dd").parse(toDate);
+                } catch (ParseException e) {
+                        e.printStackTrace();
+                }
+
+                return postRepository.findAllPostsBySearchedValueAndAuthorAndDatesAndSorted(searchedValue, authorIds, pageable, startDate, endDate);
+    }
+
+    public List<Post> getAllPostsBySearchedValueAndAuthorAndTagAndDatesAndSorted(String searchedValue,
+            List<Integer> authorIds, List<Integer> tagIds, int start, int limit, String fromDate, String toDate,
+            String order) {
+        Date startDate = null;
+        Date endDate = null;
+        Pageable pageable = PageRequest.of(start/limit, limit, Sort.by("publishedAt").descending());
+        try {
+            startDate = new SimpleDateFormat("yyyy-MM-dd").parse(fromDate);
+            endDate = new SimpleDateFormat("yyyy-MM-dd").parse(toDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return postRepository.findAllPostsBySearchedValueAndAuthorAndTagAndDatesAndSorted(
+            searchedValue, authorIds, tagIds, pageable, startDate, endDate);
+    }
+
+    
+
+    
+
+    
+
+    
     
 
     

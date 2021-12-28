@@ -24,16 +24,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
                         " t.id = pt.tag and t.id in (:tagIds) ", nativeQuery = true)
         List<Post> findPostByTag(@Param("tagId") List<Integer> tagIds);
 
-        @Query("SELECT p FROM Post p WHERE p.author.id in (:authorId)")
-        List<Post> findByAuthorId(
-                        @Param("authorId") List<Integer> Author,
-                        Pageable pageable);
-
-        @Query("select p from Post p, PostTag pt, Tag t where p.id = pt.post and " +
-                        " t.id = pt.tag and t.id in (:tagIds)")
-        List<Post> findAllByTagId(
-                        @Param("tagIds") List<Integer> tagIds,
-                        Pageable pageable);
+        
 
         @Modifying
         @Transactional
@@ -47,27 +38,69 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
                         @Param("content") String content,
                         @Param("updatedAt") Date updatedAt);
 
-        @Query(value = "SELECT p FROM Post p WHERE isPublished = true ")
-        List<Post> findPostOrderByPublisedAtDesc(Pageable pageable);
-
-        @Query(value = "SELECT p FROM Post p WHERE isPublished = true")
-        List<Post> findPostOrderByPublisedAtAsc(Pageable pageable);
-
-        @Query("select p from Post p where lower(p.title) like lower(concat('%',:searchedValue,'%')) " +
-                        "or lower(p.content) like lower(concat('%',:searchedValue,'%')) " +
-                        "or lower(p.excerpt) like lower(concat('%',:searchedValue,'%')) " +
-                        "or lower(p.author.name) like lower(concat('%',:searchedValue,'%')) ")
-        List<Post> findAllPostsBySearchedValue(@Param("searchedValue") String searchedValue, Pageable pageable);
-
         @Query("SELECT p from Post p")
         List<Post> findAllPostsByPage(Pageable pageable);
+      
+        @Query("SELECT p FROM Post p WHERE p.author.id in (:authorIds)")
+        List<Post> findByAuthorId(
+                        @Param("authorIds") List<Integer> Author,
+                        Pageable pageable);
 
+        @Query("select p from Post p, PostTag pt, Tag t where p.id = pt.post and " +
+                        " t.id = pt.tag and t.id in (:tagIds)")
+        List<Post> findAllByTagId(
+                        @Param("tagIds") List<Integer> tagIds,
+                        Pageable pageable);
         @Query("select p from Post p, PostTag pt, Tag t where p.id = pt.post and " +
                         " t.id = pt.tag and p.author.id in (:authorIds) and t.id in (:tagIds) ")
         List<Post> findAllPostsByAuthorAndTag(
                         @Param("authorIds") List<Integer> authorId,
                         @Param("tagIds") List<Integer> tagIds,
-                        Pageable pageable);
+                        Pageable pageable);                
+
+
+        @Query(value = "SELECT p FROM Post p WHERE isPublished = true ")
+        List<Post> findAllPostsInSortingOrder(Pageable pageable);
+
+        @Query("select p from Post p, PostTag pt, Tag t where p.id = pt.post and " +
+        " t.id = pt.tag and t.id in (:tagIds) ")
+        List<Post> findAllPostsByTagIdsInSortingOrder(List<Integer> tagIds, Pageable pageable);
+
+         @Query("select p from Post p where p.author.id in (:authorIds)")
+        List<Post> findAllPostsByAuthorIdsInSortingOrder(List<Integer> authorIds, Pageable pageable);
+
+        @Query("select p from Post p, PostTag pt, Tag t where p.id = pt.post and " +
+                        " t.id = pt.tag and p.author.id in (:authorIds) AND t.id in (:tagIds) ")
+        List<Post> findAllPostsByAuthorIdsAndTagIdsInSortingOrder(List<Integer> authorIds, List<Integer> tagIds,
+                Pageable pageable);
+
+
+         @Query("select p from Post p where lower(p.title) like lower(concat('%',:searchedValue,'%')) " +
+                        "or lower(p.content) like lower(concat('%',:searchedValue,'%')) " +
+                        "or lower(p.excerpt) like lower(concat('%',:searchedValue,'%')) " +
+                        "or lower(p.author.name) like lower(concat('%',:searchedValue,'%')) ")
+        List<Post> findAllPostsBySearchedValue(@Param("searchedValue") String searchedValue, Pageable pageable);
+
+        
+
+        @Query("SELECT p from Post p where publishedAt BETWEEN (:fromDate) and (:toDate)")
+        List<Post> findAllPostsByDates(Pageable pageable, @Param("fromDate") Date fromDate, @Param("toDate") Date toDate);
+
+        @Query("SELECT p from Post p where p.author.id in (:authorIds) and (publishedAt BETWEEN (:fromDate) and (:toDate))")
+        List<Post> findPostsByAuthorAndDates(@Param("authorIds") List<Integer> authorIds, Pageable pageable,
+                @Param("fromDate") Date fromDate, @Param("toDate") Date toDate );
+
+        @Query("select p from Post p, PostTag pt, Tag t where p.id = pt.post and " +
+        " t.id = pt.tag and t.id in (:tagIds) and p.publishedAt BETWEEN (:fromDate) and (:toDate)")        
+        List<Post> findAllByTagIdAndDates(List<Integer> tagIds, Pageable pageable, @Param("fromDate") Date fromDate,
+                @Param("toDate") Date toDate);
+
+        @Query("select p from Post p, PostTag pt, Tag t where p.id = pt.post and " +
+        " t.id = pt.tag and p.author.id in (:authorIds) and t.id in (:tagIds) and (p.publishedAt BETWEEN (:fromDate) and (:toDate))")           
+        List<Post> findAllPostsByAuthorAndTagAndDates(List<Integer> authorIds, List<Integer> tagIds, Pageable pageable,
+                @Param("fromDate") Date fromDate, @Param("toDate") Date toDate); 
+              
+
         @Query("select p from Post p, PostTag pt, Tag t where p.id = pt.post and " +
                         " t.id = pt.tag and p.author.id in (:authorIds) and p.publishedAt = :publishedAt ")
         List<Post> findByAuthorIdAndPublished(
@@ -83,29 +116,9 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
                         "AND author = :authorId ORDER BY published_at ASC", nativeQuery = true)
         List<Post> findAllPostsByAuthorInPublishedDateAsc(int authorId);
 
-        @Query("select p from Post p, PostTag pt, Tag t where p.id = pt.post and " +
-                        " t.id = pt.tag and t.id in (:tagIds) ")
-        List<Post> findAllPostsByTagIdsPublishedDateDesc(List<Integer> tagIds, Pageable pageable);
-
-        @Query("select p from Post p, PostTag pt, Tag t where p.id = pt.post and " +
-                        " t.id = pt.tag and t.id in (:tagIds) ")
-        List<Post> findAllPostsByTagIdsPublishedDateAsc(List<Integer> tagIds, Pageable pageable);
-
-        @Query("select p from Post p where p.author.id in (:authorIds)")
-        List<Post> findAllPostsByAuthorInPublishedDateDesc(List<Integer> authorIds, Pageable pageable);
-
-        @Query("select p from Post p where p.author.id in (:authorIds)")
-        List<Post> findAllPostsByAuthorInPublishedDateAsc(List<Integer> authorIds, Pageable pageable);
-
-        @Query("select p from Post p, PostTag pt, Tag t where p.id = pt.post and " +
-                        " t.id = pt.tag and p.author.id in (:authorIds) AND t.id in (:tagIds) ")
-        List<Post> findAllPostsByAuthorAndTagPublishedDateDesc(List<Integer> authorIds, List<Integer> tagIds,
-                Pageable pageable);
-
-        @Query("select p from Post p, PostTag pt, Tag t where p.id = pt.post and " +
-                " t.id = pt.tag and p.author.id in (:authorIds) AND t.id in (:tagIds) ")        
-        List<Post> findAllPostsByAuthorAndTagPublishedDateAsc(List<Integer> authorIds, List<Integer> tagIds,
-                Pageable pageable);
+       
+       
+       
 
         @Query("select p from Post p, PostTag pt, Tag t " +
                         "where p.id = pt.post and t.tagId = pt.tag and " +
@@ -136,7 +149,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
                         "lower(p.content) like lower(concat('%', :searchedValue,'%')) or " +
                         "lower(p.excerpt) like lower(concat('%', :searchedValue,'%')) ) and " +
                         "p.author.id in (:authorIds) and t.tagId in (:tagIds) group by p.id")
-        List<Post> findAllPostsBySearchedValueAuthorTagNoSorting(
+        List<Post> findAllPostsBySearchedValueAndAuthorAndTag(
                         @Param("searchedValue") String searchedValue,
                         @Param("authorIds") List<Integer> authorIds,
                         @Param("tagIds") List<Integer> tagIds,
@@ -149,7 +162,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
                         "lower(p.content) like lower(concat('%', :searchedValue,'%')) or " +
                         "lower(p.excerpt) like lower(concat('%', :searchedValue,'%')) ) and " +
                         "p.author.id in (:authorIds) group by p.id")
-        List<Post> findAllPostsBySearchedValueAndAuthorInDesc(
+        List<Post> findAllPostsBySearchedValueAndAuthorAndSorted(
                         @Param("searchedValue") String searchedValue,
                         @Param("authorIds") List<Integer> authorId,
                         Pageable pageable);
@@ -173,7 +186,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
                         "lower(p.content) like lower(concat('%', :searchedValue,'%')) or " +
                         "lower(p.excerpt) like lower(concat('%', :searchedValue,'%')) ) and " +
                         "p.author.id in (:authorIds) and t.tagId in (:tagIds) group by p.id")
-        List<Post> findAllPostsBySearchedValueAuthorTagInDesc(
+        List<Post> findAllPostsBySearchedValueAndAuthorAndTagAndSorted(
                         @Param("searchedValue") String searchedValue,
                         @Param("authorIds") List<Integer> authorId,
                         @Param("tagIds") List<Integer> tagIds,
@@ -191,6 +204,94 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
                         @Param("authorIds") List<Integer> authorId,
                         @Param("tagIds") List<Integer> tagIds,
                         Pageable pageable);
+//not working properly => search + dates
+        @Query("select p from Post p where lower(p.title) like lower(concat('%',:searchedValue,'%')) " +
+               "or lower(p.content) like lower(concat('%',:searchedValue,'%')) " +
+               "or lower(p.excerpt) like lower(concat('%',:searchedValue,'%')) " +
+               "or lower(p.author.name) like lower(concat('%',:searchedValue,'%')) "+
+               "and (publishedAt BETWEEN :startDate AND :endDate)")
+        List<Post> findAllPostsBySearchedValueAndDates(
+                @Param("searchedValue") String searchedValue, 
+                Pageable pageable, 
+                @Param("startDate") Date startDate,
+                @Param("endDate") Date endDate);
+
+                @Query("select p from Post p, PostTag pt, Tag t " +
+                "where p.id = pt.post and t.tagId = pt.tag and " +
+                "(lower(p.author.name) like lower(concat('%', :searchedValue,'%')) or " +
+                "lower(p.title) like lower(concat('%', :searchedValue,'%')) or " +
+                "lower(p.content) like lower(concat('%', :searchedValue,'%')) or " +
+                "lower(p.excerpt) like lower(concat('%', :searchedValue,'%')) ) and " +
+                "p.author.id in (:authorIds) "+
+                "and (p.publishedAt BETWEEN :startDate AND :endDate) group by p.id ")
+        List<Post> findAllPostsBySearchedValueAndAuthorAndDates(
+                @Param("searchedValue") String searchedValue, 
+                @Param("authorIds") List<Integer> authorIds,
+                Pageable pageable, 
+                @Param("startDate") Date startDate,
+                @Param("endDate") Date endDate);
+
+        @Query("select p from Post p, PostTag pt, Tag t " +
+                "where p.id = pt.post and t.tagId = pt.tag and " +
+                "(lower(p.author.name) like lower(concat('%', :searchedValue,'%')) or " +
+                "lower(p.title) like lower(concat('%', :searchedValue,'%')) or " +
+                "lower(p.content) like lower(concat('%', :searchedValue,'%')) or " +
+                "lower(p.excerpt) like lower(concat('%', :searchedValue,'%')) ) and " +
+                "t.tagId in (:tagIds) and "+
+                "(p.publishedAt BETWEEN :startDate AND :endDate) group by p.id")
+        List<Post> findAllPostsBySearchedValueAndTagAndDates(
+                @Param("searchedValue") String searchedValue, 
+                @Param("tagIds") List<Integer> tagIds,
+                Pageable pageable, 
+                @Param("startDate") Date startDate,
+                @Param("endDate") Date endDate);
+
+                @Query("select p from Post p, PostTag pt, Tag t " +
+                "where p.id = pt.post and t.tagId = pt.tag and " +
+                "(lower(p.author.name) like lower(concat('%', :searchedValue,'%')) or " +
+                "lower(p.title) like lower(concat('%', :searchedValue,'%')) or " +
+                "lower(p.content) like lower(concat('%', :searchedValue,'%')) or " +
+                "lower(p.excerpt) like lower(concat('%', :searchedValue,'%')) ) and " +
+                "p.author.id in (:authorIds) and t.tagId in (:tagIds) "+
+                "and (p.publishedAt BETWEEN :startDate AND :endDate) group by p.id")                
+        List<Post> findAllPostsBySearchedValueAndAuthorAndTagAndDates(
+                @Param("searchedValue") String searchedValue, 
+                @Param("authorIds") List<Integer> authorIds,
+                @Param("tagIds") List<Integer> tagIds,
+                Pageable pageable, 
+                @Param("startDate") Date startDate,
+                @Param("endDate") Date endDate);
+
+                @Query("select p from Post p, PostTag pt, Tag t " +
+                "where p.id = pt.post and t.tagId = pt.tag and " +
+                "(lower(p.author.name) like lower(concat('%', :searchedValue,'%')) or " +
+                "lower(p.title) like lower(concat('%', :searchedValue,'%')) or " +
+                "lower(p.content) like lower(concat('%', :searchedValue,'%')) or " +
+                "lower(p.excerpt) like lower(concat('%', :searchedValue,'%')) ) and " +
+                "p.author.id in (:authorIds) "+
+                "and (p.publishedAt BETWEEN :startDate AND :endDate) group by p.id")               
+                List<Post> findAllPostsBySearchedValueAndAuthorAndDatesAndSorted(String searchedValue,
+                                List<Integer> authorIds, Pageable pageable, Date startDate, Date endDate);
+
+                @Query("select p from Post p, PostTag pt, Tag t " +
+                        "where p.id = pt.post and t.tagId = pt.tag and " +
+                        "(lower(p.author.name) like lower(concat('%', :searchedValue,'%')) or " +
+                        "lower(p.title) like lower(concat('%', :searchedValue,'%')) or " +
+                        "lower(p.content) like lower(concat('%', :searchedValue,'%')) or " +
+                        "lower(p.excerpt) like lower(concat('%', :searchedValue,'%')) ) and " +
+                        "p.author.id in (:authorIds) and t.tagId in (:tagIds) "+
+                        "and (p.publishedAt BETWEEN :startDate AND :endDate) group by p.id")                                
+                List<Post> findAllPostsBySearchedValueAndAuthorAndTagAndDatesAndSorted(
+                        @Param("searchedValue") String searchedValue, 
+                        @Param("authorIds") List<Integer> authorIds,
+                        @Param("tagIds") List<Integer> tagIds,
+                        Pageable pageable, 
+                        @Param("startDate") Date startDate,
+                        @Param("endDate") Date endDate);
+
+        
+
+        
 
        
 

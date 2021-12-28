@@ -16,7 +16,8 @@
           onkeydown="searchPost()"
         />
         <a href="/post/create">Create a Post</a>
-        <a href="/login">Login</a>
+        <!-- <a href="/login">Login</a> -->
+        <a href="/logout">Logout</a>
       </div>
     </header>
     <div class="nav-bar">
@@ -33,23 +34,26 @@
       <aside class="filter-section">
         <strong style="color: black;">FILTERS</strong>
         <div  class="post-filter-tag">
-          <p>Author:&nbsp;</p>
+          <p class="filter-title">Author:&nbsp;</p>
           <checkbox-group th:each="author : ${authors}">
             <input type="checkbox" th:id="${author.name}" th:name="${author.name}" th:value="${author.id}" th:checked="${authorIdsSet.contains(author.id)? true : false}" onclick=filterPostByAuthor(this) />
             <label th:for="${author.name}">[[${author.name}]]</label><br>
           </checkbox-group>
       </div>
         <div  class="post-filter-tag">
-          <p>Tags:&nbsp;</p>
+          <p class="filter-title">Tags:&nbsp;</p>
           <checkbox-group th:each="tag : ${tags}">
             <input type="checkbox" th:id="${tag.tagName}" th:name="${tag.tagName}" th:value="${tag.tagId}" th:checked="${tagIdsSet.contains(tag.tagId)? true : false}"  onclick="filterPostByTag(this)"/>
             <label th:for="${tag.tagName}" th:inline="text">[[${tag.tagName}]]</label><br>
             </checkbox-group>
       </div>
-      <!-- <div class="post-filter-tag">
-        <input type="date" id="myDate" value="2021-12-23">
+      <div class="post-filter-tag">
+        <span>Choose start date</span>
+        <input type="date" id="startDate" value="${startDate}"><br>
+        <span>Choose end date</span>
+        <input type="date" id="endDate" value="${endDate}"> <br>
         <button onclick="selectPublishedDate()">Filter</button>
-      </div> -->
+      </div>
      </aside>
     </div>
     <div class="container">      

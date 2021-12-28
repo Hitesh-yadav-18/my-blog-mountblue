@@ -1,9 +1,5 @@
 package com.company.my.blog.controller;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -32,12 +29,17 @@ public class IndexController {
     @Autowired
     private UserService userService;
 
-    @GetMapping(value = "/login")
+    @RequestMapping(value = "/login")
     public String login() {
-        return "login";
+        return "login.html";
     }
 
-    @GetMapping("")
+    @RequestMapping(value = "/logout-success")
+    public String logout() {
+        return "redirect:/";
+    }
+
+    @RequestMapping("")
     public String getIndexPage() {
         return "redirect:/?start=0&limit=10";
     }
@@ -48,21 +50,33 @@ public class IndexController {
             @RequestParam("limit") int endPage,
             @RequestParam(value = "author", required = false, defaultValue = "-1") List<Integer> authorId,
             @RequestParam(value = "tagId", required = false, defaultValue = "-1") List<Integer> tagIds,
-            @RequestParam(value = "sortField", required = false, defaultValue = "publishedAt") String sortField,
+            @RequestParam(value = "fromDate", required = false) String fromDate,
+            @RequestParam(value = "toDate", required = false) String toDate,
             @RequestParam(value = "order", required = false, defaultValue = "-1") String order,
             Model model) {
         Set<Integer> authorIdsSet = new HashSet<>(authorId);
         Set<Integer> tagIdsSet = new HashSet<>(tagIds);
         List<Post> posts = null;
-
-        if (authorIdsSet.contains(-1) && tagIdsSet.contains(-1)) {
-            posts = postService.getAllPostsByPage(startPage, endPage);
-        } else if (!(authorIdsSet.contains(-1)) && tagIdsSet.contains(-1)) {
-            posts = postService.getPostByAuthor(authorId, startPage, endPage);
-        } else if (authorIdsSet.contains(-1) && !(tagIdsSet.contains(-1))) {
-            posts = postService.getAllPostsByTagId(tagIds, startPage, endPage);
-        } else if (!(authorIdsSet.contains(-1)) && !(tagIdsSet.contains(-1))) {
-            posts = postService.getAllPostsByAuthorAndTag(authorId, tagIds, startPage, endPage);
+        if(fromDate == null || toDate == null) {    
+            if (authorIdsSet.contains(-1) && tagIdsSet.contains(-1)) {
+                posts = postService.getAllPosts(startPage, endPage);
+            } else if (!(authorIdsSet.contains(-1)) && tagIdsSet.contains(-1)) {
+                posts = postService.getPostByAuthor(authorId, startPage, endPage);
+            } else if (authorIdsSet.contains(-1) && !(tagIdsSet.contains(-1))) {
+                posts = postService.getAllPostsByTagId(tagIds, startPage, endPage);
+            } else if (!(authorIdsSet.contains(-1)) && !(tagIdsSet.contains(-1))) {
+                posts = postService.getAllPostsByAuthorAndTag(authorId, tagIds, startPage, endPage);
+            }
+        }else if(fromDate != null && toDate != null){
+            if (authorIdsSet.contains(-1) && tagIdsSet.contains(-1)) {
+                posts = postService.getAllPostsBasedOnDates(startPage, endPage, fromDate, toDate);
+            } else if (!(authorIdsSet.contains(-1)) && tagIdsSet.contains(-1)) {
+                posts = postService.getPostsByAuthorBasedOnDates(authorId, startPage, endPage, fromDate, toDate);
+            } else if (authorIdsSet.contains(-1) && !(tagIdsSet.contains(-1))) {
+                posts = postService.getAllPostsByTagIdBasedOnDates(tagIds, startPage, endPage, fromDate, toDate);
+            } else if (!(authorIdsSet.contains(-1)) && !(tagIdsSet.contains(-1))) {
+                posts = postService.getAllPostsByAuthorAndTagBasedOnDates(authorId, tagIds, startPage, endPage, fromDate, toDate);
+            }       
         }
         
         Map<Post, List<String>> postTagMap = postService.getPostsWithTagsAsHashMap(posts);
@@ -92,30 +106,36 @@ public class IndexController {
             @RequestParam("limit") int limit,
             @RequestParam(value = "sortField") String sortField,
             @RequestParam("order") String order,
-            @RequestParam(value = "author", required = false, defaultValue = "-1") List<Integer> authorId,
+            @RequestParam(value = "author", required = false, defaultValue = "-1") List<Integer> authorIds,
             @RequestParam(value = "tagId", required = false, defaultValue = "-1") List<Integer> tagIds,
+            @RequestParam(value = "fromDate", required = false) String fromDate,
+            @RequestParam(value = "toDate", required = false) String toDate,
             Model model) {
-        Set<Integer> authorIdsSet = new HashSet<>(authorId);
+        Set<Integer> authorIdsSet = new HashSet<>(authorIds);
         Set<Integer> tagIdsSet = new HashSet<>(tagIds);
         List<Post> posts = null;
-
-        if (order.equals("desc") && authorIdsSet.contains(-1) && tagIdsSet.contains(-1)) {
-            posts = postService.getAllPostsByPublishedDateDesc(start, limit);
-        } else if (order.equals("asc") && authorIdsSet.contains(-1) && tagIdsSet.contains(-1)) {
-            posts = postService.getAllPostsByPublishedDateAsc(start, limit);
-        }else if (order.equals("desc") && authorIdsSet.contains(-1) && !(tagIdsSet.contains(-1))) {
-            posts = postService.getAllPostsByTagIdsPublishedDateDesc(tagIds, start, limit);
-        }else if(order.equals("asc") && authorIdsSet.contains(-1) && !(tagIdsSet.contains(-1))) {
-            posts = postService.getAllPostsByTagIdsPublishedDateAsc(tagIds, start, limit);
-        }else if(order.equals("desc") && !(authorIdsSet.contains(-1)) && tagIdsSet.contains(-1)) {
-            posts = postService.getAllPostsByAuthorPublishedDateDesc(authorId, start, limit);
-        }else if(order.equals("asc") && !(authorIdsSet.contains(-1)) && tagIdsSet.contains(-1)) {
-            posts = postService.getAllPostsByAuthorPublishedDateAsc(authorId, start, limit);
-        }else if(order.equals("desc") && !(authorIdsSet.contains(-1)) && !(tagIdsSet.contains(-1))) {
-            posts = postService.getAllPostsByAuthorAndTagPublishedDateDesc(authorId, tagIds, start, limit);
-        }else if(order.equals("asc") && !(authorIdsSet.contains(-1)) && !(tagIdsSet.contains(-1))) {
-            posts = postService.getAllPostsByAuthorAndTagPublishedDateAsc(authorId, tagIds, start, limit);
-        }           
+        
+        if(fromDate == null || toDate == null){
+            if (authorIdsSet.contains(-1) && tagIdsSet.contains(-1)) {
+                posts = postService.getAllPostsInSortingOrder(start, limit, order);
+            } else if (authorIdsSet.contains(-1) && !(tagIdsSet.contains(-1))) {
+                posts = postService.getAllPostsByTagIdsInSortingOrder(tagIds, start, limit, order);
+            }else if(!(authorIdsSet.contains(-1)) && tagIdsSet.contains(-1)) {
+                posts = postService.getAllPostsByAuthorIdsInSortingOrder(authorIds, start, limit, order);
+            }else if(!(authorIdsSet.contains(-1)) && !(tagIdsSet.contains(-1))) {
+                posts = postService.getAllPostsByAuthorIdsAndTagIdsInSortingOrder(authorIds, tagIds, start, limit, order);
+            } 
+        }else if(fromDate != null && toDate != null){
+            if (authorIdsSet.contains(-1) && tagIdsSet.contains(-1)) {
+                posts = postService.getAllPostsInSortingOrderByDates(start, limit, fromDate, toDate, order);
+            } else if (authorIdsSet.contains(-1) && !(tagIdsSet.contains(-1))) {
+                posts = postService.getAllPostsByTagIdsInSortingOrderByDates(tagIds, start, limit, fromDate, toDate, order);
+            }else if(!(authorIdsSet.contains(-1)) && tagIdsSet.contains(-1)) {
+                posts = postService.getAllPostsByAuthorIdsInSortingOrderByDates(authorIds, start, limit, fromDate, toDate, order);
+            }else if(!(authorIdsSet.contains(-1)) && !(tagIdsSet.contains(-1))) {
+                posts = postService.getAllPostsByAuthorIdsAndTagIdsInSortingOrderByDates(authorIds, tagIds, start, limit, fromDate, toDate, order);
+            } 
+        }      
 
         Map<Post, List<String>> postTagMap = postService.getPostsWithTagsAsHashMap(posts);
         
@@ -127,7 +147,7 @@ public class IndexController {
         if(authorIdsSet.contains(-1)) {
             model.addAttribute("tags", tagService.getAllTags());
         } else {
-            model.addAttribute("tags", tagService.getAllTagsOfSelectedAuthor(authorId));
+            model.addAttribute("tags", tagService.getAllTagsOfSelectedAuthor(authorIds));
         }
         if (posts.size() >= 10) {
             model.addAttribute("currentPage", (start / limit) + 1);
