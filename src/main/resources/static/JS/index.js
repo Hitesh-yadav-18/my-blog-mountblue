@@ -27,7 +27,6 @@ function sortingPost(sortingBtn) {
       window.location.href = url;
   }
 
-
 function prevPage(buttonElement) {
   let params = new URLSearchParams(window.location.search);
   let start = params.get("start");
@@ -88,4 +87,11 @@ function removeParam(sourceURL, key, value) {
   let removeParam = key+"="+value;
   params = params.filter(param => param !== removeParam);
   return '/?'+params.join('&');
+}
+
+function selectPublishedDate(){
+  let selectedDate = document.getElementById("myDate").value;
+  let url = new URL(window.location);
+  url.searchParams.append("sortField" , selectedDate);
+  window.location.href = url;
 }

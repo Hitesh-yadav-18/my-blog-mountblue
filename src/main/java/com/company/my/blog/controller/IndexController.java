@@ -1,5 +1,9 @@
 package com.company.my.blog.controller;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +48,7 @@ public class IndexController {
             @RequestParam("limit") int endPage,
             @RequestParam(value = "author", required = false, defaultValue = "-1") List<Integer> authorId,
             @RequestParam(value = "tagId", required = false, defaultValue = "-1") List<Integer> tagIds,
-            @RequestParam(value = "sortField", required = false, defaultValue = "-1") String sortField,
+            @RequestParam(value = "sortField", required = false, defaultValue = "publishedAt") String sortField,
             @RequestParam(value = "order", required = false, defaultValue = "-1") String order,
             Model model) {
         Set<Integer> authorIdsSet = new HashSet<>(authorId);

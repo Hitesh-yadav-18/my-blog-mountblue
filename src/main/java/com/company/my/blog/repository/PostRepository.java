@@ -68,6 +68,11 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
                         @Param("authorIds") List<Integer> authorId,
                         @Param("tagIds") List<Integer> tagIds,
                         Pageable pageable);
+        @Query("select p from Post p, PostTag pt, Tag t where p.id = pt.post and " +
+                        " t.id = pt.tag and p.author.id in (:authorIds) and p.publishedAt = :publishedAt ")
+        List<Post> findByAuthorIdAndPublished(
+                @Param("authorIds") List<Integer> authorId, 
+                @Param("publishedAt") Date sortField, Pageable pageable);                
 
         @Query(value = "SELECT * FROM post WHERE is_published = true "+
                         "and author = :authorId ORDER BY published_at DESC", 
@@ -113,6 +118,16 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
                         @Param("searchedValue") String searchedValue,
                         @Param("authorIds") List<Integer> authorIds,
                         Pageable pageable);
+
+        @Query("select p from Post p, PostTag pt, Tag t " +
+                        "where p.id = pt.post and t.tagId = pt.tag and " +
+                        "(lower(p.author.name) like lower(concat('%', :searchedValue,'%')) or " +
+                        "lower(p.title) like lower(concat('%', :searchedValue,'%')) or " +
+                        "lower(p.content) like lower(concat('%', :searchedValue,'%')) or " +
+                        "lower(p.excerpt) like lower(concat('%', :searchedValue,'%')) ) and " +
+                        "t.tagId in (:tagIds) group by p.id")
+        List<Post> findAllPostsBySearchedValueAndTag(String searchedValue, List<Integer> tagIds, Pageable pageable);
+                
 
         @Query("select p from Post p, PostTag pt, Tag t " +
                         "where p.id = pt.post and t.tagId = pt.tag and " +
@@ -177,6 +192,9 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
                         @Param("tagIds") List<Integer> tagIds,
                         Pageable pageable);
 
+       
+
+       
         
 
        

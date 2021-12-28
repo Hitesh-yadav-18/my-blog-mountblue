@@ -84,6 +84,35 @@ public class SearchController {
         return "index";
     }
 
+    @GetMapping(value = "/", params = { "start", "limit", "search", "tagId" })
+    public String getSearchPageByTag(
+            @RequestParam("start") int start,
+            @RequestParam("limit") int limit,
+            @RequestParam(value = "search") String searchedValue,
+            @RequestParam(value = "author", required = false, defaultValue = "-1") List<Integer> authorIds,
+            @RequestParam(value = "tagId", required = false, defaultValue = "-1") List<Integer> tagIds,
+            Model model) {
+        List<Post> posts = postService.getAllPostsBySearchedValueAndTag(searchedValue, tagIds,start, limit);
+
+        Map<Post, List<String>> postTagMap = postService.getPostsWithTagsAsHashMap(posts);
+        Set<Integer> authorIdsSet = new HashSet<>(authorIds);
+        Set<Integer> tagIdsSet = new HashSet<>(tagIds);
+
+        model.addAttribute("authorIdsSet", authorIdsSet);
+        model.addAttribute("tagIdsSet", tagIdsSet);
+        model.addAttribute("postTagMap", postTagMap);
+        model.addAttribute("totalResultCount", postTagMap.size());
+        model.addAttribute("authors", userService.getAllUsers());
+        model.addAttribute("tags", tagService.getAllTags());
+        if (posts.size() >= 10) {
+            model.addAttribute("currentPage", (start / limit) + 1);
+        } else {
+            model.addAttribute("currentPage", "last");
+        }
+        return "index";
+    }
+
+
     @GetMapping(value = "/", params = { "start", "limit", "search", "author", "tagId" })
     public String getSearchPageByAuthorAndTagWithoutSort(
             @RequestParam("start") int start,

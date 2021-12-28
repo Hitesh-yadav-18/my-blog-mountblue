@@ -62,17 +62,6 @@ public class PostService {
         return postRepository.findPostById(id);
     }
 
-    public List<Post> getPostByAuthor(List<Integer> authorIds, Integer start, Integer limit) {
-        Pageable pageable = PageRequest.of(start/limit, limit);
-        return postRepository.findByAuthorId(authorIds, pageable);
-    }
-
-    public List<Post> getAllPostsByTagId(List<Integer> tagIds, int startPage, int endPage) {
-        Pageable pageable = PageRequest.of(startPage / endPage, endPage,
-                 Sort.by("publishedAt").descending());
-        return postRepository.findAllByTagId(tagIds, pageable);
-    }
-
     public void deletePost(Integer id) {
         postRepository.deleteById(id);
     }
@@ -84,6 +73,23 @@ public class PostService {
             String content,
             Date updatedAt) {
         postRepository.updatePostByPostId(id, title, excerpt, content, updatedAt);
+    }
+
+    public List<Post> getPostByAuthor(List<Integer> authorIds, Integer start, Integer limit) {
+        Pageable pageable = PageRequest.of(start/limit, limit);
+        return postRepository.findByAuthorId(authorIds, pageable);
+    }
+
+    public List<Post> getAllPostsByTagId(List<Integer> tagIds, int startPage, int endPage) {
+        Pageable pageable = PageRequest.of(startPage / endPage, endPage,
+                 Sort.by("publishedAt").descending());
+        return postRepository.findAllByTagId(tagIds, pageable);
+    }
+
+    public List<Post> getPostByAuthorSelectedPublishedDate(List<Integer> authorId, int startPage, int endPage,
+            Date sortField, String order) {
+        Pageable pageable = PageRequest.of(startPage / endPage, endPage);
+        return postRepository.findByAuthorIdAndPublished(authorId, sortField, pageable);
     }
 
     public List<Post> getAllPostsByPublishedDateDesc(int start, int limit) {
@@ -143,6 +149,12 @@ public class PostService {
         return postRepository.findAllPostsBySearchedValueAndAuthor(searchedValue, author, pageable);
     }
 
+    public List<Post> getAllPostsBySearchedValueAndTag(String searchedValue, List<Integer> tagIds, int start,
+            int limit) {
+        Pageable pageable = PageRequest.of(start/limit, limit);
+        return postRepository.findAllPostsBySearchedValueAndTag(searchedValue, tagIds, pageable);
+    }
+
     public List<Post> getAllPostsBySearchedValue(String searchedValue, int start, int limit) {
         Pageable pageable = PageRequest.of(start/limit, limit);
         return postRepository.findAllPostsBySearchedValue(searchedValue, pageable);
@@ -192,6 +204,10 @@ public class PostService {
         return postRepository.findAllPostsBySearchedValueAuthorTagNoSorting(
             searchedValue, authorIds, tagIds, pageable);
     }
+
+    
+
+    
 
     
 }

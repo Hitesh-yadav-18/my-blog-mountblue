@@ -44,7 +44,12 @@
           <checkbox-group th:each="tag : ${tags}">
             <input type="checkbox" th:id="${tag.tagName}" th:name="${tag.tagName}" th:value="${tag.tagId}" th:checked="${tagIdsSet.contains(tag.tagId)? true : false}"  onclick="filterPostByTag(this)"/>
             <label th:for="${tag.tagName}" th:inline="text">[[${tag.tagName}]]</label><br>
+            </checkbox-group>
       </div>
+      <!-- <div class="post-filter-tag">
+        <input type="date" id="myDate" value="2021-12-23">
+        <button onclick="selectPublishedDate()">Filter</button>
+      </div> -->
      </aside>
     </div>
     <div class="container">      
