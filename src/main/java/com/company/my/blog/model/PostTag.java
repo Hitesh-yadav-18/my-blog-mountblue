@@ -19,12 +19,12 @@ public class PostTag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "post_id")
+    @ManyToOne
+    @JoinColumn(name = "post_id", referencedColumnName = "id")
     private Post post;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "tag_id")
+    @ManyToOne
+    @JoinColumn(name = "tag_id", referencedColumnName = "tagId")
     private Tag tag;
 
     private Date createdAt;

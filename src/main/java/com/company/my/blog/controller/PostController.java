@@ -12,6 +12,7 @@ import com.company.my.blog.model.Comment;
 import com.company.my.blog.model.Post;
 import com.company.my.blog.model.PostTag;
 import com.company.my.blog.model.Tag;
+import com.company.my.blog.model.User;
 import com.company.my.blog.service.CommentService;
 import com.company.my.blog.service.PostService;
 import com.company.my.blog.service.PostTagService;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 @Controller
 @RequestMapping(value = "/post")
@@ -64,13 +66,13 @@ public class PostController {
     }
 
     @PostMapping(value = "/create/save")
-    public String newPostCreate(HttpServletRequest request, Model model) {
+    public String newPostCreate(HttpServletRequest request, @SessionAttribute("currentUser") User user, Model model) {
         String title = request.getParameter("title");
         String excerpt = request.getParameter("excerpt");
         String content = request.getParameter("content");
         String tags = request.getParameter("tagsList");
         if (title != null && excerpt != null && content != null && tags != null) {
-            Post savedPostData = postService.createNewPost(title, excerpt, content);
+            Post savedPostData = postService.createNewPost(title, excerpt, content, user);
 
             if (savedPostData != null) {
                 Set<Tag> tagSet = new HashSet<Tag>();

@@ -30,12 +30,11 @@ public class PostService {
     @Autowired
     private TagService tagService;
 
-    public Post createNewPost(String title, String excerpt, String content) {
+    public Post createNewPost(String title, String excerpt, String content, User user) {
         Post post = new Post();
         post.setTitle(title);
         post.setExcerpt(excerpt);
         post.setContent(content);
-        User user = userRepository.findById(1).get();
         post.setAuthor(user);
         post.setPublished(true);
         post.setPublishedAt(new Date());

@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.company.my.blog.model.Post;
+import com.company.my.blog.model.User;
 import com.company.my.blog.service.PostService;
 import com.company.my.blog.service.TagService;
 import com.company.my.blog.service.UserService;
@@ -14,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -36,6 +39,18 @@ public class IndexController {
     @RequestMapping(value = "/login")
     public String login() {
         return "login.html";
+    }
+
+    @GetMapping(value = "/signup")
+    public String signup() {
+        return "signup.html";
+    }
+
+    @PostMapping(value = "/signup")
+    public String signup(@ModelAttribute User user) {
+
+        userService.registerUser(user);
+        return "redirect:/login";
     }
 
     @RequestMapping(value = "/logout-success")

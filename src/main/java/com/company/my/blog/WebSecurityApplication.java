@@ -9,7 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -19,12 +19,15 @@ public class WebSecurityApplication extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    @Autowired
+    private SuccessHandler successHandler;
+
     @Bean
     public AuthenticationProvider authenticationProvider(){
         
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userDetailsService);
-        provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
+        provider.setPasswordEncoder(new BCryptPasswordEncoder());
         
         return provider;
     }
@@ -39,6 +42,7 @@ public class WebSecurityApplication extends WebSecurityConfigurerAdapter {
             .formLogin()
             .usernameParameter("email")
             .passwordParameter("password")
+            .successHandler(successHandler)
             .loginPage("/login").permitAll()
             .and()
             .logout().invalidateHttpSession(true)
