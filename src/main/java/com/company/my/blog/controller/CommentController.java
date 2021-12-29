@@ -31,8 +31,6 @@ public class CommentController {
         post.setId(Integer.parseInt(postId));
         if (name != null && email != null && comment != null && post != null) {
             commentService.addNewCommentToPost(name, email, comment, post);
-        } else {
-            model.addAttribute("error", "Please insert all fields");
         }
         return "redirect:/post/" + postId;
     }

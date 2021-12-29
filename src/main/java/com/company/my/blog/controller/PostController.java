@@ -126,7 +126,4 @@ public class PostController {
         postService.deletePost(id);
         return "deleted";
     }
-
-    
-
 }

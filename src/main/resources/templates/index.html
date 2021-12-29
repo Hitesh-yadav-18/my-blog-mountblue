@@ -22,41 +22,78 @@
     </header>
     <div class="nav-bar">
       <div id="sortDropdown" class="dropdown-content">
-        <select name="sort" id="sort"  onclick="sortingPost(this)">
-          <option value="" disabled selected >Sort</option>
-          <option id="sortByDesc" value="desc" >Newest first</option>
-          <option id="sortByAsc" value="asc" >Oldest first</option>
+        <select name="sort" id="sort" onclick="sortingPost(this)">
+          <option value="" disabled selected>Sort</option>
+          <option id="sortByDesc" value="desc">Newest first</option>
+          <option id="sortByAsc" value="asc">Oldest first</option>
         </select>
       </div>
     </div>
-    <h3> Current search result:&nbsp;<em th:text="${totalResultCount}"></em></h3>
+    <h3>Current search result:&nbsp;<em th:text="${totalResultCount}"></em></h3>
     <div>
       <aside class="filter-section">
-        <strong style="color: black;">FILTERS</strong>
-        <div  class="post-filter-tag">
-          <p class="filter-title">Author:&nbsp;</p>
+        <div class="post-filter-title">
+          <strong class="aside-title">Filter</strong>
+        </div>
+        <div class="post-filter-tag">
           <checkbox-group th:each="author : ${authors}">
-            <input type="checkbox" th:id="${author.name}" th:name="${author.name}" th:value="${author.id}" th:checked="${authorIdsSet.contains(author.id)? true : false}" onclick=filterPostByAuthor(this) />
-            <label th:for="${author.name}">[[${author.name}]]</label><br>
+            <input
+              type="checkbox"
+              th:id="${author.name}"
+              th:name="${author.name}"
+              th:value="${author.id}"
+              th:checked="${authorIdsSet.contains(author.id)? true : false}"
+              onclick="filterPostByAuthor(this)"
+            />
+            <label th:for="${author.name}">[[${author.name}]]</label><br />
           </checkbox-group>
-      </div>
-        <div  class="post-filter-tag">
-          <p class="filter-title">Tags:&nbsp;</p>
+        </div>
+        <div class="post-filter-title">
+          <strong class="aside-title">Tags</strong>
+        </div>
+        <div class="post-filter-tag">
           <checkbox-group th:each="tag : ${tags}">
-            <input type="checkbox" th:id="${tag.tagName}" th:name="${tag.tagName}" th:value="${tag.tagId}" th:checked="${tagIdsSet.contains(tag.tagId)? true : false}"  onclick="filterPostByTag(this)"/>
-            <label th:for="${tag.tagName}" th:inline="text">[[${tag.tagName}]]</label><br>
-            </checkbox-group>
-      </div>
-      <div class="post-filter-tag">
-        <span>Choose start date</span>
-        <input type="date" id="startDate" value="${startDate}"><br>
-        <span>Choose end date</span>
-        <input type="date" id="endDate" value="${endDate}"> <br>
-        <button onclick="selectPublishedDate()">Filter</button>
-      </div>
-     </aside>
+            <input
+              type="checkbox"
+              th:id="${tag.tagName}"
+              th:name="${tag.tagName}"
+              th:value="${tag.tagId}"
+              th:checked="${tagIdsSet.contains(tag.tagId)? true : false}"
+              onclick="filterPostByTag(this)"
+            />
+            <label th:for="${tag.tagName}" th:inline="text"
+              >[[${tag.tagName}]]</label
+            ><br />
+          </checkbox-group>
+        </div>
+        <div class="post-filter-title">
+          <strong class="aside-title">Published Date</strong>
+        </div>
+        <div class="post-filter-tag">
+          <span>Choose start date</span>
+          <input
+            class="input-date"
+            type="date"
+            id="startDate"
+            min="2021-12-24"
+            value="${startDate}"
+          /><br />
+          <span>Choose end date</span>
+          <input
+            class="input-date"
+            type="date"
+            id="endDate"
+            min="2021-12-24"
+            value="${endDate}"
+          />
+          <br />
+          <button class="button-date" onclick="selectPublishedDate()">
+            Filter
+          </button>
+        </div>
+      </aside>
     </div>
-    <div class="container">      
+    <div class="container">
       <div th:each="post : ${postTagMap.keySet()}">
         <div class="blog-box">
           <div
@@ -71,12 +108,18 @@
               Published on: <span>[[${post.getPublishedAt()}]]</span>
             </p>
           </div>
-          <div  class="post-tag">
-            <p>Tags:&nbsp;
-            <span th:each="tag : ${postTagMap.get(post)}" th:if="${tag != ''}" th:inline="text">        
-                [[${tag}]]&nbsp;&nbsp; 
-            </span></p>
-        </div>
+          <div class="post-tag">
+            <p>
+              Tags:&nbsp;
+              <span
+                th:each="tag : ${postTagMap.get(post)}"
+                th:if="${tag != ''}"
+                th:inline="text"
+              >
+                [[${tag}]]&nbsp;&nbsp;
+              </span>
+            </p>
+          </div>
           <div class="blog-box-content">
             <p th:text="${post.getExcerpt()}"></p>
           </div>
