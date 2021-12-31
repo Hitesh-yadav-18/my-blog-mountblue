@@ -24,6 +24,7 @@ public class User {
     @Column(unique=true)
     private String email;
     private String password;
+    private String role;
 
     @OneToMany(mappedBy = "author")
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -59,6 +60,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public List<Post> getPosts() {

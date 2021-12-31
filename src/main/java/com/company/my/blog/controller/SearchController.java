@@ -32,7 +32,7 @@ public class SearchController {
     private UserService userService;
 
     @GetMapping(value = "/", params = { "start", "limit", "search" })
-    public String getSearchPage(
+    public String getSearchedPosts(
             @RequestParam("start") int start,
             @RequestParam("limit") int limit,
             @RequestParam(value = "search") String searchedValue,
@@ -51,14 +51,14 @@ public class SearchController {
                 searchedValue, start, limit, fromDate, toDate);
         }
 
-        Map<Post, List<String>> postTagMap = postService.getPostsWithTagsAsHashMap(posts);
+        Map<Post, List<String>> postTagsMap = postService.getPostsAndTagsAsKeyValuePair(posts);
         Set<Integer> authorIdsSet = new HashSet<>(authorIds);
         Set<Integer> tagIdsSet = new HashSet<>(tagIds);
 
         model.addAttribute("authorIdsSet", authorIdsSet);
         model.addAttribute("tagIdsSet", tagIdsSet);
-        model.addAttribute("postTagMap", postTagMap);
-        model.addAttribute("totalResultCount", postTagMap.size());
+        model.addAttribute("postTagMap", postTagsMap);
+        model.addAttribute("totalResultCount", postTagsMap.size());
         model.addAttribute("authors", userService.getAllUsers());
         model.addAttribute("tags", tagService.getAllTags());
         if (posts.size() >= PAGE_LIMIT) {
@@ -70,7 +70,7 @@ public class SearchController {
     }
 
     @GetMapping(value = "/", params = { "start", "limit", "search", "author" })
-    public String getSearchPageByAuthor(
+    public String getSearchedPostsByAuthor(
             @RequestParam("start") int start,
             @RequestParam("limit") int limit,
             @RequestParam(value = "search") String searchedValue,
@@ -89,7 +89,7 @@ public class SearchController {
                 searchedValue, start, limit, authorIds, fromDate, toDate);
         }
 
-        Map<Post, List<String>> postTagMap = postService.getPostsWithTagsAsHashMap(posts);
+        Map<Post, List<String>> postTagMap = postService.getPostsAndTagsAsKeyValuePair(posts);
         Set<Integer> authorIdsSet = new HashSet<>(authorIds);
         Set<Integer> tagIdsSet = new HashSet<>(tagIds);
 
@@ -108,7 +108,7 @@ public class SearchController {
     }
 
     @GetMapping(value = "/", params = { "start", "limit", "search", "tagId" })
-    public String getSearchPageByTag(
+    public String getSearchedPostsByTag(
             @RequestParam("start") int start,
             @RequestParam("limit") int limit,
             @RequestParam(value = "search") String searchedValue,
@@ -128,7 +128,7 @@ public class SearchController {
                 searchedValue, start, limit, tagIds, fromDate, toDate);
         }
 
-        Map<Post, List<String>> postTagMap = postService.getPostsWithTagsAsHashMap(posts);
+        Map<Post, List<String>> postTagMap = postService.getPostsAndTagsAsKeyValuePair(posts);
         Set<Integer> authorIdsSet = new HashSet<>(authorIds);
         Set<Integer> tagIdsSet = new HashSet<>(tagIds);
 
@@ -148,7 +148,7 @@ public class SearchController {
     }
 
     @GetMapping(value = "/", params = { "start", "limit", "search", "author", "tagId" })
-    public String getSearchPageByAuthorAndTagWithoutSort(
+    public String getSearchedPostsByAuthorAndTagWithoutSort(
             @RequestParam("start") int start,
             @RequestParam("limit") int limit,
             @RequestParam(value = "search") String searchedValue,
@@ -169,12 +169,12 @@ public class SearchController {
 
         Set<Integer> authorIdsSet = new HashSet<>(authorIds);
         Set<Integer> tagIdsSet = new HashSet<>(tagIds);
-        Map<Post, List<String>> postTagMap = postService.getPostsWithTagsAsHashMap(posts);
+        Map<Post, List<String>> postTagsMap = postService.getPostsAndTagsAsKeyValuePair(posts);
 
         model.addAttribute("authorIdsSet", authorIdsSet);
         model.addAttribute("tagIdsSet", tagIdsSet);
-        model.addAttribute("postTagMap", postTagMap);
-        model.addAttribute("totalResultCount", postTagMap.size());
+        model.addAttribute("postTagMap", postTagsMap);
+        model.addAttribute("totalResultCount", postTagsMap.size());
         model.addAttribute("authors", userService.getAllUsers());
         model.addAttribute("tags", tagService.getAllTags());
         if (posts.size() >= PAGE_LIMIT) {
@@ -188,7 +188,7 @@ public class SearchController {
     @GetMapping(
         value = "/",
         params = { "start", "limit", "search", "author", "sortField", "order" })
-    public String getSearchPageByAuthorInSortedWay(
+    public String getSearchedPostsByAuthorInSortedWay(
             @RequestParam("start") int start,
             @RequestParam("limit") int limit,
             @RequestParam(value = "search") String searchedValue,
@@ -211,7 +211,7 @@ public class SearchController {
 
         Set<Integer> authorIdsSet = new HashSet<>(authorIds);
         Set<Integer> tagIdsSet = new HashSet<>(tagIds);
-        Map<Post, List<String>> postTagMap = postService.getPostsWithTagsAsHashMap(posts);
+        Map<Post, List<String>> postTagMap = postService.getPostsAndTagsAsKeyValuePair(posts);
 
         model.addAttribute("authorIdsSet", authorIdsSet);
         model.addAttribute("tagIdsSet", tagIdsSet);
@@ -230,7 +230,7 @@ public class SearchController {
     @GetMapping(
         value = "/", 
         params = { "start", "limit", "search", "author", "sortField", "order", "tagId" })
-    public String getSearchPageByAuthorAndTagInSortedWay(
+    public String getSearchedPostsByAuthorAndTagInSortedWay(
             @RequestParam("start") int start,
             @RequestParam("limit") int limit,
             @RequestParam(value = "search") String searchedValue,
@@ -255,7 +255,7 @@ public class SearchController {
 
         Set<Integer> authorIdsSet = new HashSet<>(authorIds);
         Set<Integer> tagIdsSet = new HashSet<>(tagIds);
-        Map<Post, List<String>> postTagMap = postService.getPostsWithTagsAsHashMap(posts);
+        Map<Post, List<String>> postTagMap = postService.getPostsAndTagsAsKeyValuePair(posts);
 
         model.addAttribute("authorIdsSet", authorIdsSet);
         model.addAttribute("tagIdsSet", tagIdsSet);

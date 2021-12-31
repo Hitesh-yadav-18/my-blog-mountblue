@@ -21,6 +21,7 @@
       </div>
     </header>
     <div class="nav-bar">
+      <h3 th:inline="text">Welcome ! [[${userName}]]</h3>
       <div id="sortDropdown" class="dropdown-content">
         <select name="sort" id="sort" onclick="sortingPost(this)">
           <option value="" disabled selected>Sort</option>
@@ -29,6 +30,7 @@
         </select>
       </div>
     </div>
+   
     <h3>Current search result:&nbsp;<em th:text="${totalResultCount}"></em></h3>
     <div>
       <aside class="filter-section">

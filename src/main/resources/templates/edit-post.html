@@ -35,13 +35,13 @@
           placeholder="Add brief summary about post"
         />
         <br />
-        <!-- <input
-          class="form-input"
-          th:field="*{tag}"
+        <input
+          class="form-input"  
+          th:value="${tags.toString()}"
           type="text"
           name="tags"
           id="tags"
-          placeholder="Add tags"
+          placeholder="Add tags-Press enter to insert another tag"
           onkeydown="tagCreate()"
         />
         <br /> 
@@ -52,7 +52,7 @@
           id="tagsList"
           placeholder="Added tags will appear here"
           readonly
-        />-->
+        />
         <textarea
           name="content"
           th:field="*{content}"
@@ -65,5 +65,17 @@
         <input class="form-btn" type="submit" value="Update Post" />
       </form>
     </div>
+    <script>
+      var el = document.getElementById("tags");
+      el.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+           event.preventDefault(); 
+          let insertedTag = event.target.value;
+          document.getElementById("tagsList").value += insertedTag + ",";
+          event.target.value = "";
+        }
+      });
+
+    </script>
   </body>
 </html>

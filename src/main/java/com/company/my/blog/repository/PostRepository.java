@@ -18,11 +18,10 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 
         List<Post> findAll();
 
-        Post findPostById(int id);
+        Post findPostById(int postId);
 
-        @Query(value = "select p from Post p, PostTag pt, Tag t where p.id = pt.post and " +
-                        " t.id = pt.tag and t.id in (:tagIds) ", 
-                        nativeQuery = true)
+        @Query("select p from Post p, PostTag pt, Tag t where p.id = pt.post and " +
+                        " t.id = pt.tag and t.id in (:tagIds) ")
         List<Post> findPostByTag(@Param("tagId") List<Integer> tagIds);
 
         @Modifying
@@ -301,5 +300,6 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
                         Pageable pageable,
                         @Param("startDate") Date startDate,
                         @Param("endDate") Date endDate);
+        
 
 }

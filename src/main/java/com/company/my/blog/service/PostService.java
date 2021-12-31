@@ -10,7 +10,6 @@ import java.util.Map;
 import com.company.my.blog.model.Post;
 import com.company.my.blog.model.User;
 import com.company.my.blog.repository.PostRepository;
-import com.company.my.blog.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -25,10 +24,8 @@ public class PostService {
     private PostRepository postRepository;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private TagService tagService;
+
 
     public Post createNewPost(String title, String excerpt, String content, User user) {
         Post post = new Post();
@@ -44,7 +41,7 @@ public class PostService {
         return postRepository.save(post);
     }
 
-    public Map<Post, List<String>> getPostsWithTagsAsHashMap(List<Post> posts) {
+    public Map<Post, List<String>> getPostsAndTagsAsKeyValuePair(List<Post> posts) {
         List<String> tagList = null;
         Map<Post, List<String>> postTagMap = new LinkedHashMap<>();
         for (Post post : posts) {
@@ -54,12 +51,13 @@ public class PostService {
         return postTagMap;
     }
 
+    
+
     public List<Post> getAllPosts() {
         return postRepository.findAll();
     }
-
-    public Post getParticularPost(int id) {
-        return postRepository.findPostById(id);
+    public Post getParticularPost(int postId) {
+        return postRepository.findPostById(postId);
     }
 
     public void deletePost(Integer id) {
@@ -488,4 +486,6 @@ public class PostService {
                 searchedValue, authorIds, tagIds, pageable, startDate, endDate);
     }
 
+    
+   
 }

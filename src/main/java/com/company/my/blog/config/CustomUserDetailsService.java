@@ -1,6 +1,5 @@
-package com.company.my.blog.service;
+package com.company.my.blog.config;
 
-import com.company.my.blog.CustomUserDetails;
 import com.company.my.blog.model.User;
 import com.company.my.blog.repository.UserRepository;
 
@@ -24,8 +23,5 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found...");
         }
         return new CustomUserDetails(user);
-    }
-
-    
-    
+    }    
 }

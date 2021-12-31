@@ -1,4 +1,4 @@
-package com.company.my.blog;
+package com.company.my.blog.config;
 
 import java.io.IOException;
 

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 @Controller
 public class IndexController {
@@ -37,17 +38,17 @@ public class IndexController {
     private UserService userService;
 
     @RequestMapping(value = "/login")
-    public String login() {
+    public String getLoginPage() {
         return "login.html";
     }
 
     @GetMapping(value = "/signup")
-    public String signup() {
+    public String getSignupPage() {
         return "signup.html";
     }
 
     @PostMapping(value = "/signup")
-    public String signup(@ModelAttribute User user) {
+    public String getSignupDetails(@ModelAttribute User user) {
 
         userService.registerUser(user);
         return "redirect:/login";
@@ -64,18 +65,19 @@ public class IndexController {
     }
 
     @GetMapping(value = "/", params = { "start", "limit" })
-    public String getPageByAuthor(
+    public String getPostsByAuthorsTagsDates (
             @RequestParam("start") int startPage,
             @RequestParam("limit") int endPage,
             @RequestParam(value = "author", required = false, defaultValue = ""+NO_DATA+"")
-                 List<Integer> authorId,
+                 List<Integer> authorIds,
             @RequestParam(value = "tagId", required = false, defaultValue = ""+NO_DATA+"")
                  List<Integer> tagIds,
             @RequestParam(value = "fromDate", required = false) String fromDate,
             @RequestParam(value = "toDate", required = false) String toDate,
             @RequestParam(value = "order", required = false, defaultValue = ""+NO_DATA+"") String order,
+            @SessionAttribute("currentUser") User user,
             Model model) {
-        Set<Integer> authorIdsSet = new HashSet<>(authorId);
+        Set<Integer> authorIdsSet = new HashSet<>(authorIds);
         Set<Integer> tagIdsSet = new HashSet<>(tagIds);
         List<Post> posts = null;
 
@@ -83,29 +85,31 @@ public class IndexController {
             if (authorIdsSet.contains(NO_DATA) && tagIdsSet.contains(NO_DATA)) {
                 posts = postService.getAllPosts(startPage, endPage);
             } else if (!(authorIdsSet.contains(NO_DATA)) && tagIdsSet.contains(NO_DATA)) {
-                posts = postService.getPostByAuthor(authorId, startPage, endPage);
+                posts = postService.getPostByAuthor(authorIds, startPage, endPage);
             } else if (authorIdsSet.contains(NO_DATA) && !(tagIdsSet.contains(NO_DATA))) {
                 posts = postService.getAllPostsByTagId(tagIds, startPage, endPage);
             } else if (!(authorIdsSet.contains(NO_DATA)) && !(tagIdsSet.contains(NO_DATA))) {
-                posts = postService.getAllPostsByAuthorAndTag(authorId, tagIds, startPage, endPage);
+                posts = postService.getAllPostsByAuthorAndTag(authorIds, tagIds, startPage, endPage);
             }
-        } else if (fromDate != null && toDate != null) {
+        } else {
             if (authorIdsSet.contains(NO_DATA) && tagIdsSet.contains(NO_DATA)) {
                 posts = postService.getAllPostsBasedOnDates(startPage, endPage, fromDate, toDate);
             } else if (!(authorIdsSet.contains(NO_DATA)) && tagIdsSet.contains(NO_DATA)) {
                 posts = postService.getPostsByAuthorBasedOnDates(
-                    authorId, startPage, endPage, fromDate, toDate);
+                    authorIds, startPage, endPage, fromDate, toDate);
             } else if (authorIdsSet.contains(NO_DATA) && !(tagIdsSet.contains(NO_DATA))) {
                 posts = postService.getAllPostsByTagIdBasedOnDates(
                     tagIds, startPage, endPage, fromDate, toDate);
             } else if (!(authorIdsSet.contains(NO_DATA)) && !(tagIdsSet.contains(NO_DATA))) {
                 posts = postService.getAllPostsByAuthorAndTagBasedOnDates(
-                    authorId, tagIds, startPage, endPage, fromDate, toDate);
+                    authorIds, tagIds, startPage, endPage, fromDate, toDate);
             }
         }
 
-        Map<Post, List<String>> postTagMap = postService.getPostsWithTagsAsHashMap(posts);
+        assert posts != null;
+        Map<Post, List<String>> postTagMap = postService.getPostsAndTagsAsKeyValuePair(posts);
 
+        model.addAttribute("userName", user.getName());
         model.addAttribute("authorIdsSet", authorIdsSet);
         model.addAttribute("tagIdsSet", tagIdsSet);
         model.addAttribute("postTagMap", postTagMap);
@@ -114,7 +118,7 @@ public class IndexController {
         if (authorIdsSet.contains(NO_DATA)) {
             model.addAttribute("tags", tagService.getAllTags());
         } else {
-            model.addAttribute("tags", tagService.getAllTagsOfSelectedAuthor(authorId));
+            model.addAttribute("tags", tagService.getAllTagsOfSelectedAuthor(authorIds));
         }
 
         if (posts.size() >= PAGE_LIMIT) {
@@ -126,7 +130,7 @@ public class IndexController {
     }
 
     @GetMapping(value = "/", params = { "start", "limit", "sortField", "order" })
-    public String getSortedPostsByPublishedDate(
+    public String getSortedPostsAndFilterByPublishedDate(
             @RequestParam("start") int start,
             @RequestParam("limit") int limit,
             @RequestParam(value = "sortField") String sortField,
@@ -154,7 +158,7 @@ public class IndexController {
                 posts = postService.getAllPostsByAuthorIdsAndTagIdsInSortingOrder(
                     authorIds, tagIds, start, limit, order);
             }
-        } else if (fromDate != null && toDate != null) {
+        } else {
             if (authorIdsSet.contains(NO_DATA) && tagIdsSet.contains(NO_DATA)) {
                 posts = postService.getAllPostsInSortingOrderByDates(
                     start, limit, fromDate, toDate, order);
@@ -171,12 +175,13 @@ public class IndexController {
             }
         }
 
-        Map<Post, List<String>> postTagMap = postService.getPostsWithTagsAsHashMap(posts);
+        assert posts != null;
+        Map<Post, List<String>> postTagsMap = postService.getPostsAndTagsAsKeyValuePair(posts);
 
         model.addAttribute("authorIdsSet", authorIdsSet);
         model.addAttribute("tagIdsSet", tagIdsSet);
-        model.addAttribute("postTagMap", postTagMap);
-        model.addAttribute("totalResultCount", postTagMap.size());
+        model.addAttribute("postTagMap", postTagsMap);
+        model.addAttribute("totalResultCount", postTagsMap.size());
         model.addAttribute("authors", userService.getAllUsers());
         if (authorIdsSet.contains(NO_DATA)) {
             model.addAttribute("tags", tagService.getAllTags());

@@ -3,7 +3,6 @@ package com.company.my.blog.model;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -38,11 +37,11 @@ public class Post {
     private Date createdAt;
     private Date updatedAt;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<PostTag> postTags;
 
-    @OneToMany(mappedBy = "postId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "postId")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Comment> comments;
 
