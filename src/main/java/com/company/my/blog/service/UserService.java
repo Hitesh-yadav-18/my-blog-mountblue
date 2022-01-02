@@ -26,7 +26,14 @@ public class UserService {
     public void registerUser(User user) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         user.setPassword(encoder.encode(user.getPassword()));
+        user.setRole("Author");
 
         userRepository.save(user);
     }
+
+    public User getUserByEmail(String selectedAuthor) {
+        return userRepository.findByEmail(selectedAuthor);
+    }
+
+    
 }

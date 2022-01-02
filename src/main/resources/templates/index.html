@@ -15,16 +15,18 @@
           placeholder="Search"
           onkeydown="searchPost()"
         />
-        <a th:if="${user != null}" href="/post/create">Create a Post</a>
+        <a sec:authorize="hasAnyAuthority('Admin','Author')" href="/post/create">Create a Post</a>
+
+      
+          <a sec:authorize="isAnonymous()" href="/login">Login</a>
         
-          <a th:if="${user == null}" href="/login">Login</a>
-     
-          <a th:if="${user != null}" href="/logout">Logout</a>
-        
+       
+          <a sec:authorize="isAuthenticated()" href="/logout">Logout</a>
+      
       </div>
     </header>
     <div class="nav-bar">
-      <h3  th:if="${user != null}" th:inline="text">Welcome ! [[${user.getName()}]]</h3>
+      <h3  sec:authorize="isAuthenticated()" th:inline="text">Welcome ! [[${user.getName()}]]</h3>
       
       <div id="sortDropdown" class="dropdown-content">
         <select name="sort" id="sort" onclick="sortingPost(this)">

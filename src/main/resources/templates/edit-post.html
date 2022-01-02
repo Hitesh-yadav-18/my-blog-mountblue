@@ -11,12 +11,25 @@
     <a th:href="@{/}"><h2>My Blog Application</h2></a>
     <h1>Edit Post</h1>
     <div class="container">
+      
       <form
+        id="edit-form"
         th:action="@{../postUpdate/{id} (id=${post.getId()})}"
         th:object="${post}"
         method="post"
         class="create-form"
       >
+      <div class="selected-author" sec:authorize="hasAuthority('Admin')">
+          Author :
+        <select th:inline = "text" name="selectedAuthor" > 
+          <option 
+            th:each="author : ${authorsList}" 
+            th:value="${author.getEmail()}">
+              [[${author.getName()}]]
+            </option>
+        </select>
+      </div>
+      
         <input
           class="form-input"
           th:field="*{title}"
@@ -35,6 +48,7 @@
           placeholder="Add brief summary about post"
         />
         <br />
+        <span style="color:red;">Press "Enter" key to add below tag to post*</span>
         <input
           class="form-input"  
           th:value="${tags.toString()}"

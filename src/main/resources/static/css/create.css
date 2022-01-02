@@ -50,3 +50,23 @@ textarea {
   font-size: 1.2em;
   margin-left: 25vw;
 }
+
+.selected-author{
+  width: 40%;
+  height: 5vh;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  font-size: 1.2em;
+  margin-bottom: 10px;
+}
+
+.selected-author select{
+  padding: 5px;
+  margin-bottom: 10px;
+  height: 5vh;
+  width: 15vw;
+  border: 1px solid rgb(183, 218, 231);
+  background-color: rgb(205, 231, 243);
+  font-size: 16px;
+}

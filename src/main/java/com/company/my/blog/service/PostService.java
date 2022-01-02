@@ -79,6 +79,10 @@ public class PostService {
         postRepository.updatePostByPostId(id, title, excerpt, content, updatedAt);
     }
 
+    public void updatePostWithAuthorById(Post post) {
+        postRepository.save(post);
+    }
+
     public List<Post> getAllPosts(int startPage, int endPage) {
         Pageable pageable = PageRequest.of(startPage / endPage, endPage);
         return postRepository.findAllPostsByPage(pageable);
@@ -491,6 +495,8 @@ public class PostService {
         return postRepository.findAllPostsBySearchedValueAndAuthorAndTagAndDatesAndSorted(
                 searchedValue, authorIds, tagIds, pageable, startDate, endDate);
     }
+
+    
 
     
    

@@ -7,22 +7,34 @@
     <link rel="stylesheet" href="/css/comment.css">
 </head>
 <body>
-<header>
-    <a th:href="@{/}"><h3>My Blog Application</h3></a>
-    <div class="header-div">
-        <a th:if="${user == null}" href="/login">Login</a>
+<header class="header-div">
+    <div class="header-div-left">
+     <a th:href="@{/}"><h3>My Blog Application</h3></a>
     </div>
+    <div class="header-div-right">
+        <h3  sec:authorize="isAuthenticated()" th:inline="text">User: [[${user.getName()}]]</h3>
+        <a sec:authorize="isAnonymous()" href="/login">Login</a>
+        <a sec:authorize="isAuthenticated()" href="/logout">Logout</a>
+    </div>
+    
 </header>
 <div th:if="${user != null}">
   <div th:if="${(user.getRole() == 'Admin') || (isCurrentUserIsPostOwner == true) }" >
-<button class="edit post-button" th:value="${post.getId()}" onclick="editPostPage(this)">Edit Post</button>
-<button class="delete post-button"  onclick="deletePostPage()">Delete Post</button>
-</div> 
+        <button 
+            class="edit post-button" 
+            th:value="${post.getId()}" 
+            onclick="editPostPage(this)"> Edit Post</button>
+        <button 
+            class="delete post-button"  
+            onclick="deletePostPage()">Delete Post</button>
+    </div> 
 </div>
 <div class="container" th:id="${post.getId()}">
     <div class="blog-title">
         <h1 th:text="${post.getTitle()}"></h1>
-        <p th:inline = "text"> Author : [[${post.getAuthor().getName()}]], Published on: [[${post.getPublishedAt()}]] </p>
+        <p th:inline = "text"> 
+            Author : [[${post.getAuthor().getName()}]],
+            Published on: [[${post.getPublishedAt()}]] </p>
     </div>
     <div  class="post-tag">
         <p>Tags:&nbsp;</p> 
@@ -38,12 +50,22 @@
             <div class="comment-item" th:each="comment : ${comments}">
                 <div class="comment-item-header">
                     <h4 th:text="${comment.getName()}"></h4>
-                    <p th:inline = "text"> Email: [[${comment.getEmail()}]] &nbsp;&nbsp;&nbsp; Published on: [[${comment.getCreatedAt()}]] </p>
+                    <p th:inline = "text"> 
+                        Email: [[${comment.getEmail()}]] &nbsp;&nbsp;&nbsp; 
+                        Published on: [[${comment.getCreatedAt()}]] </p>
                     
-                    <div class="comment-button">
-                        <button class="edit comment-button" th:value="${comment.getId()}" onclick="editCommentPage(this)">Edit</button>
-                        <button class="delete comment-button" th:value="${comment.getId() +','+ comment.getPostId().getId()}" onclick="deleteComment(this)">x</button>
-                    </div>
+                    <div th:if="${user != null}">
+                        <div th:if="${(user.getRole() == 'Admin') || (isCurrentUserIsPostOwner == true) }" >    
+                            <div class="comment-button">
+                                <button class="edit comment-button" 
+                                    th:value="${comment.getId()}" 
+                                    onclick="editCommentPage(this)"> Edit </button>
+                                <button class="delete comment-button" 
+                                    th:value="${comment.getId() +','+ comment.getPostId().getId()}" 
+                                    onclick="deleteComment(this)">x</button>
+                            </div>
+                        </div>
+                    </div>       
                 </div>
                 <div class="comment-item-content" th:text="${comment.getComment()}"></div>
             </div>
@@ -55,15 +77,30 @@
             <input type="hidden" name="postId" th:value="${post.getId()}">
             <div class="form-group">
                 <label for="name">Name</label>
-                <input type="text" class="form-control" id="name" name="name" placeholder="Enter name">
+                <input 
+                    type="text" 
+                    class="form-control" 
+                    id="name" 
+                    name="name" 
+                    placeholder="Enter name">
             </div>
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="Enter email">
+                <input 
+                    type="email" 
+                    class="form-control" 
+                    id="email" 
+                    name="email" 
+                    placeholder="Enter email">
             </div>
             <div class="form-group">
                 <label for="comment">Comment</label>
-                <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
+                <textarea 
+                    class="form-control" 
+                    id="comment" 
+                    name="comment" 
+                    rows="3">
+                </textarea>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
     </div>
