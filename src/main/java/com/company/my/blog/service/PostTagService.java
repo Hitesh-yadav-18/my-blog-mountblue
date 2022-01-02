@@ -25,7 +25,7 @@ public class PostTagService {
 
     public void splitTagsAndSavePostTags(String tags, Post post) {
         Set<Tag> tagSet = new HashSet<Tag>();
-                String allTags[] = tags.split(",");
+                String[] allTags = tags.split(",");
                 for (String tagName : allTags) {
                     tagName = tagName.trim();
                     if (tagName.length() > 0) {
@@ -47,11 +47,11 @@ public class PostTagService {
                     postTag.setTag(tag);
                     postTag.setCreatedAt(new Date());
                     postTag.setUpdatedAt(new Date());
-                    addTagToPost(postTag);
+                    addTagsPostEntries(postTag);
                 }
     }
 
-    public void addTagToPost(PostTag postTag) {
+    public void addTagsPostEntries(PostTag postTag) {
         postTagRepository.save(postTag);
     }
 

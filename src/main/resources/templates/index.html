@@ -15,13 +15,17 @@
           placeholder="Search"
           onkeydown="searchPost()"
         />
-        <a href="/post/create">Create a Post</a>
-        <!-- <a href="/login">Login</a> -->
-        <a href="/logout">Logout</a>
+        <a th:if="${user != null}" href="/post/create">Create a Post</a>
+        
+          <a th:if="${user == null}" href="/login">Login</a>
+     
+          <a th:if="${user != null}" href="/logout">Logout</a>
+        
       </div>
     </header>
     <div class="nav-bar">
-      <h3 th:inline="text">Welcome ! [[${userName}]]</h3>
+      <h3  th:if="${user != null}" th:inline="text">Welcome ! [[${user.getName()}]]</h3>
+      
       <div id="sortDropdown" class="dropdown-content">
         <select name="sort" id="sort" onclick="sortingPost(this)">
           <option value="" disabled selected>Sort</option>
@@ -30,7 +34,6 @@
         </select>
       </div>
     </div>
-   
     <h3>Current search result:&nbsp;<em th:text="${totalResultCount}"></em></h3>
     <div>
       <aside class="filter-section">

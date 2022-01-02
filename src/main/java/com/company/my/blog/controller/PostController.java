@@ -44,7 +44,10 @@ public class PostController {
     private CommentService commentService;
 
     @GetMapping(value = "/{id}")
-    public String getPostById(@PathVariable(value = "id") int id, Model model) {
+    public String getPostById(@PathVariable(value = "id") int id,
+                              @SessionAttribute(value="currentUser", required = false) User user,
+                              Model model) {
+        boolean isCurrentUserIsPostOwner =false;                          
         Post post = postService.getParticularPost(id);
         List<Comment> comments = commentService.getCommentsByPostId(post);
         List<Tag> tags = new ArrayList<>();
@@ -53,6 +56,12 @@ public class PostController {
             tags.add(post.getPostTags().get(i).getTag());
         }
 
+        if(user != null){
+            isCurrentUserIsPostOwner = postService.isCurrentUserIsPostOwner(post, user);
+        }
+
+        model.addAttribute("isCurrentUserIsPostOwner", isCurrentUserIsPostOwner);
+        model.addAttribute("user", user);
         model.addAttribute("comments", comments);
         model.addAttribute("post", post);
         model.addAttribute("tags", tags);
@@ -67,7 +76,7 @@ public class PostController {
     @PostMapping(value = "/create/save")
     public String newPostCreate(
         HttpServletRequest request, 
-        @SessionAttribute("currentUser") User user,
+        @SessionAttribute(value="currentUser", required = false) User user,
         Model model) {
         String title = request.getParameter("title");
         String excerpt = request.getParameter("excerpt");

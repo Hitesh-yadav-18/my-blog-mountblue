@@ -10,11 +10,15 @@
 <header>
     <a th:href="@{/}"><h3>My Blog Application</h3></a>
     <div class="header-div">
-        <a href="login.html">Login</a>
+        <a th:if="${user == null}" href="/login">Login</a>
     </div>
 </header>
+<div th:if="${user != null}">
+  <div th:if="${(user.getRole() == 'Admin') || (isCurrentUserIsPostOwner == true) }" >
 <button class="edit post-button" th:value="${post.getId()}" onclick="editPostPage(this)">Edit Post</button>
 <button class="delete post-button"  onclick="deletePostPage()">Delete Post</button>
+</div> 
+</div>
 <div class="container" th:id="${post.getId()}">
     <div class="blog-title">
         <h1 th:text="${post.getTitle()}"></h1>

@@ -51,6 +51,12 @@ public class PostService {
         return postTagMap;
     }
 
+    public boolean isCurrentUserIsPostOwner(Post post, User user){
+        if(post.getAuthor().getId() == user.getId())
+        return true;
+
+        return false;
+    }
     
 
     public List<Post> getAllPosts() {

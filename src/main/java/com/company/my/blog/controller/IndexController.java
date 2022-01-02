@@ -75,7 +75,7 @@ public class IndexController {
             @RequestParam(value = "fromDate", required = false) String fromDate,
             @RequestParam(value = "toDate", required = false) String toDate,
             @RequestParam(value = "order", required = false, defaultValue = ""+NO_DATA+"") String order,
-            @SessionAttribute("currentUser") User user,
+            @SessionAttribute(value = "currentUser", required= false) User user,
             Model model) {
         Set<Integer> authorIdsSet = new HashSet<>(authorIds);
         Set<Integer> tagIdsSet = new HashSet<>(tagIds);
@@ -109,7 +109,7 @@ public class IndexController {
         assert posts != null;
         Map<Post, List<String>> postTagMap = postService.getPostsAndTagsAsKeyValuePair(posts);
 
-        model.addAttribute("userName", user.getName());
+        model.addAttribute("user", user);
         model.addAttribute("authorIdsSet", authorIdsSet);
         model.addAttribute("tagIdsSet", tagIdsSet);
         model.addAttribute("postTagMap", postTagMap);
