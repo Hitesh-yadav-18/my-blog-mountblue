@@ -25,7 +25,7 @@
       
       </div>
     </header>
-    <div class="nav-bar">
+    <div class="nav-bar" th:if="${user != null}">
       <h3  sec:authorize="isAuthenticated()" th:inline="text">Welcome ! [[${user.getName()}]]</h3>
       
       <div id="sortDropdown" class="dropdown-content">
@@ -42,7 +42,7 @@
         <div class="post-filter-title">
           <strong class="aside-title">Filter</strong>
         </div>
-        <div class="post-filter-tag">
+        <div class="post-filter-tag" th:if="${authors != null}">
           <checkbox-group th:each="author : ${authors}">
             <input
               type="checkbox"
@@ -58,7 +58,7 @@
         <div class="post-filter-title">
           <strong class="aside-title">Tags</strong>
         </div>
-        <div class="post-filter-tag">
+        <div class="post-filter-tag" th:if="${tags != null}">
           <checkbox-group th:each="tag : ${tags}">
             <input
               type="checkbox"
