@@ -49,7 +49,6 @@ public class IndexController {
 
     @PostMapping(value = "/signup")
     public String getSignupDetails(@ModelAttribute User user) {
-
         userService.registerUser(user);
         return "redirect:/login";
     }
