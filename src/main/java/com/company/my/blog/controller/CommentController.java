@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Date;
+
 @Controller
 public class CommentController {
 
@@ -45,10 +47,12 @@ public class CommentController {
     @PostMapping(value = "/updateComment/{commentId}")
     public String processUpdateCommentById(
             @PathVariable(value = "commentId") int commentId,
-            @ModelAttribute(value = "comments") Comment commentObj,
+            @ModelAttribute(value = "comments") Comment comment,
             @RequestParam("postId") Integer postId) {
-
-        commentService.updateExistingCommentById(commentId, commentObj.getComment());
+        comment.setId(commentId);
+        comment.setCreatedAt(commentService.getCommentById(commentId).getCreatedAt());
+        comment.setUpdatedAt(new Date());
+        commentService.updateExistingCommentById(comment);
         return "redirect:/post/" + postId;
     }
 

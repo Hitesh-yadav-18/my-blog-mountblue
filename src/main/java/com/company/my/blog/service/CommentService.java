@@ -41,10 +41,10 @@ public class CommentService {
     }
 
     public void deleteExistingCommentById(int commentId) {
-        commentRepository.deleteCommentById(commentId);
+        commentRepository.deleteById(commentId);
     }
 
-    public void updateExistingCommentById(int commentId, String comment) {
-        commentRepository.updateCommentById(commentId, comment);
+    public void updateExistingCommentById(Comment comment) {
+        commentRepository.save(comment);
     }
 }

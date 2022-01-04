@@ -1,7 +1,5 @@
 package com.company.my.blog.repository;
 
-import javax.transaction.Transactional;
-
 import com.company.my.blog.model.Post;
 import com.company.my.blog.model.PostTag;
 
@@ -15,7 +13,6 @@ import org.springframework.stereotype.Repository;
 public interface PostTagRepository extends JpaRepository<PostTag, Integer> {
 
     @Modifying
-    @Transactional
     @Query("DELETE FROM PostTag pt where pt.post = :postId")
     void deleteAllPostTagsByPostId(@Param("postId") Post post);
     

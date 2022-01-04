@@ -22,8 +22,6 @@ public interface TagRepository extends JpaRepository<Tag, Integer> {
                         nativeQuery = true)
         List<String> findTagsByPostId(@Param("postId") int postId);
 
-        List<Tag> findAll();
-
         @Query("SELECT DISTINCT t from Tag t, Post p, PostTag pt where p.id = pt.post " +
                         "and t.id = pt.tag and p.author.id in(:authorId)")
         List<Tag> findAllTagsOfSelectedAuthor(@Param("authorId") List<Integer> authorId);

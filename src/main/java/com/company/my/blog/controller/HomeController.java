@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
 @Controller
-public class IndexController {
+public class HomeController {
 
     private static final int START_PAGE = 0;
     private static final int PAGE_LIMIT = 10;
