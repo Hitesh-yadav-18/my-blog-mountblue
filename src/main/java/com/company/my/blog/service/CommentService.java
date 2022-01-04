@@ -33,7 +33,7 @@ public class CommentService {
     }
 
     public List<Comment> getCommentsByPostId(Post post) {
-        return commentRepository.findCommentByPostId(post);
+        return commentRepository.findCommentsByPostId(post);
     }
 
     public Comment getCommentById(int commentId) {
