@@ -136,12 +136,8 @@ public class PostController {
             postService.updatePostWithAuthorById(post);
             
         }else{
-           postService.updatePostById(
-                        postId, 
-                        post.getTitle(),
-                        post.getExcerpt(), 
-                        post.getContent(), 
-                        post.getUpdatedAt());
+            post.setAuthor(user);
+            postService.updatePostById(post); 
         }
         postTagService.splitTagsAndSavePostTags(tagsAsText, post);
          

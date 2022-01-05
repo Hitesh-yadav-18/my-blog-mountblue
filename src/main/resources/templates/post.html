@@ -102,6 +102,11 @@
                 </textarea>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
+            <input 
+					type="hidden"
+					th:name="${_csrf.parameterName}"
+					th:value="${_csrf.token}"/>	
+        </form>    
     </div>
 
 </div>

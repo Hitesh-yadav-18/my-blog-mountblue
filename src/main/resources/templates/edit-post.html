@@ -77,6 +77,10 @@
         ></textarea>
         <br />
         <input class="form-btn" type="submit" value="Update Post" />
+        <input 
+					type="hidden"
+					th:name="${_csrf.parameterName}"
+					th:value="${_csrf.token}"/>	
       </form>
     </div>
     <script>

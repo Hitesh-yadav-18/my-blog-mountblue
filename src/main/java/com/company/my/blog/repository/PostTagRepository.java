@@ -14,6 +14,6 @@ public interface PostTagRepository extends JpaRepository<PostTag, Integer> {
 
     @Modifying
     @Query("DELETE FROM PostTag pt where pt.post = :postId")
-    void deleteAllPostTagsByPostId(@Param("postId") Post post);
+    void deleteTagsByPostId(@Param("postId") Post post);
     
 }

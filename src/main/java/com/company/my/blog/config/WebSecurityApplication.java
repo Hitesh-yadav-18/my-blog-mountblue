@@ -35,7 +35,6 @@ public class WebSecurityApplication extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-            .csrf().disable()
             .authorizeRequests().antMatchers("/post/create").hasAnyAuthority("Admin", "Author")
             .antMatchers("/**","/css/**","/JS/**").permitAll()            
             .anyRequest().authenticated()

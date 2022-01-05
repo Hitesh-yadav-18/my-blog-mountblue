@@ -26,12 +26,12 @@
 				</div>
 				<div class="form-input">
 					<label for="message" class="form-label">Password<sup>*</sup></label>
-					<input type="password" name="password"  required /> <em>Please enter
+					<input type="password" name="password" id="password"  required /> <em>Please enter
 						your password</em>
 				</div>
                 <div class="form-input">
-					<label for="message" class="form-label">Password<sup>*</sup></label>
-					<input type="password" name="confirmPassword"  required /> <em>Please re-enter
+					<label for="message" class="form-label">Confirm Password<sup>*</sup></label>
+					<input type="password" name="confirmPassword" id="confirmPassword"  required /> <em>Please re-enter
 						your password</em>
 				</div>
 				<div class="form-input">
@@ -40,8 +40,14 @@
 						<a href="/login">login</a>
 					</button>
 				</div>
+				<input 
+					type="hidden"
+					th:name="${_csrf.parameterName}"
+					th:value="${_csrf.token}"/>		
+
 			</form>
 		</div>
 	</div>
+	<script th:src="@{/JS/signup.js}"></script>
 </body>
 </html>

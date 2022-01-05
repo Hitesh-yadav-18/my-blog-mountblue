@@ -8,6 +8,7 @@ if (currentPage.innerHTML == "1") {
   document.getElementById("next-btn").disabled = true;
 }
 
+
 function searchPost() {
   var el = document.getElementById("search");
   el.addEventListener("keydown", function (event) {
