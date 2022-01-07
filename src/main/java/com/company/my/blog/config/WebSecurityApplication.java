@@ -37,8 +37,8 @@ public class WebSecurityApplication extends WebSecurityConfigurerAdapter {
         http
             .csrf().disable()
             .authorizeRequests().antMatchers("/post/create").hasAnyAuthority("Admin", "Author")
-            .antMatchers("/*","/post/*","/css/**","/JS/**").permitAll()            
-            .anyRequest().authenticated()
+            // .antMatchers("/*","/post/*","/css/**","/JS/**").permitAll()            
+            // .anyRequest().authenticated()
             .and()            
             .formLogin()
             .usernameParameter("email")

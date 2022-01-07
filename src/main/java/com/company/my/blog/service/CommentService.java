@@ -3,11 +3,13 @@ package com.company.my.blog.service;
 import java.util.Date;
 import java.util.List;
 
+import com.company.my.blog.dto.CommentDto;
 import com.company.my.blog.model.Comment;
 import com.company.my.blog.model.Post;
 import com.company.my.blog.repository.CommentRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -36,7 +38,7 @@ public class CommentService {
         return commentRepository.findCommentByPostId(post);
     }
 
-    public Comment getCommentById(int commentId) {
+    public CommentDto getCommentById(int commentId) {
         return commentRepository.findCommentById(commentId);
     }
 
