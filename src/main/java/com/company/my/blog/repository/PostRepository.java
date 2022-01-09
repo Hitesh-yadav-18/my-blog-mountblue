@@ -36,41 +36,41 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
         @Query("SELECT new com.company.my.blog.dto.PostExcerptDto(p.id, p.title, p.excerpt, p.publishedAt, p.author.id, p.author.name, p.author.email) from Post p where isPublished = true")
         List<PostExcerptDto> findAllPostsByPage(Pageable pageable);
 
-        @Query("SELECT p FROM Post p WHERE p.author.id in (:authorIds)")
-        List<Post> findByAuthorId(
+        @Query("SELECT new com.company.my.blog.dto.PostExcerptDto(p.id, p.title, p.excerpt, p.publishedAt, p.author.id, p.author.name, p.author.email) FROM Post p WHERE p.author.id in (:authorIds)")
+        List<PostExcerptDto> findByAuthorId(
                         @Param("authorIds") List<Integer> Author,
                         Pageable pageable);
 
-        @Query("select p from Post p, PostTag pt, Tag t where p.id = pt.post and " +
+        @Query("select new com.company.my.blog.dto.PostExcerptDto(p.id, p.title, p.excerpt, p.publishedAt, p.author.id, p.author.name, p.author.email) from Post p, PostTag pt, Tag t where p.id = pt.post and " +
                         " t.id = pt.tag and t.id in (:tagIds)")
-        List<Post> findAllByTagId(
+        List<PostExcerptDto> findAllByTagId(
                         @Param("tagIds") List<Integer> tagIds,
                         Pageable pageable);
 
-        @Query("select p from Post p, PostTag pt, Tag t where p.id = pt.post and " +
+        @Query("select new com.company.my.blog.dto.PostExcerptDto(p.id, p.title, p.excerpt, p.publishedAt, p.author.id, p.author.name, p.author.email) from Post p, PostTag pt, Tag t where p.id = pt.post and " +
                         " t.id = pt.tag and p.author.id in (:authorIds) and t.id in (:tagIds) ")
-        List<Post> findAllPostsByAuthorAndTag(
-                        @Param("authorIds") List<Integer> authorId,
+        List<PostExcerptDto> findAllPostsByAuthorAndTag(
+                        @Param("authorIds") List<Integer> authorIds,
                         @Param("tagIds") List<Integer> tagIds,
                         Pageable pageable);
 
-        @Query(value = "SELECT p FROM Post p WHERE isPublished = true ")
-        List<Post> findAllPostsInSortingOrder(Pageable pageable);
+        @Query(value = "SELECT new com.company.my.blog.dto.PostExcerptDto(p.id, p.title, p.excerpt, p.publishedAt, p.author.id, p.author.name, p.author.email) FROM Post p WHERE isPublished = true ")
+        List<PostExcerptDto> findAllPostsInSortingOrder(Pageable pageable);
 
-        @Query("select p from Post p, PostTag pt, Tag t where p.id = pt.post and " +
+        @Query("select new com.company.my.blog.dto.PostExcerptDto(p.id, p.title, p.excerpt, p.publishedAt, p.author.id, p.author.name, p.author.email) from Post p, PostTag pt, Tag t where p.id = pt.post and " +
                         " t.id = pt.tag and t.id in (:tagIds) ")
-        List<Post> findAllPostsByTagIdsInSortingOrder(
+        List<PostExcerptDto> findAllPostsByTagIdsInSortingOrder(
                         @Param("tagIds") List<Integer> tagIds, 
                         Pageable pageable);
 
-        @Query("select p from Post p where p.author.id in (:authorIds)")
-        List<Post> findAllPostsByAuthorIdsInSortingOrder(
+        @Query("select new com.company.my.blog.dto.PostExcerptDto(p.id, p.title, p.excerpt, p.publishedAt, p.author.id, p.author.name, p.author.email) from Post p where p.author.id in (:authorIds)")
+        List<PostExcerptDto> findAllPostsByAuthorIdsInSortingOrder(
                         @Param("authorIds") List<Integer> authorIds, 
                         Pageable pageable);
 
-        @Query("select p from Post p, PostTag pt, Tag t where p.id = pt.post and " +
+        @Query("select new com.company.my.blog.dto.PostExcerptDto(p.id, p.title, p.excerpt, p.publishedAt, p.author.id, p.author.name, p.author.email) from Post p, PostTag pt, Tag t where p.id = pt.post and " +
                         " t.id = pt.tag and p.author.id in (:authorIds) AND t.id in (:tagIds) ")
-        List<Post> findAllPostsByAuthorIdsAndTagIdsInSortingOrder(
+        List<PostExcerptDto> findAllPostsByAuthorIdsAndTagIdsInSortingOrder(
                         @Param("authorIds") List<Integer> authorIds, 
                         @Param("tagIds") List<Integer> tagIds,
                         Pageable pageable);
@@ -83,33 +83,33 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
                         @Param("searchedValue") String searchedValue,
                         Pageable pageable);
 
-        @Query("SELECT p from Post p where publishedAt BETWEEN (:fromDate) and (:toDate)")
-        List<Post> findAllPostsByDates(
+        @Query("SELECT new com.company.my.blog.dto.PostExcerptDto(p.id, p.title, p.excerpt, p.publishedAt, p.author.id, p.author.name, p.author.email) from Post p where publishedAt BETWEEN (:fromDate) and (:toDate)")
+        List<PostExcerptDto> findAllPostsByDates(
                         Pageable pageable, 
                         @Param("fromDate") Date fromDate,
                         @Param("toDate") Date toDate);
 
-        @Query("SELECT p from Post p where p.author.id in (:authorIds)"+
+        @Query("SELECT new com.company.my.blog.dto.PostExcerptDto(p.id, p.title, p.excerpt, p.publishedAt, p.author.id, p.author.name, p.author.email) from Post p where p.author.id in (:authorIds)"+
                 " and (publishedAt BETWEEN (:fromDate) and (:toDate))")
-        List<Post> findPostsByAuthorAndDates(
+        List<PostExcerptDto> findPostsByAuthorAndDates(
                         @Param("authorIds") List<Integer> authorIds,
                         Pageable pageable,
                         @Param("fromDate") Date fromDate, 
                         @Param("toDate") Date toDate);
 
-        @Query("select p from Post p, PostTag pt, Tag t where p.id = pt.post and " +
+        @Query("select new com.company.my.blog.dto.PostExcerptDto(p.id, p.title, p.excerpt, p.publishedAt, p.author.id, p.author.name, p.author.email) from Post p, PostTag pt, Tag t where p.id = pt.post and " +
                         "t.id = pt.tag and t.id in (:tagIds) and "+
                         "p.publishedAt BETWEEN (:fromDate) and (:toDate)")
-        List<Post> findAllByTagIdAndDates(
+        List<PostExcerptDto> findAllByTagIdAndDates(
                         @Param("tagIds") List<Integer> tagIds,
                         Pageable pageable, 
                         @Param("fromDate") Date fromDate,
                         @Param("toDate") Date toDate);
 
-        @Query("select p from Post p, PostTag pt, Tag t where p.id = pt.post and " +
+        @Query("select new com.company.my.blog.dto.PostExcerptDto(p.id, p.title, p.excerpt, p.publishedAt, p.author.id, p.author.name, p.author.email) from Post p, PostTag pt, Tag t where p.id = pt.post and " +
                         "t.id = pt.tag and p.author.id in (:authorIds) and t.id in (:tagIds) and "+
                         "(p.publishedAt BETWEEN (:fromDate) and (:toDate))")
-        List<Post> findAllPostsByAuthorAndTagAndDates(
+        List<PostExcerptDto> findAllPostsByAuthorAndTagAndDates(
                         @Param("authorIds")List<Integer> authorIds, 
                         @Param("tagIds") List<Integer> tagIds, 
                         Pageable pageable,
@@ -123,7 +123,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
                         "lower(p.content) like lower(concat('%', :searchedValue,'%')) or " +
                         "lower(p.excerpt) like lower(concat('%', :searchedValue,'%')) ) and " +
                         "p.author.id in (:authorIds) group by p.id")
-        List<Post> findAllPostsBySearchedValueAndAuthor(
+        List<PostExcerptDto> findAllPostsBySearchedValueAndAuthor(
                         @Param("searchedValue") String searchedValue,
                         @Param("authorIds") List<Integer> authorIds,
                         Pageable pageable);

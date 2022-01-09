@@ -19,17 +19,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class SearchController {
 
-    private static final int PAGE_LIMIT = 10;
-    private static final int NO_DATA = -1;
+    // private static final int PAGE_LIMIT = 10;
+    // private static final int NO_DATA = -1;
 
-    @Autowired
-    private PostService postService;
+    // @Autowired
+    // private PostService postService;
 
-    @Autowired
-    private TagService tagService;
+    // @Autowired
+    // private TagService tagService;
 
-    @Autowired
-    private UserService userService;
+    // @Autowired
+    // private UserService userService;
 
     // @GetMapping(value = "/", params = { "start", "limit", "search" })
     // public String getSearchedPosts(

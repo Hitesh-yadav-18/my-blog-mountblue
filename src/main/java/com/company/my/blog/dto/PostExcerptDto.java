@@ -1,6 +1,7 @@
 package com.company.my.blog.dto;
 
 import java.util.Date;
+import java.util.List;
 
 public class PostExcerptDto {
     private Integer id;
@@ -8,6 +9,8 @@ public class PostExcerptDto {
     private String excerpt;
     private Date publishedAt;
     private UserDto author;
+
+    List<TagDto> tags;
 
     public PostExcerptDto(Integer id, String title, String excerpt, Date publishedAt, Integer authorId, String authorName, String authorEmail) {
         this.id = id;
@@ -55,6 +58,14 @@ public class PostExcerptDto {
 
     public void setAuthor(UserDto author) {
         this.author = author;
+    }
+
+    public List<TagDto> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<TagDto> tags) {
+        this.tags = tags;
     }
     
     

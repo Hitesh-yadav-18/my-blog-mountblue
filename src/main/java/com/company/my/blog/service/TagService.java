@@ -25,7 +25,7 @@ public class TagService {
         return tagRepository.findByTagName(tag);
     }
 
-    public List<String> getTagsName(PostExcerptDto postExcerptDto) {
+    public List<TagDto> getTagsName(PostExcerptDto postExcerptDto) {
         return tagRepository.findTagsByPostId(postExcerptDto.getId());
     }
 
