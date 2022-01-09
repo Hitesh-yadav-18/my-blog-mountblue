@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.company.my.blog.dto.PostExcerptDto;
 import com.company.my.blog.model.Post;
 import com.company.my.blog.model.User;
 import com.company.my.blog.repository.PostRepository;
@@ -41,10 +42,10 @@ public class PostService {
         return postRepository.save(post);
     }
 
-    public Map<Post, List<String>> getPostsAndTagsAsKeyValuePair(List<Post> posts) {
+    public Map<PostExcerptDto, List<String>> getPostsAndTagsAsKeyValuePair(List<PostExcerptDto> postsExcerpt) {
         List<String> tagList = null;
-        Map<Post, List<String>> postTagMap = new LinkedHashMap<>();
-        for (Post post : posts) {
+        Map<PostExcerptDto, List<String>> postTagMap = new LinkedHashMap<>();
+        for (PostExcerptDto post : postsExcerpt) {
             tagList = tagService.getTagsName(post);
             postTagMap.put(post, tagList);
         }
@@ -83,7 +84,7 @@ public class PostService {
         postRepository.save(post);
     }
 
-    public List<Post> getAllPosts(int startPage, int endPage) {
+    public List<PostExcerptDto> getAllPosts(int startPage, int endPage) {
         Pageable pageable = PageRequest.of(startPage / endPage, endPage);
         return postRepository.findAllPostsByPage(pageable);
     }

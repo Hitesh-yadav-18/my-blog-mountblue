@@ -48,110 +48,110 @@ public class PostController {
     @Autowired
     private UserService userService;
 
-    @GetMapping(value = "/{id}")
-    public String getPostById(@PathVariable(value = "id") int id,
-                              @SessionAttribute(value="currentUser", required = false) User user,
-                              Model model) {
-        boolean isCurrentUserIsPostOwner =false;                          
-        Post post = postService.getParticularPost(id);
-        List<Comment> comments = commentService.getCommentsByPostId(post);
-        List<Tag> tags = new ArrayList<>();
+    // @GetMapping(value = "/{id}")
+    // public String getPostById(@PathVariable(value = "id") int id,
+    //                           @SessionAttribute(value="currentUser", required = false) User user,
+    //                           Model model) {
+    //     boolean isCurrentUserIsPostOwner =false;                          
+    //     Post post = postService.getParticularPost(id);
+    //     List<Comment> comments = commentService.getCommentsByPostId(post);
+    //     List<Tag> tags = new ArrayList<>();
 
-        for (int i = 0; i < post.getPostTags().size(); i++) {
-            tags.add(post.getPostTags().get(i).getTag());
-        }
+    //     for (int i = 0; i < post.getPostTags().size(); i++) {
+    //         tags.add(post.getPostTags().get(i).getTag());
+    //     }
 
-        if(user != null){
-            isCurrentUserIsPostOwner = postService.isCurrentUserIsPostOwner(post, user);
-        }
+    //     if(user != null){
+    //         isCurrentUserIsPostOwner = postService.isCurrentUserIsPostOwner(post, user);
+    //     }
 
-        model.addAttribute("isCurrentUserIsPostOwner", isCurrentUserIsPostOwner);
-        model.addAttribute("user", user);
-        model.addAttribute("comments", comments);
-        model.addAttribute("post", post);
-        model.addAttribute("tags", tags);
-        return "post";
-    }
+    //     model.addAttribute("isCurrentUserIsPostOwner", isCurrentUserIsPostOwner);
+    //     model.addAttribute("user", user);
+    //     model.addAttribute("comments", comments);
+    //     model.addAttribute("post", post);
+    //     model.addAttribute("tags", tags);
+    //     return "post";
+    // }
 
-    @GetMapping(value = "/create")
-    public String getCreatePostPage() {
-        return "create";
-    }
+    // @GetMapping(value = "/create")
+    // public String getCreatePostPage() {
+    //     return "create";
+    // }
 
-    @PostMapping(value = "/create/save")
-    public String newPostCreate(
-        HttpServletRequest request, 
-        @SessionAttribute(value="currentUser", required = false) User user,
-        Model model) {
-        String title = request.getParameter("title");
-        String excerpt = request.getParameter("excerpt");
-        String content = request.getParameter("content");
-        String tags = request.getParameter("tagsList");
-        if (title != null && excerpt != null && content != null && tags != null) {
-            Post post = postService.createNewPost(title, excerpt, content, user);
+    // @PostMapping(value = "/create/save")
+    // public String newPostCreate(
+    //     HttpServletRequest request, 
+    //     @SessionAttribute(value="currentUser", required = false) User user,
+    //     Model model) {
+    //     String title = request.getParameter("title");
+    //     String excerpt = request.getParameter("excerpt");
+    //     String content = request.getParameter("content");
+    //     String tags = request.getParameter("tagsList");
+    //     if (title != null && excerpt != null && content != null && tags != null) {
+    //         Post post = postService.createNewPost(title, excerpt, content, user);
 
-            if (post != null) {
-                postTagService.splitTagsAndSavePostTags(tags, post);
-            }
-        }
-        return "redirect:/post/create";
-    }
+    //         if (post != null) {
+    //             postTagService.splitTagsAndSavePostTags(tags, post);
+    //         }
+    //     }
+    //     return "redirect:/post/create";
+    // }
 
-    @GetMapping(value = "/editPost/{id}")
-    public String showPostEditForm(
-        @PathVariable(value = "id") int postId, 
-        @SessionAttribute(value="currentUser", required = false) User user,
-        Model model) {
-        Post post = postService.getParticularPost(postId);
-        List<User> authorsList = userService.getAllUsers();
-        List<String> tags = tagService.getTagsName(post);
-        String tagsAsText = String.join(",", tags);
+    // @GetMapping(value = "/editPost/{id}")
+    // public String showPostEditForm(
+    //     @PathVariable(value = "id") int postId, 
+    //     @SessionAttribute(value="currentUser", required = false) User user,
+    //     Model model) {
+    //     Post post = postService.getParticularPost(postId);
+    //     List<User> authorsList = userService.getAllUsers();
+    //     List<String> tags = tagService.getTagsName(post);
+    //     String tagsAsText = String.join(",", tags);
         
-        model.addAttribute("user", user);
-        model.addAttribute("post", post);
-        model.addAttribute("authorsList", authorsList);
-        model.addAttribute("tags", tagsAsText);
-        return "edit-post";
-    }
+    //     model.addAttribute("user", user);
+    //     model.addAttribute("post", post);
+    //     model.addAttribute("authorsList", authorsList);
+    //     model.addAttribute("tags", tagsAsText);
+    //     return "edit-post";
+    // }
 
-    @PostMapping(value = "/postUpdate/{id}")
-    public String processUpdatePostById(
-            HttpServletRequest request,
-            @PathVariable(value = "id") int postId,
-            @ModelAttribute Post post,
-            @RequestParam(value = "selectedAuthor", required = false) String selectedAuthor,
-            @SessionAttribute(value="currentUser", required = false) User user) {
-        String tagsAsText = request.getParameter("tagsList");
-        post.setId(postId);
-        post.setPublishedAt(postService.getParticularPost(postId).getPublishedAt());
-        post.setCreatedAt(postService.getParticularPost(postId).getCreatedAt());
-        post.setPublished(true);
-        post.setUpdatedAt(new Date());
-        postTagService.deleteAllPostTagsByPostId(post);
+    // @PostMapping(value = "/postUpdate/{id}")
+    // public String processUpdatePostById(
+    //         HttpServletRequest request,
+    //         @PathVariable(value = "id") int postId,
+    //         @ModelAttribute Post post,
+    //         @RequestParam(value = "selectedAuthor", required = false) String selectedAuthor,
+    //         @SessionAttribute(value="currentUser", required = false) User user) {
+    //     String tagsAsText = request.getParameter("tagsList");
+    //     post.setId(postId);
+    //     post.setPublishedAt(postService.getParticularPost(postId).getPublishedAt());
+    //     post.setCreatedAt(postService.getParticularPost(postId).getCreatedAt());
+    //     post.setPublished(true);
+    //     post.setUpdatedAt(new Date());
+    //     postTagService.deleteAllPostTagsByPostId(post);
         
-        if(user.getRole().equals("Admin")){
+    //     if(user.getRole().equals("Admin")){
             
-            User author = userService.getUserByEmail(selectedAuthor);
-            post.setAuthor(author);            
-            postService.updatePostWithAuthorById(post);
+    //         User author = userService.getUserByEmail(selectedAuthor);
+    //         post.setAuthor(author);            
+    //         postService.updatePostWithAuthorById(post);
             
-        }else{
-           postService.updatePostById(
-                        postId, 
-                        post.getTitle(),
-                        post.getExcerpt(), 
-                        post.getContent(), 
-                        post.getUpdatedAt());
-        }
-        postTagService.splitTagsAndSavePostTags(tagsAsText, post);
+    //     }else{
+    //        postService.updatePostById(
+    //                     postId, 
+    //                     post.getTitle(),
+    //                     post.getExcerpt(), 
+    //                     post.getContent(), 
+    //                     post.getUpdatedAt());
+    //     }
+    //     postTagService.splitTagsAndSavePostTags(tagsAsText, post);
          
-        return "redirect:/post/" + postId;
-    }
+    //     return "redirect:/post/" + postId;
+    // }
 
-    @DeleteMapping(value = "/postDelete/{id}")
-    @ResponseBody
-    public String deletePost(@PathVariable(value = "id") int postId) {  
-        postService.deletePost(postId);
-        return "success";
-    }
+    // @DeleteMapping(value = "/postDelete/{id}")
+    // @ResponseBody
+    // public String deletePost(@PathVariable(value = "id") int postId) {  
+    //     postService.deletePost(postId);
+    //     return "success";
+    // }
 }

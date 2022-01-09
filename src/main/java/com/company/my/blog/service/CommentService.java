@@ -9,7 +9,6 @@ import com.company.my.blog.model.Post;
 import com.company.my.blog.repository.CommentRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 @Service

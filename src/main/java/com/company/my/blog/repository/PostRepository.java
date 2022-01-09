@@ -3,6 +3,7 @@ package com.company.my.blog.repository;
 import java.util.Date;
 import java.util.List;
 
+import com.company.my.blog.dto.PostExcerptDto;
 import com.company.my.blog.model.Post;
 
 import org.springframework.data.domain.Pageable;
@@ -32,8 +33,8 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
                         @Param("content") String content,
                         @Param("updatedAt") Date updatedAt);
 
-        @Query("SELECT p from Post p")
-        List<Post> findAllPostsByPage(Pageable pageable);
+        @Query("SELECT new com.company.my.blog.dto.PostExcerptDto(p.id, p.title, p.excerpt, p.publishedAt, p.author.id, p.author.name, p.author.email) from Post p where isPublished = true")
+        List<PostExcerptDto> findAllPostsByPage(Pageable pageable);
 
         @Query("SELECT p FROM Post p WHERE p.author.id in (:authorIds)")
         List<Post> findByAuthorId(
