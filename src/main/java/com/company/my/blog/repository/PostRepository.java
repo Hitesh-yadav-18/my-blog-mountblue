@@ -3,6 +3,7 @@ package com.company.my.blog.repository;
 import java.util.Date;
 import java.util.List;
 
+import com.company.my.blog.dto.PostDto;
 import com.company.my.blog.dto.PostExcerptDto;
 import com.company.my.blog.model.Post;
 
@@ -16,7 +17,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Integer> {
         
-        Post findPostById(int postId);
+        @Query("SELECT new com.company.my.blog.dto.PostDto(p.id, p.title, p.excerpt, p.content, p.publishedAt, p.author.id, p.author.name, p.author.email) FROM Post p WHERE p.id = :postId")
+        PostDto findPostById(@Param("postId") int postId);
 
         @Query("select p from Post p, PostTag pt, Tag t where p.id = pt.post and " +
                         " t.id = pt.tag and t.id in (:tagIds) ")

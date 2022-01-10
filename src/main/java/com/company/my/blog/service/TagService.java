@@ -2,6 +2,7 @@ package com.company.my.blog.service;
 
 import java.util.List;
 
+import com.company.my.blog.dto.PostDto;
 import com.company.my.blog.dto.PostExcerptDto;
 import com.company.my.blog.dto.TagDto;
 import com.company.my.blog.model.Post;
@@ -29,6 +30,10 @@ public class TagService {
         return tagRepository.findTagsByPostId(postExcerptDto.getId());
     }
 
+    public List<TagDto> getTagsName(PostDto postDto) {
+        return tagRepository.findTagsByPostId(postDto.getId());
+    }
+
     public List<Tag> getAllTags() {
         return tagRepository.findAll();
     }
@@ -36,5 +41,7 @@ public class TagService {
     public List<Tag> getAllTagsOfSelectedAuthor(List<Integer> authorId) {
         return tagRepository.findAllTagsOfSelectedAuthor(authorId);
     }
+
+    
 
 }

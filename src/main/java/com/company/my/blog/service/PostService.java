@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.company.my.blog.dto.PostDto;
 import com.company.my.blog.dto.PostExcerptDto;
 import com.company.my.blog.dto.TagDto;
 import com.company.my.blog.model.Post;
@@ -63,7 +64,7 @@ public class PostService {
     public List<Post> getAllPosts() {
         return postRepository.findAll();
     }
-    public Post getParticularPost(int postId) {
+    public PostDto getParticularPost(int postId) {
         return postRepository.findPostById(postId);
     }
 

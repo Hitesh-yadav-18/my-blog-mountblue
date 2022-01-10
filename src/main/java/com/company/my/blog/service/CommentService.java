@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.company.my.blog.dto.CommentDto;
+import com.company.my.blog.dto.PostDto;
 import com.company.my.blog.model.Comment;
 import com.company.my.blog.model.Post;
 import com.company.my.blog.repository.CommentRepository;
@@ -33,8 +34,8 @@ public class CommentService {
         commentRepository.save(comment);
     }
 
-    public List<Comment> getCommentsByPostId(Post post) {
-        return commentRepository.findCommentByPostId(post);
+    public List<CommentDto> getCommentsByPostId(PostDto postDto) {
+        return commentRepository.findCommentsByPostId(postDto.getId());
     }
 
     public CommentDto getCommentById(int commentId) {

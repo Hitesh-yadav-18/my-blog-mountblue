@@ -6,6 +6,9 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.company.my.blog.dto.CommentDto;
+import com.company.my.blog.dto.PostDto;
+import com.company.my.blog.dto.TagDto;
 import com.company.my.blog.model.Comment;
 import com.company.my.blog.model.Post;
 import com.company.my.blog.model.Tag;
@@ -27,9 +30,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
-@Controller
+@RestController
 @RequestMapping(value = "/post")
 public class PostController {
 
@@ -48,30 +52,16 @@ public class PostController {
     @Autowired
     private UserService userService;
 
-    // @GetMapping(value = "/{id}")
-    // public String getPostById(@PathVariable(value = "id") int id,
-    //                           @SessionAttribute(value="currentUser", required = false) User user,
-    //                           Model model) {
-    //     boolean isCurrentUserIsPostOwner =false;                          
-    //     Post post = postService.getParticularPost(id);
-    //     List<Comment> comments = commentService.getCommentsByPostId(post);
-    //     List<Tag> tags = new ArrayList<>();
-
-    //     for (int i = 0; i < post.getPostTags().size(); i++) {
-    //         tags.add(post.getPostTags().get(i).getTag());
-    //     }
-
-    //     if(user != null){
-    //         isCurrentUserIsPostOwner = postService.isCurrentUserIsPostOwner(post, user);
-    //     }
-
-    //     model.addAttribute("isCurrentUserIsPostOwner", isCurrentUserIsPostOwner);
-    //     model.addAttribute("user", user);
-    //     model.addAttribute("comments", comments);
-    //     model.addAttribute("post", post);
-    //     model.addAttribute("tags", tags);
-    //     return "post";
-    // }
+    @GetMapping(value = "/{id}")
+    public PostDto getPostById(@PathVariable(value = "id") int id,
+                              @SessionAttribute(value="currentUser", required = false) User user) {                       
+        PostDto postDto = postService.getParticularPost(id);
+        List<CommentDto> comments = commentService.getCommentsByPostId(postDto);
+        List<TagDto> tags = tagService.getTagsName(postDto);
+        postDto.setComments(comments);
+        postDto.setTags(tags);
+        return postDto;
+    }
 
     // @GetMapping(value = "/create")
     // public String getCreatePostPage() {
