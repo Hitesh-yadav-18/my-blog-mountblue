@@ -47,7 +47,7 @@ public class WebSecurityApplication extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/post/create/save", "/post/edit/*", "/post/update/*", "/post/delete/*")
                 .hasAnyAuthority("Admin", "Author")
-                .antMatchers("/*", "/login", "/token/*", "/post/*", "/css/**", "/JS/**").permitAll()
+                .antMatchers("/**", "/login","/token/*", "/post/*", "/css/**", "/JS/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
