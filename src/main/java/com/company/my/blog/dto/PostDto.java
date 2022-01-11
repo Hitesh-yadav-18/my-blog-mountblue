@@ -13,17 +13,19 @@ public class PostDto {
     private String excerpt;
     private String content;
     private Date publishedAt;
+    private Date createdAt;
     private UserDto author;
 
     List<CommentDto> comments;
     List<TagDto> tags;
 
-    public PostDto(Integer id, String title, String excerpt, String content, Date publishedAt, Integer authorId, String authorName, String authorEmail) {
+    public PostDto(Integer id, String title, String excerpt, String content, Date publishedAt, Date createdAt, Integer authorId, String authorName, String authorEmail) {
         this.id = id;
         this.title = title;
         this.excerpt = excerpt;
         this.content = content;
         this.publishedAt = publishedAt;
+        this.createdAt = createdAt;
         this.author = new UserDto(authorId, authorName, authorEmail);
     }
 
@@ -62,6 +64,12 @@ public class PostDto {
     }
     public void setPublishedAt(Date publishedAt) {
         this.publishedAt = publishedAt;
+    }
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
     public List<CommentDto> getComments() {
         return comments;

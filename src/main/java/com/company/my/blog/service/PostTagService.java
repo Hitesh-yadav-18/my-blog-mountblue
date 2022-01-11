@@ -11,8 +11,10 @@ import com.company.my.blog.repository.PostTagRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class PostTagService {
 
     @Autowired
@@ -48,6 +50,7 @@ public class PostTagService {
                     postTag.setCreatedAt(new Date());
                     postTag.setUpdatedAt(new Date());
                     addTagsPostEntries(postTag);
+                    System.out.println(postTag);
                 }
     }
 
@@ -55,6 +58,7 @@ public class PostTagService {
         postTagRepository.save(postTag);
     }
 
+   
     public void deleteAllPostTagsByPostId(Post post) {
         postTagRepository.deleteAllPostTagsByPostId(post);
     }

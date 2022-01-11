@@ -73,12 +73,8 @@ public class PostService {
     }
 
     public void updatePostById(
-            int id,
-            String title,
-            String excerpt,
-            String content,
-            Date updatedAt) {
-        postRepository.updatePostByPostId(id, title, excerpt, content, updatedAt);
+            Post post) {
+        postRepository.save(post);
     }
 
     public void updatePostWithAuthorById(Post post) {
@@ -497,6 +493,8 @@ public class PostService {
         return postRepository.findAllPostsBySearchedValueAndAuthorAndTagAndDatesAndSorted(
                 searchedValue, authorIds, tagIds, pageable, startDate, endDate);
     }
+
+    
 
     
 

@@ -13,10 +13,12 @@ import com.company.my.blog.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -55,7 +57,7 @@ public class CommentController {
         }
     }
 
-   @PostMapping(value = "/updateComment/{commentId}")
+   @PutMapping(value = "/updateComment/{commentId}")
    public ResponseEntity<String> processUpdateCommentById(
            @PathVariable(value = "commentId") int commentId,
            @ModelAttribute(value = "comments") Comment comment,
@@ -72,7 +74,7 @@ public class CommentController {
          }
    }
 
-   @GetMapping(value = "/deleteComment/{postId}/{commentId}")
+   @DeleteMapping(value = "/deleteComment/{postId}/{commentId}")
    public ResponseEntity<String> processDeleteCommentById(@PathVariable(value = "postId") int postId,
            @PathVariable(value = "commentId") int commentId) {
        try{
@@ -80,7 +82,7 @@ public class CommentController {
               return ResponseEntity.status(HttpStatus.FOUND).body("Comment deleted successfully");
        }
        catch(Exception e){
-              return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Comment not deleted. Please try again");
+              return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Either comment not found or not deleted. Please try again");
        }
    }
 

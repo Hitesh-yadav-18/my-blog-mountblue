@@ -17,23 +17,12 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Integer> {
         
-        @Query("SELECT new com.company.my.blog.dto.PostDto(p.id, p.title, p.excerpt, p.content, p.publishedAt, p.author.id, p.author.name, p.author.email) FROM Post p WHERE p.id = :postId")
+        @Query("SELECT new com.company.my.blog.dto.PostDto(p.id, p.title, p.excerpt, p.content, p.publishedAt, p.createdAt, p.author.id, p.author.name, p.author.email) FROM Post p WHERE p.id = :postId")
         PostDto findPostById(@Param("postId") int postId);
 
         @Query("select p from Post p, PostTag pt, Tag t where p.id = pt.post and " +
                         " t.id = pt.tag and t.id in (:tagIds) ")
         List<Post> findPostByTag(@Param("tagId") List<Integer> tagIds);
-
-        @Modifying
-        @Query(value = "UPDATE post SET title = :title, excerpt = :excerpt," +
-                        "content = :content, updated_at = :updatedAt  WHERE id = :postId", 
-                        nativeQuery = true)
-        void updatePostByPostId(
-                        @Param("postId") int postId,
-                        @Param("title") String title,
-                        @Param("excerpt") String excerpt,
-                        @Param("content") String content,
-                        @Param("updatedAt") Date updatedAt);
 
         @Query("SELECT new com.company.my.blog.dto.PostExcerptDto(p.id, p.title, p.excerpt, p.publishedAt, p.author.id, p.author.name, p.author.email) from Post p where isPublished = true")
         List<PostExcerptDto> findAllPostsByPage(Pageable pageable);
