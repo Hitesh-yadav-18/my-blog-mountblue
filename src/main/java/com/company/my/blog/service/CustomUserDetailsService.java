@@ -1,5 +1,6 @@
-package com.company.my.blog.config;
+package com.company.my.blog.service;
 
+import com.company.my.blog.config.CustomUserDetails;
 import com.company.my.blog.model.User;
 import com.company.my.blog.repository.UserRepository;
 

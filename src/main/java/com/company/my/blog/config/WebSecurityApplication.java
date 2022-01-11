@@ -1,7 +1,5 @@
 package com.company.my.blog.config;
 
-import javax.servlet.Filter;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +18,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityApplication extends WebSecurityConfigurerAdapter {
-    
+
     @Autowired
     private UserDetailsService userDetailsService;
 
@@ -28,12 +26,12 @@ public class WebSecurityApplication extends WebSecurityConfigurerAdapter {
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
-    public AuthenticationProvider authenticationProvider(){
-        
+    public AuthenticationProvider authenticationProvider() {
+
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userDetailsService);
         provider.setPasswordEncoder(new BCryptPasswordEncoder());
-        
+
         return provider;
     }
 
@@ -45,21 +43,23 @@ public class WebSecurityApplication extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-            .csrf().disable()
-            .authorizeRequests().antMatchers("/post/create/save", "/post/edit/*", "/post/update/*", "/post/delete/*").hasAnyAuthority("Admin", "Author")
-            .antMatchers("/*","/login","/token/*","/post/*","/css/**","/JS/**").permitAll()            
-            .anyRequest().authenticated()
-            .and()            
-            .formLogin()
-            .usernameParameter("email")
-            .passwordParameter("password")
-            .and()
-            .logout().invalidateHttpSession(true)
-            .clearAuthentication(true)
-            .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-            .and()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-         
-       http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);    
+                .csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/post/create/save", "/post/edit/*", "/post/update/*", "/post/delete/*")
+                .hasAnyAuthority("Admin", "Author")
+                .antMatchers("/*", "/login", "/token/*", "/post/*", "/css/**", "/JS/**").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .usernameParameter("email")
+                .passwordParameter("password")
+                .and()
+                .logout().invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 }

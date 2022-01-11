@@ -4,9 +4,6 @@ package com.company.my.blog.dto;
 import java.util.Date;
 import java.util.List;
 
-import com.company.my.blog.model.Comment;
-import com.company.my.blog.model.Tag;
-
 public class PostDto {
     private Integer id;
     private String title;
@@ -19,7 +16,8 @@ public class PostDto {
     List<CommentDto> comments;
     List<TagDto> tags;
 
-    public PostDto(Integer id, String title, String excerpt, String content, Date publishedAt, Date createdAt, Integer authorId, String authorName, String authorEmail) {
+    public PostDto(Integer id, String title, String excerpt, String content, Date publishedAt,
+        Date createdAt, Integer authorId, String authorName, String authorEmail) {
         this.id = id;
         this.title = title;
         this.excerpt = excerpt;
@@ -82,9 +80,6 @@ public class PostDto {
     }
     public void setTags(List<TagDto> tags) {
         this.tags = tags;
-    }
-
-    
-    
+    }   
     
 }

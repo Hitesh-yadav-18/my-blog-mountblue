@@ -9,7 +9,6 @@ import com.company.my.blog.model.Post;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -66,11 +65,11 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
                         @Param("tagIds") List<Integer> tagIds,
                         Pageable pageable);
 
-        @Query("select p from Post p where lower(p.title) like lower(concat('%',:searchedValue,'%')) " +
+        @Query("select new com.company.my.blog.dto.PostExcerptDto(p.id, p.title, p.excerpt, p.publishedAt, p.author.id, p.author.name, p.author.email) from Post p where lower(p.title) like lower(concat('%',:searchedValue,'%')) " +
                         "or lower(p.content) like lower(concat('%',:searchedValue,'%')) " +
                         "or lower(p.excerpt) like lower(concat('%',:searchedValue,'%')) " +
                         "or lower(p.author.name) like lower(concat('%',:searchedValue,'%')) ")
-        List<Post> findAllPostsBySearchedValue(
+        List<PostExcerptDto> findAllPostsBySearchedValue(
                         @Param("searchedValue") String searchedValue,
                         Pageable pageable);
 
@@ -107,118 +106,118 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
                         @Param("fromDate") Date fromDate, 
                         @Param("toDate") Date toDate);
 
-        @Query("select p from Post p, PostTag pt, Tag t " +
+        @Query("select Distinct new com.company.my.blog.dto.PostExcerptDto(p.id, p.title, p.excerpt, p.publishedAt, p.author.id, p.author.name, p.author.email) from Post p, PostTag pt, Tag t " +
                         "where p.id = pt.post and t.tagId = pt.tag and " +
                         "(lower(p.author.name) like lower(concat('%', :searchedValue,'%')) or " +
                         "lower(p.title) like lower(concat('%', :searchedValue,'%')) or " +
                         "lower(p.content) like lower(concat('%', :searchedValue,'%')) or " +
                         "lower(p.excerpt) like lower(concat('%', :searchedValue,'%')) ) and " +
-                        "p.author.id in (:authorIds) group by p.id")
+                        "p.author.id in (:authorIds)")
         List<PostExcerptDto> findAllPostsBySearchedValueAndAuthor(
                         @Param("searchedValue") String searchedValue,
                         @Param("authorIds") List<Integer> authorIds,
                         Pageable pageable);
 
-        @Query("select p from Post p, PostTag pt, Tag t " +
+        @Query("select Distinct new com.company.my.blog.dto.PostExcerptDto(p.id, p.title, p.excerpt, p.publishedAt, p.author.id, p.author.name, p.author.email) from Post p, PostTag pt, Tag t " +
                         "where p.id = pt.post and t.tagId = pt.tag and " +
                         "(lower(p.author.name) like lower(concat('%', :searchedValue,'%')) or " +
                         "lower(p.title) like lower(concat('%', :searchedValue,'%')) or " +
                         "lower(p.content) like lower(concat('%', :searchedValue,'%')) or " +
                         "lower(p.excerpt) like lower(concat('%', :searchedValue,'%')) ) and " +
-                        "t.tagId in (:tagIds) group by p.id")
-        List<Post> findAllPostsBySearchedValueAndTag(
+                        "t.tagId in (:tagIds)")
+        List<PostExcerptDto> findAllPostsBySearchedValueAndTag(
                         @Param("searchedValue") String searchedValue,
                         @Param("tagIds") List<Integer> tagIds,
                         Pageable pageable);
 
-        @Query("select p from Post p, PostTag pt, Tag t " +
+        @Query("select DISTINCT new com.company.my.blog.dto.PostExcerptDto(p.id, p.title, p.excerpt, p.publishedAt, p.author.id, p.author.name, p.author.email) from Post p, PostTag pt, Tag t " +
                         "where p.id = pt.post and t.tagId = pt.tag and " +
                         "(lower(p.author.name) like lower(concat('%', :searchedValue,'%')) or " +
                         "lower(p.title) like lower(concat('%', :searchedValue,'%')) or " +
                         "lower(p.content) like lower(concat('%', :searchedValue,'%')) or " +
                         "lower(p.excerpt) like lower(concat('%', :searchedValue,'%')) ) and " +
-                        "p.author.id in (:authorIds) and t.tagId in (:tagIds) group by p.id")
-        List<Post> findAllPostsBySearchedValueAndAuthorAndTag(
+                        "p.author.id in (:authorIds) and t.tagId in (:tagIds)")
+        List<PostExcerptDto> findAllPostsBySearchedValueAndAuthorAndTag(
                         @Param("searchedValue") String searchedValue,
                         @Param("authorIds") List<Integer> authorIds,
                         @Param("tagIds") List<Integer> tagIds,
                         Pageable pageable);
 
-        @Query("select p from Post p, PostTag pt, Tag t " +
+        @Query("select DISTINCT new com.company.my.blog.dto.PostExcerptDto(p.id, p.title, p.excerpt, p.publishedAt, p.author.id, p.author.name, p.author.email) from Post p, PostTag pt, Tag t " +
                         "where p.id = pt.post and t.tagId = pt.tag and " +
                         "(lower(p.author.name) like lower(concat('%', :searchedValue,'%')) or " +
                         "lower(p.title) like lower(concat('%', :searchedValue,'%')) or " +
                         "lower(p.content) like lower(concat('%', :searchedValue,'%')) or " +
                         "lower(p.excerpt) like lower(concat('%', :searchedValue,'%')) ) and " +
-                        "p.author.id in (:authorIds) group by p.id")
-        List<Post> findAllPostsBySearchedValueAndAuthorAndSorted(
+                        "p.author.id in (:authorIds)")
+        List<PostExcerptDto> findAllPostsBySearchedValueAndAuthorAndSorted(
                         @Param("searchedValue") String searchedValue,
                         @Param("authorIds") List<Integer> authorId,
                         Pageable pageable);
 
-        @Query("select p from Post p, PostTag pt, Tag t " +
+        @Query("select DISTINCT new com.company.my.blog.dto.PostExcerptDto(p.id, p.title, p.excerpt, p.publishedAt, p.author.id, p.author.name, p.author.email) from Post p, PostTag pt, Tag t " +
                         "where p.id = pt.post and t.tagId = pt.tag and " +
                         "(lower(p.author.name) like lower(concat('%', :searchedValue,'%')) or " +
                         "lower(p.title) like lower(concat('%', :searchedValue,'%')) or " +
                         "lower(p.content) like lower(concat('%', :searchedValue,'%')) or " +
                         "lower(p.excerpt) like lower(concat('%', :searchedValue,'%')) ) and " +
-                        "p.author.id in (:authorIds) and t.tagId in (:tagIds) group by p.id")
-        List<Post> findAllPostsBySearchedValueAndAuthorAndTagAndSorted(
+                        "p.author.id in (:authorIds) and t.tagId in (:tagIds)")
+        List<PostExcerptDto> findAllPostsBySearchedValueAndAuthorAndTagAndSorted(
                         @Param("searchedValue") String searchedValue,
                         @Param("authorIds") List<Integer> authorId,
                         @Param("tagIds") List<Integer> tagIds,
                         Pageable pageable);
 
-        @Query("select p from Post p where lower(p.title) like lower(concat('%',:searchedValue,'%')) " +
+        @Query("select DISTINCT new com.company.my.blog.dto.PostExcerptDto(p.id, p.title, p.excerpt, p.publishedAt, p.author.id, p.author.name, p.author.email) from Post p where (lower(p.title) like lower(concat('%',:searchedValue,'%')) " +
                         "or lower(p.content) like lower(concat('%',:searchedValue,'%')) " +
                         "or lower(p.excerpt) like lower(concat('%',:searchedValue,'%')) " +
-                        "or lower(p.author.name) like lower(concat('%',:searchedValue,'%')) " +
-                        "and (publishedAt BETWEEN :startDate AND :endDate)")
-        List<Post> findAllPostsBySearchedValueAndDates(
+                        "or lower(p.author.name) like lower(concat('%',:searchedValue,'%'))) " +
+                        "and (p.publishedAt BETWEEN :startDate AND :endDate)")
+        List<PostExcerptDto> findAllPostsBySearchedValueAndDates(
                         @Param("searchedValue") String searchedValue,
                         Pageable pageable,
                         @Param("startDate") Date startDate,
                         @Param("endDate") Date endDate);
 
-        @Query("select p from Post p, PostTag pt, Tag t " +
+        @Query("select DISTINCT new com.company.my.blog.dto.PostExcerptDto(p.id, p.title, p.excerpt, p.publishedAt, p.author.id, p.author.name, p.author.email) from Post p, PostTag pt, Tag t " +
                         "where p.id = pt.post and t.tagId = pt.tag and " +
                         "(lower(p.author.name) like lower(concat('%', :searchedValue,'%')) or " +
                         "lower(p.title) like lower(concat('%', :searchedValue,'%')) or " +
                         "lower(p.content) like lower(concat('%', :searchedValue,'%')) or " +
                         "lower(p.excerpt) like lower(concat('%', :searchedValue,'%')) ) and " +
                         "p.author.id in (:authorIds) " +
-                        "and (p.publishedAt BETWEEN :startDate AND :endDate) group by p.id ")
-        List<Post> findAllPostsBySearchedValueAndAuthorAndDates(
+                        "and (p.publishedAt BETWEEN :startDate AND :endDate)")
+        List<PostExcerptDto> findAllPostsBySearchedValueAndAuthorAndDates(
                         @Param("searchedValue") String searchedValue,
                         @Param("authorIds") List<Integer> authorIds,
                         Pageable pageable,
                         @Param("startDate") Date startDate,
                         @Param("endDate") Date endDate);
 
-        @Query("select p from Post p, PostTag pt, Tag t " +
+        @Query("select DISTINCT new com.company.my.blog.dto.PostExcerptDto(p.id, p.title, p.excerpt, p.publishedAt, p.author.id, p.author.name, p.author.email) from Post p, PostTag pt, Tag t " +
                         "where p.id = pt.post and t.tagId = pt.tag and " +
                         "(lower(p.author.name) like lower(concat('%', :searchedValue,'%')) or " +
                         "lower(p.title) like lower(concat('%', :searchedValue,'%')) or " +
                         "lower(p.content) like lower(concat('%', :searchedValue,'%')) or " +
                         "lower(p.excerpt) like lower(concat('%', :searchedValue,'%')) ) and " +
                         "t.tagId in (:tagIds) and " +
-                        "(p.publishedAt BETWEEN :startDate AND :endDate) group by p.id")
-        List<Post> findAllPostsBySearchedValueAndTagAndDates(
+                        "(p.publishedAt BETWEEN :startDate AND :endDate)")
+        List<PostExcerptDto> findAllPostsBySearchedValueAndTagAndDates(
                         @Param("searchedValue") String searchedValue,
                         @Param("tagIds") List<Integer> tagIds,
                         Pageable pageable,
                         @Param("startDate") Date startDate,
                         @Param("endDate") Date endDate);
 
-        @Query("select p from Post p, PostTag pt, Tag t " +
+        @Query("select DISTINCT new com.company.my.blog.dto.PostExcerptDto(p.id, p.title, p.excerpt, p.publishedAt, p.author.id, p.author.name, p.author.email) from Post p, PostTag pt, Tag t " +
                         "where p.id = pt.post and t.tagId = pt.tag and " +
                         "(lower(p.author.name) like lower(concat('%', :searchedValue,'%')) or " +
                         "lower(p.title) like lower(concat('%', :searchedValue,'%')) or " +
                         "lower(p.content) like lower(concat('%', :searchedValue,'%')) or " +
                         "lower(p.excerpt) like lower(concat('%', :searchedValue,'%')) ) and " +
                         "p.author.id in (:authorIds) and t.tagId in (:tagIds) " +
-                        "and (p.publishedAt BETWEEN :startDate AND :endDate) group by p.id")
-        List<Post> findAllPostsBySearchedValueAndAuthorAndTagAndDates(
+                        "and (p.publishedAt BETWEEN :startDate AND :endDate)")
+        List<PostExcerptDto> findAllPostsBySearchedValueAndAuthorAndTagAndDates(
                         @Param("searchedValue") String searchedValue,
                         @Param("authorIds") List<Integer> authorIds,
                         @Param("tagIds") List<Integer> tagIds,
@@ -226,30 +225,30 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
                         @Param("startDate") Date startDate,
                         @Param("endDate") Date endDate);
 
-        @Query("select p from Post p, PostTag pt, Tag t " +
+        @Query("select DISTINCT new com.company.my.blog.dto.PostExcerptDto(p.id, p.title, p.excerpt, p.publishedAt, p.author.id, p.author.name, p.author.email) from Post p, PostTag pt, Tag t " +
                         "where p.id = pt.post and t.tagId = pt.tag and " +
                         "(lower(p.author.name) like lower(concat('%', :searchedValue,'%')) or " +
                         "lower(p.title) like lower(concat('%', :searchedValue,'%')) or " +
                         "lower(p.content) like lower(concat('%', :searchedValue,'%')) or " +
                         "lower(p.excerpt) like lower(concat('%', :searchedValue,'%')) ) and " +
                         "p.author.id in (:authorIds) " +
-                        "and (p.publishedAt BETWEEN :startDate AND :endDate) group by p.id")
-        List<Post> findAllPostsBySearchedValueAndAuthorAndDatesAndSorted(
+                        "and (p.publishedAt BETWEEN :startDate AND :endDate)")
+        List<PostExcerptDto> findAllPostsBySearchedValueAndAuthorAndDatesAndSorted(
                         @Param("searchedValue") String searchedValue,
                         @Param("authorIds") List<Integer> authorIds,
                         Pageable pageable,
                         @Param("startDate") Date startDate,
                         @Param("endDate") Date endDate);
 
-        @Query("select p from Post p, PostTag pt, Tag t " +
+        @Query("select DISTINCT new com.company.my.blog.dto.PostExcerptDto(p.id, p.title, p.excerpt, p.publishedAt, p.author.id, p.author.name, p.author.email) from Post p, PostTag pt, Tag t " +
                         "where p.id = pt.post and t.tagId = pt.tag and " +
                         "(lower(p.author.name) like lower(concat('%', :searchedValue,'%')) or " +
                         "lower(p.title) like lower(concat('%', :searchedValue,'%')) or " +
                         "lower(p.content) like lower(concat('%', :searchedValue,'%')) or " +
                         "lower(p.excerpt) like lower(concat('%', :searchedValue,'%')) ) and " +
                         "p.author.id in (:authorIds) and t.tagId in (:tagIds) " +
-                        "and (p.publishedAt BETWEEN :startDate AND :endDate) group by p.id")
-        List<Post> findAllPostsBySearchedValueAndAuthorAndTagAndDatesAndSorted(
+                        "and (p.publishedAt BETWEEN :startDate AND :endDate)")
+        List<PostExcerptDto> findAllPostsBySearchedValueAndAuthorAndTagAndDatesAndSorted(
                         @Param("searchedValue") String searchedValue,
                         @Param("authorIds") List<Integer> authorIds,
                         @Param("tagIds") List<Integer> tagIds,

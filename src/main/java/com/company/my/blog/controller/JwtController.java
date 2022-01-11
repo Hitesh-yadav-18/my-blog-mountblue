@@ -1,9 +1,9 @@
 package com.company.my.blog.controller;
 
-import com.company.my.blog.config.CustomUserDetailsService;
 import com.company.my.blog.helper.JwtUtil;
 import com.company.my.blog.model.JwtTokenResponse;
 import com.company.my.blog.model.User;
+import com.company.my.blog.service.CustomUserDetailsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

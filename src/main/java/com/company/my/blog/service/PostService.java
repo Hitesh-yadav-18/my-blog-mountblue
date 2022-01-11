@@ -3,9 +3,7 @@ package com.company.my.blog.service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.company.my.blog.dto.PostDto;
 import com.company.my.blog.dto.PostExcerptDto;
@@ -314,7 +312,7 @@ public class PostService {
             authorIds, tagIds, pageable, startDate, endDate);
     }
 
-    public List<Post> getAllPostsBySearchedValue(String searchedValue, int start, int limit) {
+    public List<PostExcerptDto> getAllPostsBySearchedValue(String searchedValue, int start, int limit) {
         Pageable pageable = PageRequest.of(start / limit, limit);
         return postRepository.findAllPostsBySearchedValue(searchedValue, pageable);
     }
@@ -325,20 +323,20 @@ public class PostService {
         return postRepository.findAllPostsBySearchedValueAndAuthor(searchedValue, authorIds, pageable);
     }
 
-    public List<Post> getAllPostsBySearchedValueAndTag(
+    public List<PostExcerptDto> getAllPostsBySearchedValueAndTag(
         String searchedValue, List<Integer> tagIds, int start, int limit) {
         Pageable pageable = PageRequest.of(start / limit, limit);
         return postRepository.findAllPostsBySearchedValueAndTag(searchedValue, tagIds, pageable);
     }
 
-    public List<Post> getAllPostsBySearchedValueAndAuthorAndTag(
+    public List<PostExcerptDto> getAllPostsBySearchedValueAndAuthorAndTag(
         String searchedValue, List<Integer> authorIds, List<Integer> tagIds, int start, int limit) {
         Pageable pageable = PageRequest.of(start / limit, limit);
         return postRepository.findAllPostsBySearchedValueAndAuthorAndTag(
                 searchedValue, authorIds, tagIds, pageable);
     }
 
-    public List<Post> getAllPostsBySearchedValueAndAuthorAndSorted(
+    public List<PostExcerptDto> getAllPostsBySearchedValueAndAuthorAndSorted(
             String searchedValue, List<Integer> authorIds, int start, int limit, String order) {
         Pageable pageable = null;
         if (order.equals("desc")) {
@@ -351,7 +349,7 @@ public class PostService {
                 searchedValue, authorIds, pageable);
     }
 
-    public List<Post> getAllPostsBySearchedValueAndAuthorAndTagAndSorted(
+    public List<PostExcerptDto> getAllPostsBySearchedValueAndAuthorAndTagAndSorted(
             String searchedValue, 
             List<Integer> authorIds,
             List<Integer> tagIds, 
@@ -369,7 +367,7 @@ public class PostService {
                 searchedValue, authorIds, tagIds, pageable);
     }
 
-    public List<Post> getAllPostsBySearchedValueAndDates(
+    public List<PostExcerptDto> getAllPostsBySearchedValueAndDates(
         String searchedValue, int start, int limit, String fromDate, String toDate) {
 
         Date startDate = null;
@@ -385,7 +383,7 @@ public class PostService {
             searchedValue, pageable, startDate, endDate);
     }
 
-    public List<Post> getAllPostsBySearchedValueAndAuthorAndDates(
+    public List<PostExcerptDto> getAllPostsBySearchedValueAndAuthorAndDates(
             String searchedValue, 
             int start, 
             int limit,
@@ -406,7 +404,7 @@ public class PostService {
             searchedValue, authorIds, pageable, startDate, endDate);
     }
 
-    public List<Post> getAllPostsBySearchedValueAndTagAndDates(
+    public List<PostExcerptDto> getAllPostsBySearchedValueAndTagAndDates(
             String searchedValue, 
             int start, 
             int limit,
@@ -427,7 +425,7 @@ public class PostService {
             searchedValue, tagIds, pageable, startDate, endDate);
     }
 
-    public List<Post> getAllPostsBySearchedValueAndAuthorAndTagAndDates(
+    public List<PostExcerptDto> getAllPostsBySearchedValueAndAuthorAndTagAndDates(
             String searchedValue, 
             int start,
             int limit,
@@ -449,7 +447,7 @@ public class PostService {
             searchedValue, authorIds, tagIds, pageable, startDate, endDate);
     }
 
-    public List<Post> getAllPostsBySearchedValueAndAuthorAndDatesAndSorted(
+    public List<PostExcerptDto> getAllPostsBySearchedValueAndAuthorAndDatesAndSorted(
             String searchedValue, 
             int start, 
             int limit,
@@ -459,7 +457,14 @@ public class PostService {
             String order) {
         Date startDate = null;
         Date endDate = null;
-        Pageable pageable = PageRequest.of(start / limit, limit, Sort.by("publishedAt").descending());
+        Pageable pageable = null;
+
+        if (order.equals("desc")) {
+            pageable = PageRequest.of(start / limit, limit, Sort.by("publishedAt").descending());
+        } else if (order.equals("asc")) {
+            pageable = PageRequest.of(start / limit, limit, Sort.by("publishedAt").ascending());
+        }
+
         try {
             startDate = new SimpleDateFormat("yyyy-MM-dd").parse(fromDate);
             endDate = new SimpleDateFormat("yyyy-MM-dd").parse(toDate);
@@ -471,7 +476,7 @@ public class PostService {
             searchedValue, authorIds, pageable,startDate, endDate);
     }
 
-    public List<Post> getAllPostsBySearchedValueAndAuthorAndTagAndDatesAndSorted(
+    public List<PostExcerptDto> getAllPostsBySearchedValueAndAuthorAndTagAndDatesAndSorted(
             String searchedValue,
             List<Integer> authorIds, 
             List<Integer> tagIds, 
@@ -482,7 +487,14 @@ public class PostService {
             String order) {
         Date startDate = null;
         Date endDate = null;
-        Pageable pageable = PageRequest.of(start / limit, limit, Sort.by("publishedAt").descending());
+        Pageable pageable = null;
+
+        if (order.equals("desc")) {
+            pageable = PageRequest.of(start / limit, limit, Sort.by("publishedAt").descending());
+        } else if (order.equals("asc")) {
+            pageable = PageRequest.of(start / limit, limit, Sort.by("publishedAt").ascending());
+        }
+
         try {
             startDate = new SimpleDateFormat("yyyy-MM-dd").parse(fromDate);
             endDate = new SimpleDateFormat("yyyy-MM-dd").parse(toDate);

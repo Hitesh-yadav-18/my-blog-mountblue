@@ -1,6 +1,5 @@
 package com.company.my.blog.controller;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -10,9 +9,7 @@ import com.company.my.blog.dto.CommentDto;
 import com.company.my.blog.dto.PostDto;
 import com.company.my.blog.dto.TagDto;
 import com.company.my.blog.dto.UserDto;
-import com.company.my.blog.model.Comment;
 import com.company.my.blog.model.Post;
-import com.company.my.blog.model.Tag;
 import com.company.my.blog.model.User;
 import com.company.my.blog.service.CommentService;
 import com.company.my.blog.service.PostService;
@@ -23,10 +20,7 @@ import com.company.my.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -35,7 +29,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
@@ -60,7 +53,7 @@ public class PostController {
 
     @GetMapping(value = "/{id}")
     public PostDto getPostById(@PathVariable(value = "id") int id,
-                              @SessionAttribute(value="currentUser", required = false) User user) {                       
+            @SessionAttribute(value = "currentUser", required = false) User user) {
         PostDto postDto = postService.getParticularPost(id);
         List<CommentDto> comments = commentService.getCommentsByPostId(postDto);
         List<TagDto> tags = tagService.getTagsName(postDto);
@@ -71,7 +64,7 @@ public class PostController {
 
     @PostMapping(value = "/create/save")
     public ResponseEntity<String> newPostCreate(
-        HttpServletRequest request) {
+            HttpServletRequest request) {
         String title = request.getParameter("title");
         String excerpt = request.getParameter("excerpt");
         String content = request.getParameter("content");
@@ -93,7 +86,7 @@ public class PostController {
 
     @GetMapping(value = "/edit/{id}")
     public PostDto showPostEditForm(
-        @PathVariable(value = "id") int postId) {
+            @PathVariable(value = "id") int postId) {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
@@ -104,8 +97,8 @@ public class PostController {
         PostDto postDto = postService.getParticularPost(postId);
         List<TagDto> tags = tagService.getTagsName(postDto);
         postDto.setTags(tags);
-        postDto.setAuthor(userDto);    
-       
+        postDto.setAuthor(userDto);
+
         return postDto;
     }
 
@@ -121,35 +114,35 @@ public class PostController {
         post.setCreatedAt(postService.getParticularPost(postId).getCreatedAt());
         post.setPublished(true);
         post.setUpdatedAt(new Date());
-        
+
         postTagService.deleteAllPostTagsByPostId(post);
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         User user = userService.getUserByEmail(email);
-        
-        if(user.getRole().equals("Admin")){
-            
+
+        if (user.getRole().equals("Admin")) {
+
             User author = userService.getUserByEmail(selectedAuthor);
-            post.setAuthor(author);            
+            post.setAuthor(author);
             postService.updatePostWithAuthorById(post);
-            
-        }else{
+
+        } else {
             post.setId(postId);
             post.setAuthor(user);
             postService.updatePostById(post);
         }
         postTagService.splitTagsAndSavePostTags(tagsAsText, post);
-         
+
         return ResponseEntity.ok("Post updated successfully");
     }
 
     @DeleteMapping(value = "/delete/{id}")
-    public ResponseEntity<String> deletePost(@PathVariable(value = "id") int postId) {  
-        try{
-        postService.deletePost(postId);
-        return ResponseEntity.ok("Post deleted successfully");
-        }catch(Exception e){
+    public ResponseEntity<String> deletePost(@PathVariable(value = "id") int postId) {
+        try {
+            postService.deletePost(postId);
+            return ResponseEntity.ok("Post deleted successfully");
+        } catch (Exception e) {
             return ResponseEntity.ok("Post not found");
         }
     }

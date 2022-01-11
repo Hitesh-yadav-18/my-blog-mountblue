@@ -5,7 +5,6 @@ import java.util.List;
 import com.company.my.blog.dto.PostDto;
 import com.company.my.blog.dto.PostExcerptDto;
 import com.company.my.blog.dto.TagDto;
-import com.company.my.blog.model.Post;
 import com.company.my.blog.model.Tag;
 import com.company.my.blog.repository.TagRepository;
 
