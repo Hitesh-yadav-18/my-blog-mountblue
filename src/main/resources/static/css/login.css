@@ -3,8 +3,8 @@
 }
 
 body {
-	/* background-image : linear-gradient(to bottom right, cyan, blue); */
-	background: rgb(0 0 0/ 5%);
+	background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url("../images/login.jpg");
+	background-size: cover;
 	height: 97.8vh;
 	background-repeat: no-repeat;
 	display: grid;
@@ -15,12 +15,13 @@ body {
 .container {
 	width: 30vw;
 	height: max-content;
-	box-shadow: 0 0 11px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 0 11px rgba(0, 0, 0, 0.7);
 	border-radius: 1vh;
 	display: grid;
 	justify-content: center;
 	align-items: center;
 	overflow: hidden;
+	background: rgb(0 0 0/ 5%);
 }
 
 .container-header {
@@ -71,4 +72,27 @@ body {
 
 .signup-link{
 	margin: 1vh 5vh;
+}
+
+@media only screen and (max-device-width: 480px){
+	.container {
+		width: 80vw;
+		height: auto;
+		font-size: 40px;
+	}
+	
+	.form {
+		width: 80vw;
+		font-size: 34px;
+	}
+	.form-input {
+		width: 80vw;
+	}
+	.form-input input {
+		font-size: 40px;
+		width: 75vw;
+	}
+	.signup-link{
+		margin: 1vh 1vh;
+	}
 }

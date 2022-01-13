@@ -5,10 +5,11 @@
 }
 
 header {
-  background-color: #f5f5f5;
-  padding: 10px;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url("../images/back.jpg");
   display: flex;
   justify-content: space-between;
+  box-shadow: 4px 4px 18px rgba(0, 0, 0, 0.2);
+
 }
 .header-div {
   align-self: center;
@@ -27,17 +28,21 @@ header input[type="text"] {
 
 a {
   margin: 1vh;
-  font-size: larger;
+  font-size: large;
+  font-weight: bolder;
   text-decoration: none;
-  color: #0dbfe9;
+  color: #069ff8;
   align-self: center;
 }
 
 .nav-bar {
   display: flex;
-  justify-content: end;
+  justify-content: space-between;
   align-items: center;
+  margin: 1vh;
   padding: 1vh;
+  background-image: linear-gradient(rgba(109, 240, 240, 0.5), rgba(81, 197, 212, 0.5));
+  
 }
 
 .dropdown-content select {
@@ -46,7 +51,8 @@ a {
   height: 5vh;
   width: 15vw;
   border: 1px solid rgb(183, 218, 231);
-  background-color: rgb(205, 231, 243);
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url("../images/back.jpg");
   font-size: 16px;
 }
 
@@ -55,6 +61,7 @@ a {
   margin-bottom: 3vh;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url("../images/back.jpg");
 }
 
 .blog-box {
@@ -86,12 +93,13 @@ a {
   padding: 10px;
   display: flex;
   justify-content: space-between;
+  color-scheme: dark;
 }
 
 aside {
-  width: 15%;
+  width: 15.5%;
   padding-left: .5rem;
-  margin-left: .5rem;
+  margin: .5rem;
   float: left;
   color: #29627e;
 }
@@ -100,8 +108,9 @@ aside {
   border: 1px solid #bde0f0;
   margin: 0.5vh;
   padding: 0.5vh;
-  height :30vh;
+  height :20vh;
   overflow: auto;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url("../images/back.jpg");
 }
 .post-tag span{
   background-color: rgba(255,255,255,0.4);
@@ -139,4 +148,60 @@ aside {
   background-color: #bcdae9;
   padding: 0.3vw;
   margin: 0.5vh 0.2vw;
+}
+
+@media only screen and (max-device-width: 480px) {
+  body{
+    overflow: hidden;
+  }
+
+  .dropdown-content select {
+    padding: auto;
+    margin: auto;
+    height: auto;
+    width: auto;
+    font-size:16px;
+  }
+  .container {
+    margin-top: 0px;
+    grid-template-columns: 1fr;
+    max-height: 70vh;
+    overflow: auto;
+  }
+  .blog-box {
+    width: 78%;
+    height: auto;
+    margin: 0.5vh 1.5vh;
+    
+  }
+  .blog-box-header {
+    font-size: small;
+  }
+  .blog-box-content {
+    font-size: small;
+  }
+  .blog-box-footer {
+    font-size: small;
+  }
+
+  aside{
+    width: 30%;
+  }
+  .post-filter-tag {
+    height: 10vh;
+  }
+
+  checkbox-group{
+    font-size: x-large;
+  }
+  .aside-title{
+    font-size: small;
+  }
+
+  .input-date{
+    padding: 0.1vw 2.5vh;
+    width: auto;
+    font-size: small;
+  }
+  
 }

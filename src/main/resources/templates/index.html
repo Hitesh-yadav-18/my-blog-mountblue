@@ -7,7 +7,7 @@
   </head>
   <body>
     <header>
-      <a th:href="@{/}"><h3>My Blog Application</h3></a>
+      <a th:href="@{/}"><h2>My Blog Application</h2></a>
       <div class="header-div">
         <input
           type="text"
@@ -25,7 +25,8 @@
       
       </div>
     </header>
-    <div class="nav-bar" th:if="${user != null}">
+    <div class="nav-bar">
+      <h3 style="float: left;">Current search result:&nbsp;<em th:text="${totalResultCount}"></em></h3>
       <h3  sec:authorize="isAuthenticated()" th:inline="text">Welcome ! [[${user.getName()}]]</h3>
       
       <div id="sortDropdown" class="dropdown-content">
@@ -36,7 +37,7 @@
         </select>
       </div>
     </div>
-    <h3>Current search result:&nbsp;<em th:text="${totalResultCount}"></em></h3>
+    
     <div>
       <aside class="filter-section">
         <div class="post-filter-title">
