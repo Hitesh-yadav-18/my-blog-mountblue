@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.company.my.blog.dto.PostExcerptDto;
+import com.company.my.blog.model.RequestMessage;
 import com.company.my.blog.model.User;
 import com.company.my.blog.service.CustomMethodsService;
 import com.company.my.blog.service.PostService;
@@ -59,7 +60,9 @@ public class HomeController {
             start = Integer.parseInt(startAString);
             limit = Integer.parseInt(limitAString);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid start or limit..Enter numbers only");   
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body("Invalid type of start or limit,"+
+                    " must be integer also equal or greater than 0");   
         }     
         if (customMethodsService.isValidPageNumbers(start, limit)) {
             Set<Integer> authorIdsSet = new HashSet<>(authorIds);
@@ -98,7 +101,9 @@ public class HomeController {
 
             return ResponseEntity.ok(postsWithoutContent);
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid page numbers");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new RequestMessage("Invalid value of start or limit,"+
+                                            " must be equal or greater than 0 (Zero)"));
         }
 
     }
@@ -121,7 +126,9 @@ public class HomeController {
             start = Integer.parseInt(startAString);
             limit = Integer.parseInt(limitAString);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid start or limit..Enter numbers only");   
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Invalid type of start or limit,"+
+                    " must be integer also equal or greater than 0");   
         }             
         if (customMethodsService.isValidPageNumbers(start, limit)) {
             Set<Integer> authorIdsSet = new HashSet<>(authorIds);
@@ -163,7 +170,9 @@ public class HomeController {
 
             return ResponseEntity.ok(postsWithoutContent);
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid page numbers");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new RequestMessage("Invalid value of start or limit,"+
+                                        " must be equal or greater than 0 (Zero)"));
         }
     }
 }

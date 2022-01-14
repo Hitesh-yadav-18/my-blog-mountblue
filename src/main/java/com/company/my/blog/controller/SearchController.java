@@ -43,7 +43,8 @@ public class SearchController {
             limit = Integer.parseInt(limitAString);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new RequestMessage("Invalid start or limit..Enter numbers only"));   
+                    .body(new RequestMessage("Invalid type of start or limit,"+
+                                            " must be integer also equal or greater than 0"));   
         }             
         if (customMethodsService.isValidPageNumbers(start, limit)) {
             List<PostExcerptDto> postsWithoutContent = null;
@@ -63,7 +64,8 @@ public class SearchController {
             }
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(new RequestMessage("Invalid page numbers"));
+                        .body(new RequestMessage("Invalid value of start or limit,"+
+                                                " also should equal or greater than 0"));
         }
     }
 
@@ -84,7 +86,8 @@ public class SearchController {
             limit = Integer.parseInt(limitAString);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new RequestMessage("Invalid start or limit..Enter numbers only"));   
+                    .body(new RequestMessage("Invalid type of start or limit,"+
+                                            " must be integer also equal or greater than 0"));   
         }                     
         if (customMethodsService.isValidPageNumbers(start, limit) ) {
             List<PostExcerptDto> postsWithoutContent = null;
@@ -106,7 +109,8 @@ public class SearchController {
             }
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                                 .body(new RequestMessage("Invalid page numbers"));
+                                 .body(new RequestMessage("Invalid value of start or limit,"+
+                                                          " also should equal or greater than 0"));
         }
     }
 
@@ -128,7 +132,8 @@ public class SearchController {
             limit = Integer.parseInt(limitAString);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new RequestMessage("Invalid start or limit..Enter numbers only"));   
+                    .body(new RequestMessage("Invalid type of start or limit,"+
+                                    " must be integer also equal or greater than 0"));   
         }                     
         if (customMethodsService.isValidPageNumbers(start, limit)) {
             List<PostExcerptDto> postsWithoutContent = null;
@@ -171,7 +176,8 @@ public class SearchController {
             limit = Integer.parseInt(limitAString);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new RequestMessage("Invalid start or limit..Enter numbers only"));   
+                    .body(new RequestMessage("Invalid type of start or limit,"+
+                            " must be integer also equal or greater than 0"));   
         }                     
         if (customMethodsService.isValidPageNumbers(start, limit)) {
             List<PostExcerptDto> postsWithoutContent = null;
@@ -193,7 +199,8 @@ public class SearchController {
             }
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new RequestMessage("Invalid page numbers"));
+                    .body(new RequestMessage("Invalid value of start or limit,"+
+                            " also should equal or greater than 0"));
         }
 
     }
@@ -217,7 +224,8 @@ public class SearchController {
             limit = Integer.parseInt(limitAString);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new RequestMessage("Invalid start or limit..Enter numbers only"));   
+                    .body(new RequestMessage("Invalid type of start or limit,"+
+                                        " must be integer also equal or greater than 0"));   
         }                     
         if (customMethodsService.isValidPageNumbers(start, limit)) {
             List<PostExcerptDto> postsWithoutContent = null;
@@ -239,7 +247,8 @@ public class SearchController {
             }
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new RequestMessage("Invalid page numbers"));
+                    .body(new RequestMessage("Invalid value of start or limit,"+
+                            " also should equal or greater than 0"));
         }
     }
 
@@ -267,7 +276,8 @@ public class SearchController {
             limit = Integer.parseInt(limitAString);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new RequestMessage("Invalid start or limit..Enter numbers only"));   
+                    .body(new RequestMessage("Invalid type of start or limit,"+
+                                            " must be integer also equal or greater than 0"));   
         }                     
         if (customMethodsService.isValidPageNumbers(start, limit)) {
             List<PostExcerptDto> postsWithoutContent = null;
@@ -289,7 +299,8 @@ public class SearchController {
             }
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(new RequestMessage("Invalid page numbers"));
+                        .body(new RequestMessage("Invalid value of start or limit,"+
+                                " also should equal or greater than 0"));
         }
     }
 }
