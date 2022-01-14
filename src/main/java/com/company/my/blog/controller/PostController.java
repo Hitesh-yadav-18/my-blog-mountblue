@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -102,17 +103,34 @@ public class PostController {
             return ResponseEntity.badRequest().body(new RequestMessage("You are not logged in"));
         }
 
-        String email = auth.getName();
-        User user = userService.getUserByEmail(email);
-
-        UserDto userDto = new UserDto(user.getId(), user.getName(), user.getEmail());
-
         PostDto postDto = postService.getParticularPost(postId);
-        List<TagDto> tags = tagService.getTagsName(postDto);
-        postDto.setTags(tags);
-        postDto.setAuthor(userDto);
+        if (postDto == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new RequestMessage("Post not found"));
+        }
+        String currentUserEmailId = postDto.getAuthor().getEmail();
+        System.out.println(auth.getAuthorities());
+        if (currentUserEmailId.equals(auth.getName()) 
+                || auth.getAuthorities().contains(new SimpleGrantedAuthority("Admin"))) {
+            try {
+                String email = auth.getName();
+                User user = userService.getUserByEmail(email);
 
-        return ResponseEntity.ok(postDto);
+                UserDto userDto = new UserDto(user.getId(), user.getName(), user.getEmail());
+
+                List<TagDto> tags = tagService.getTagsName(postDto);
+                postDto.setTags(tags);
+                postDto.setAuthor(userDto);
+
+                return ResponseEntity.ok(postDto);
+            } catch (Exception e) {    
+                return ResponseEntity.ok()
+                        .body(new RequestMessage("Unable to process the request. Try again!"));
+            }
+        }else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(new RequestMessage("You are not authorized to edit this comment"));
+        }                
     }
 
     @PutMapping(value = "/update/{id}")
@@ -126,32 +144,51 @@ public class PostController {
         if(auth.getPrincipal() == "anonymousUser"){
             return ResponseEntity.badRequest().body(new RequestMessage("You are not logged in"));
         }
-        String email = auth.getName();
-        User user = userService.getUserByEmail(email);
 
-        String tagsAsText = request.getParameter("tagsList");
-        post.setId(postId);
-        post.setPublishedAt(postService.getParticularPost(postId).getPublishedAt());
-        post.setCreatedAt(postService.getParticularPost(postId).getCreatedAt());
-        post.setPublished(true);
-        post.setUpdatedAt(new Date());
-
-        postTagService.deleteAllPostTagsByPostId(post);
-
-        if (user.getRole().equals("Admin")) {
-
-            User author = userService.getUserByEmail(selectedAuthor);
-            post.setAuthor(author);
-            postService.updatePostWithAuthorById(post);
-
-        } else {
-            post.setId(postId);
-            post.setAuthor(user);
-            postService.updatePostById(post);
+        PostDto postDto = postService.getParticularPost(postId);
+        if (postDto == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new RequestMessage("Post not found"));
         }
-        postTagService.splitTagsAndSavePostTags(tagsAsText, post);
+        String currentUserEmailId = postDto.getAuthor().getEmail();
+        System.out.println(auth.getAuthorities());
+        if (currentUserEmailId.equals(auth.getName()) 
+                || auth.getAuthorities().contains(new SimpleGrantedAuthority("Admin"))) {
+            try {
+                String email = auth.getName();
+                User user = userService.getUserByEmail(email);
 
-        return ResponseEntity.ok(new RequestMessage("Post updated"));
+                String tagsAsText = request.getParameter("tagsList");
+                post.setId(postId);
+                post.setPublishedAt(postService.getParticularPost(postId).getPublishedAt());
+                post.setCreatedAt(postService.getParticularPost(postId).getCreatedAt());
+                post.setPublished(true);
+                post.setUpdatedAt(new Date());
+
+                postTagService.deleteAllPostTagsByPostId(post);
+
+                if (user.getRole().equals("Admin")) {
+
+                    User author = userService.getUserByEmail(selectedAuthor);
+                    post.setAuthor(author);
+                    postService.updatePostWithAuthorById(post);
+
+                } else {
+                    post.setId(postId);
+                    post.setAuthor(user);
+                    postService.updatePostById(post);
+                }
+                postTagService.splitTagsAndSavePostTags(tagsAsText, post);
+
+                return ResponseEntity.ok(new RequestMessage("Post updated"));
+            } catch (Exception e) {    
+                return ResponseEntity.ok()
+                        .body(new RequestMessage("Unable to update post. Try again!"));
+            }
+        }else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(new RequestMessage("You are not authorized to edit this comment"));
+        }                
     }
 
     @DeleteMapping(value = "/delete/{id}")
@@ -163,12 +200,27 @@ public class PostController {
                     .body(new RequestMessage("You are not logged in"));
         }
 
-        try {
-            postService.deletePost(postId);
-            return ResponseEntity.ok(new RequestMessage("Post deleted successfully"));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                    .body(new RequestMessage("Either post not exists or you are not authorized to delete this post"));
+        PostDto postDto = postService.getParticularPost(postId);
+        if (postDto == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new RequestMessage("Post not found"));
         }
+        String currentUserEmailId = postDto.getAuthor().getEmail();
+        System.out.println(auth.getAuthorities());
+        if (currentUserEmailId.equals(auth.getName()) 
+                || auth.getAuthorities().contains(new SimpleGrantedAuthority("Admin"))) {
+            try {
+                postService.deletePost(postId);
+                return ResponseEntity.ok(new RequestMessage("Post deleted successfully"));
+            } catch (Exception e) {
+                return ResponseEntity.ok()
+                        .body(new RequestMessage("Unable to delete post. Try again!"));
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(new RequestMessage("You are not authorized to edit this comment"));
+        }
+
+        
     }
 }

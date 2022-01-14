@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -70,7 +71,8 @@ public class CommentController {
         }
         String currentUserEmailId = postService.getParticularPost(commentDto.getPostId())
                 .getAuthor().getEmail();
-        if (currentUserEmailId.equals(auth.getName())) {
+        if (currentUserEmailId.equals(auth.getName())
+                 || auth.getAuthorities().contains(new SimpleGrantedAuthority("Admin"))) {
             return ResponseEntity.ok(commentDto);
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
@@ -96,7 +98,8 @@ public class CommentController {
         }
         String currentUserEmailId = postService.getParticularPost(commentDto.getPostId())
                 .getAuthor().getEmail();
-        if (currentUserEmailId.equals(auth.getName())) {
+        if (currentUserEmailId.equals(auth.getName())
+                || auth.getAuthorities().contains(new SimpleGrantedAuthority("Admin"))) {
             try {
                 comment.setId(commentId);
                 comment.setCreatedAt(commentService.getCommentById(commentId).getCreatedAt());
@@ -131,7 +134,8 @@ public class CommentController {
         }
         String currentUserEmailId = postService.getParticularPost(commentDto.getPostId())
                 .getAuthor().getEmail();
-        if (currentUserEmailId.equals(auth.getName())) {
+        if (currentUserEmailId.equals(auth.getName())
+                || auth.getAuthorities().contains(new SimpleGrantedAuthority("Admin"))) {
             try {
                 commentService.deleteExistingCommentById(commentId);
                 return ResponseEntity.status(HttpStatus.FOUND)
