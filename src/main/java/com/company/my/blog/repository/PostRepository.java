@@ -15,6 +15,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Integer> {
+
+        @Query("SELECT p FROM Post p WHERE p.id = :postId")
+        Post findFullPostById(@Param("postId") int postId);
         
         @Query("SELECT new com.company.my.blog.dto.PostDto(p.id, p.title, p.excerpt, p.content, p.publishedAt, p.createdAt, p.author.id, p.author.name, p.author.email) FROM Post p WHERE p.id = :postId")
         PostDto findPostById(@Param("postId") int postId);

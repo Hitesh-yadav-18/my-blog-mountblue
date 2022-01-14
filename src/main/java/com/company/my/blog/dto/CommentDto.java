@@ -9,14 +9,16 @@ public class CommentDto{
     private String comment;
     private Date createdAt;
     private Date updatedAt;
+    private Integer postId;
 
-    public CommentDto(int id, String name, String email, String comment, Date createdAt, Date updatedAt) {
+    public CommentDto(int id, String name, String email, String comment, Date createdAt, Date updatedAt, Integer postId) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.comment = comment;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.postId = postId;
     }
 
    
@@ -67,6 +69,16 @@ public class CommentDto{
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    public Integer getPostId() {
+        return postId;
+    }
+
+
+    public void setPostId(Integer postId) {
+        this.postId = postId;
+    }
+    
 
     
     

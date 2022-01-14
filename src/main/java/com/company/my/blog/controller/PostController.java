@@ -9,6 +9,7 @@ import com.company.my.blog.dto.CommentDto;
 import com.company.my.blog.dto.PostDto;
 import com.company.my.blog.dto.TagDto;
 import com.company.my.blog.dto.UserDto;
+import com.company.my.blog.model.RequestMessage;
 import com.company.my.blog.model.Post;
 import com.company.my.blog.model.User;
 import com.company.my.blog.service.CommentService;
@@ -18,6 +19,7 @@ import com.company.my.blog.service.TagService;
 import com.company.my.blog.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,7 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
 @RestController
-@RequestMapping(value = "/post")
+@RequestMapping(value = "/api/post")
 public class PostController {
 
     @Autowired
@@ -62,15 +64,19 @@ public class PostController {
         return postDto;
     }
 
-    @PostMapping(value = "/create/save")
-    public ResponseEntity<String> newPostCreate(
+    @PostMapping(value = "/create")
+    public ResponseEntity<?> newPostCreate(
             HttpServletRequest request) {
         String title = request.getParameter("title");
         String excerpt = request.getParameter("excerpt");
         String content = request.getParameter("content");
         String tags = request.getParameter("tagsList");
 
-        Authentication auth = (Authentication) request.getUserPrincipal();
+        Authentication auth = (Authentication) request.getUserPrincipal(); 
+        if(auth == null){
+            return ResponseEntity.badRequest().body(new RequestMessage("You are not logged in"));
+        }
+
         String email = auth.getName();
         User user = userService.getUserByEmail(email);
 
@@ -80,15 +86,22 @@ public class PostController {
             if (post != null) {
                 postTagService.splitTagsAndSavePostTags(tags, post);
             }
+                return ResponseEntity.status(HttpStatus.CREATED).body(new RequestMessage("Post created"));
+        }else{
+                return ResponseEntity.ok(new RequestMessage("Request processed but due to some error post not created. Try again!"));
         }
-        return ResponseEntity.ok("Post created successfully");
+        
     }
 
     @GetMapping(value = "/edit/{id}")
-    public PostDto showPostEditForm(
+    public ResponseEntity<?> showPostEditForm(
             @PathVariable(value = "id") int postId) {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if(auth.getPrincipal() == "anonymousUser"){
+            return ResponseEntity.badRequest().body(new RequestMessage("You are not logged in"));
+        }
+
         String email = auth.getName();
         User user = userService.getUserByEmail(email);
 
@@ -99,15 +112,23 @@ public class PostController {
         postDto.setTags(tags);
         postDto.setAuthor(userDto);
 
-        return postDto;
+        return ResponseEntity.ok(postDto);
     }
 
     @PutMapping(value = "/update/{id}")
-    public ResponseEntity<String> processUpdatePostById(
+    public ResponseEntity<?> processUpdatePostById(
             HttpServletRequest request,
             @PathVariable(value = "id") int postId,
             @ModelAttribute Post post,
             @RequestParam(value = "selectedAuthorEmail", required = false) String selectedAuthor) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    
+        if(auth.getPrincipal() == "anonymousUser"){
+            return ResponseEntity.badRequest().body(new RequestMessage("You are not logged in"));
+        }
+        String email = auth.getName();
+        User user = userService.getUserByEmail(email);
+
         String tagsAsText = request.getParameter("tagsList");
         post.setId(postId);
         post.setPublishedAt(postService.getParticularPost(postId).getPublishedAt());
@@ -116,10 +137,6 @@ public class PostController {
         post.setUpdatedAt(new Date());
 
         postTagService.deleteAllPostTagsByPostId(post);
-
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String email = auth.getName();
-        User user = userService.getUserByEmail(email);
 
         if (user.getRole().equals("Admin")) {
 
@@ -134,16 +151,24 @@ public class PostController {
         }
         postTagService.splitTagsAndSavePostTags(tagsAsText, post);
 
-        return ResponseEntity.ok("Post updated successfully");
+        return ResponseEntity.ok(new RequestMessage("Post updated"));
     }
 
     @DeleteMapping(value = "/delete/{id}")
-    public ResponseEntity<String> deletePost(@PathVariable(value = "id") int postId) {
+    public ResponseEntity<?> deletePost(@PathVariable(value = "id") int postId) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    
+        if(auth.getPrincipal() == "anonymousUser"){
+            return ResponseEntity.badRequest()
+                    .body(new RequestMessage("You are not logged in"));
+        }
+
         try {
             postService.deletePost(postId);
-            return ResponseEntity.ok("Post deleted successfully");
+            return ResponseEntity.ok(new RequestMessage("Post deleted successfully"));
         } catch (Exception e) {
-            return ResponseEntity.ok("Post not found");
+            return ResponseEntity.badRequest()
+                    .body(new RequestMessage("Either post not exists or you are not authorized to delete this post"));
         }
     }
 }

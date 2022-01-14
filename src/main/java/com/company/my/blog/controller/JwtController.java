@@ -1,6 +1,7 @@
 package com.company.my.blog.controller;
 
 import com.company.my.blog.helper.JwtUtil;
+import com.company.my.blog.model.RequestMessage;
 import com.company.my.blog.model.JwtTokenResponse;
 import com.company.my.blog.model.User;
 import com.company.my.blog.service.CustomUserDetailsService;
@@ -32,7 +33,7 @@ public class JwtController {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
             
         }catch(Exception e){
-            return ResponseEntity.badRequest().body("Invalid username or password");
+            return ResponseEntity.badRequest().body(new RequestMessage("Invalid username or password"));
         }
 
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(user.getEmail());

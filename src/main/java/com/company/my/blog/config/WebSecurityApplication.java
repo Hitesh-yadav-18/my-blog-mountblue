@@ -1,5 +1,7 @@
 package com.company.my.blog.config;
 
+import com.company.my.blog.service.CustomMethodsService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,6 +40,11 @@ public class WebSecurityApplication extends WebSecurityConfigurerAdapter {
     @Bean
     public AuthenticationManager authenticationManager() throws Exception {
         return super.authenticationManager();
+    }
+
+    @Bean
+    public CustomMethodsService customMethodsService() {
+        return new CustomMethodsService();
     }
 
     @Override

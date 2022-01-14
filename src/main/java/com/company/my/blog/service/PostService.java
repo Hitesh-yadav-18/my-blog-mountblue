@@ -51,19 +51,15 @@ public class PostService {
         return postsWithoutContent;
     }
 
-    public boolean isCurrentUserIsPostOwner(Post post, User user){
-        if(post.getAuthor().getId() == user.getId())
-        return true;
-
-        return false;
-    }
-    
-
     public List<Post> getAllPosts() {
         return postRepository.findAll();
     }
     public PostDto getParticularPost(int postId) {
         return postRepository.findPostById(postId);
+    }
+
+    public Post getParticularFullPost(Integer postId) {
+        return postRepository.findFullPostById(postId);
     }
 
     public void deletePost(Integer id) {
@@ -506,10 +502,6 @@ public class PostService {
                 searchedValue, authorIds, tagIds, pageable, startDate, endDate);
     }
 
-    
-
-    
-
-    
+      
    
 }

@@ -1,9 +1,9 @@
 package com.company.my.blog.model;
 
-public class BadRequestMessage {
+public class RequestMessage {
     private String message;
 
-    public BadRequestMessage(String message) {
+    public RequestMessage(String message) {
         this.message = message;
     }
 
