@@ -30,8 +30,8 @@ public class JwtController {
     @PostMapping(value="/token")
     public ResponseEntity<?> generateToken(@RequestBody User user){
         try{
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
-            
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), 
+                                                            user.getPassword()));            
         }catch(Exception e){
             return ResponseEntity.badRequest().body(new RequestMessage("Invalid username or password"));
         }
@@ -41,5 +41,4 @@ public class JwtController {
 
         return ResponseEntity.ok(new JwtTokenResponse(token));
     }
-
 }
